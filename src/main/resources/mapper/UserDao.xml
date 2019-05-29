@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqut.wangyu.crm.dao.UserDao">
     <!--注册-->
-    <insert id="register" parameterType="com.cqut.wangyu.crm.entity.User">
+    <insert id="registerUser" parameterType="com.cqut.wangyu.crm.entity.User">
         insert into users(
         id ,
         userName ,
@@ -15,7 +15,7 @@
         )
     </insert>
     <!--根据ID查用户-->
-    <select id="findUserById" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.entity.User">
+    <select id="findUserByID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.entity.User">
         select * from users
         where id = ${id}
     </select>
@@ -25,9 +25,21 @@
         where userName = #{name}
     </select>
     <!--根据ID修改用户-->
-    <update id="update"></update>
+    <update id="updateUserByID">
+        update users
+        set userName = #{userName},
+            password = #{password}
+        where
+                id = #{id}
+    </update>
     <!--根据ID删除用户-->
-    <delete id="delete"></delete>
+    <delete id="deleteUserByID" parameterType="java.lang.Integer">
+        delete from users
+        where id=#{0}
+    </delete>
     <!--查询所有用户-->
-    <select id="findAll" resultType="com.cqut.wangyu.crm.entity.User"></select>
+    <select id="findAllUser" resultType="com.cqut.wangyu.crm.entity.User">
+        select * from users
+        order by id
+    </select>
 </mapper>

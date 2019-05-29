@@ -23,33 +23,33 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
     private Boolean register(User user) {
         return userService.register(user);
     }
 
-    @RequestMapping(value = "/findUserById", method = RequestMethod.GET)
+    @RequestMapping(value = "/findUserByID", method = RequestMethod.POST)
     private User findUserById(Integer id) {
         return userService.findUserById(id);
     }
 
-    @RequestMapping(value = "/findUserByName", method = RequestMethod.GET)
+    @RequestMapping(value = "/findUserByName", method = RequestMethod.POST)
     private User findUserByName(String name) {
         return userService.findUserByName(name);
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    private Boolean delete(int id) {
-        return userService.delete(id);
+    @RequestMapping(value = "/deleteUserByID", method = RequestMethod.POST)
+    private Boolean delete(Integer id) {
+        return userService.deleteUserByID(id);
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    private Boolean update(int id, User user) {
-        return userService.update(id, user);
+    @RequestMapping(value = "/updateUserByID", method = RequestMethod.POST)
+    private Boolean update(User user) {
+        return userService.updateUserByID(user);
     }
 
-    @RequestMapping(value = "/findAll", method = RequestMethod.GET)
+    @RequestMapping(value = "/findAllUser", method = RequestMethod.GET)
     private List<User> findAll() {
-        return userService.findAll();
+        return userService.findAllUser();
     }
 }

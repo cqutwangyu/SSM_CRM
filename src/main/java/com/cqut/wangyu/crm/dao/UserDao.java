@@ -1,7 +1,6 @@
 package com.cqut.wangyu.crm.dao;
 
 import com.cqut.wangyu.crm.entity.User;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -10,17 +9,17 @@ import java.util.List;
 @Mapper
 @Component(value = "userDao")
 public interface UserDao {
-    Integer register(User user);
+    Integer registerUser(User user);
 
-    User findUserById(Integer id);
+    User findUserByID(Integer id);
 
-    User findUserByName(@Param("name")String name);
+    User findUserByName(String name);
 
-    Boolean delete(int id);
+    Integer deleteUserByID(Integer id);
 
-    Boolean update(int id, User user);
+    Integer updateUserByID(User user);
 
-    List<User> findAll();
+    List<User> findAllUser();
 
 }
 

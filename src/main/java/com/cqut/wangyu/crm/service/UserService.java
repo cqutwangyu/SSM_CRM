@@ -20,10 +20,10 @@ public interface UserService {
 
     User findUserByName(String name);
 
-    Boolean delete(int id);
+    Boolean deleteUserByID(Integer id);
 
-    Boolean update(int id, User user);
+    Boolean updateUserByID(User user);
 
-    List<User> findAll();
+    List<User> findAllUser();
 
 }

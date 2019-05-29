@@ -23,14 +23,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean register(User user) {
-        Integer row = userDao.register(user);
-        Boolean result = row == 1 ? true : false;
+        Integer rows = userDao.registerUser(user);
+        Boolean result = rows == 1 ? true : false;
         return result;
     }
 
     @Override
     public User findUserById(Integer id) {
-        User user = userDao.findUserById(id);
+        User user = userDao.findUserByID(id);
         return user;
     }
 
@@ -41,17 +41,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean delete(int id) {
-        return userDao.delete(id);
+    public Boolean deleteUserByID(Integer id) {
+        Integer rows = userDao.deleteUserByID(id);
+        Boolean result = rows == 1 ? true : false;
+        return result;
     }
 
     @Override
-    public Boolean update(int id, User user) {
-        return userDao.update(id, user);
+    public Boolean updateUserByID(User user) {
+        Integer rows = userDao.updateUserByID(user);
+        Boolean result = rows == 1 ? true : false;
+        return result;
     }
 
     @Override
-    public List<User> findAll() {
-        return userDao.findAll();
+    public List<User> findAllUser() {
+        List<User> list= userDao.findAllUser();
+        return list;
     }
 }

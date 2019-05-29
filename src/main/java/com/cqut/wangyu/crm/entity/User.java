@@ -8,12 +8,17 @@ package com.cqut.wangyu.crm.entity;
  * @GitHub https://github.com/ChongqingWangYu
  */
 public class User {
-    private int id;
+
+    private Integer id;
     private String userName;
     private String password;
 
     public int getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getUserName() {

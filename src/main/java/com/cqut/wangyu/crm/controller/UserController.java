@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -23,9 +24,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
-    private Boolean register(User user) {
-        return userService.register(user);
+    @RequestMapping(value = "/registerUser", method = RequestMethod.POST,produces = "text/plain;charset=utf-8")
+    @ResponseBody
+    private String register(User user) {
+        Boolean resutl = userService.register(user);
+        return resutl ? "注册成功" : "注册失败";
     }
 
     @RequestMapping(value = "/findUserByID", method = RequestMethod.POST)

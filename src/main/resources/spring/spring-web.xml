@@ -37,8 +37,8 @@
     <mvc:interceptors>
         <!-- 注意拦截器的执行顺序，会按照这里配置顺序执行 -->
         <mvc:interceptor>
-            <mvc:mapping path="/**" /><!--匹配所有路径-->
-            <bean class="com.cqut.wangyu.crm.filter.RquestInterceptor" />
+            <mvc:mapping path="/**"/><!--匹配所有路径-->
+            <bean class="com.cqut.wangyu.crm.filter.RquestInterceptor"/>
         </mvc:interceptor>
         <!-- 其他拦截器 -->
         <!--<mvc:interceptor></mvc:interceptor>-->

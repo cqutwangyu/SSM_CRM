@@ -27,33 +27,33 @@ public class UserController {
 
     @RequestMapping(value = "/registerUser", method = RequestMethod.POST, produces = "text/plain;charset=utf-8")
     @ResponseBody
-    private String register(User user) {
+    public String register(User user) {
         Boolean resutl = userService.register(user);
         return resutl ? "注册成功" : "注册失败";
     }
 
     @RequestMapping(value = "/findUserByID", method = RequestMethod.POST)
-    private User findUserById(Integer id) {
+    public User findUserById(Integer id) {
         return userService.findUserById(id);
     }
 
     @RequestMapping(value = "/findUserByName", method = RequestMethod.POST)
-    private User findUserByName(String name) {
+    public User findUserByName(String name) {
         return userService.findUserByName(name);
     }
 
     @RequestMapping(value = "/deleteUserByID", method = RequestMethod.POST)
-    private Boolean delete(Integer id) {
+    public Boolean deleteUserByID(Integer id) {
         return userService.deleteUserByID(id);
     }
 
     @RequestMapping(value = "/updateUserByID", method = RequestMethod.POST)
-    private Boolean update(User user) {
+    public Boolean updateUserByID(User user) {
         return userService.updateUserByID(user);
     }
 
     @RequestMapping(value = "/findAllUser", method = RequestMethod.GET)
-    private List<User> findAll() {
+    public List<User> findAll() {
         return userService.findAllUser();
     }
 }

@@ -1,4 +1,4 @@
-package com.cqut.wangyu.crm.logger;
+package com.cqut.wangyu.crm.aop;
 
 
 import com.cqut.wangyu.crm.utils.DateUtil;
@@ -28,8 +28,8 @@ public class LogAspect {
      */
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
 //    @Pointcut("execution(* com.cqut.wangyu.crm.service.impl.*.*(..))")
+//    @Pointcut("execution(* com.cqut.wangyu.crm.controller.*.*(..))")
     public void controllerLog() {
-        logger.info("-------------------------------ControllerLog----------------------------------------------------------------------");
     }
 
     /**
@@ -39,7 +39,6 @@ public class LogAspect {
      */
     @Before("controllerLog()")
     public void doBeforeController(JoinPoint joinPoint) {
-        System.out.println("before");
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         HttpSession session = request.getSession();
@@ -55,7 +54,6 @@ public class LogAspect {
 
     @Around(value = "controllerLog()")
     public Object doAfterController(ProceedingJoinPoint joinPoint) {
-        System.out.println("after");
         try {
             long start = System.currentTimeMillis();
             Object object = joinPoint.proceed();

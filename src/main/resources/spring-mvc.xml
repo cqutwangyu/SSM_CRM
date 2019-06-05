@@ -37,8 +37,20 @@
     <mvc:interceptors>
         <!-- 注意拦截器的执行顺序，会按照这里配置顺序执行 -->
         <mvc:interceptor>
+            <!-- /*的写法只能拦截一层（/user）,/**会拦截所有（/user/register）-->
             <mvc:mapping path="/**"/><!--匹配所有路径-->
-            <bean class="com.cqut.wangyu.crm.filter.RquestInterceptor"/>
+            <bean class="com.cqut.wangyu.crm.interceptors.RquestInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.cqut.wangyu.crm.interceptors.MethodTimerInterceptors"/>
         </mvc:interceptor>
     </mvc:interceptors>
+    <!-- 文件上传解析器-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--最大上传大小，单位为bytes-->
+        <property name="maxUploadSize" value="10240000000"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="maxUploadSizePerFile" value="200000000"/>
+    </bean>
 </beans>

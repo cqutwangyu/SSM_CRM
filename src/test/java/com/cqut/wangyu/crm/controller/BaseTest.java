@@ -1,6 +1,6 @@
 package com.cqut.wangyu.crm.controller;
 
-import com.cqut.wangyu.crm.logger.LogAspect;
+import com.cqut.wangyu.crm.aop.LogAspect;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

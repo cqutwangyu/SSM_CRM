@@ -2,13 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context.xsd
     http://www.springframework.org/schema/tx
-    http://www.springframework.org/schema/tx/spring-tx.xsd">
+    http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
     <!-- 配置整合mybatis过程 -->
     <!-- 扫描mapper-->
     <!-- 1.配置数据库相关参数properties的属性：${url} -->
@@ -76,14 +76,19 @@
         <!-- 注入数据库连接池 -->
         <property name="dataSource" ref="dataSource"/>
     </bean>
-
+    <aop:config>
+        <aop:pointcut id="allControllerMethods" expression="execution(* com.cqut.wangyu.crm.controller.*.*(..))"/>
+        <aop:advisor advice-ref="transactionAdvice"
+                     pointcut-ref="allControllerMethods"/>
+    </aop:config>
     <!-- 配置基于注解的声明式事务 -->
     <tx:advice id="transactionAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <!-- 事务只读 -->
             <tx:method name="select*" read-only="true"/>
-            <tx:method name="get*" read-only="true"/>
+            <tx:method name="find*" read-only="true"/>
             <tx:method name="query*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
             <!-- 事务异常回滚 -->
             <tx:method name="delete*" propagation="REQUIRED" rollback-for="Exception"/>
             <tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>

@@ -1,5 +1,6 @@
 package com.cqut.wangyu.crm.controller;
 
+import com.cqut.wangyu.crm.dto.ResultDTO;
 import com.cqut.wangyu.crm.entity.User;
 import com.cqut.wangyu.crm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/registerUser", method = RequestMethod.POST, produces = "text/plain;charset=utf-8")
+    @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
     @ResponseBody
-    public String register(User user) {
+    public ResultDTO register(User user) {
+        ResultDTO dto = new ResultDTO();
         Boolean resutl = userService.register(user);
-        return resutl ? "注册成功" : "注册失败";
+        dto.setCode(resutl ? 200 : 500);
+        dto.setMassage(resutl ? "注册成功" : "注册失败");
+        return dto;
     }
 
     @RequestMapping(value = "/findUserByID", method = RequestMethod.POST)

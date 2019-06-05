@@ -17,7 +17,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration("src/main/resources")
-@ContextConfiguration({"classpath:spring/spring-web.xml", "classpath:spring/spring-service.xml", "classpath:spring/spring-dao.xml"})
+@ContextConfiguration({"classpath:spring/applicationContext.xml"})
 public class BaseTest {
     @SuppressWarnings("unused")
     private Logger logger = LoggerFactory.getLogger(LogAspect.class);

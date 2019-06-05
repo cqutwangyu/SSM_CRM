@@ -27,7 +27,9 @@ public class LogAspect {
      * 定义切面，拦截所有controller方法
      */
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
+//    @Pointcut("execution(* com.cqut.wangyu.crm.service.impl.*.*(..))")
     public void controllerLog() {
+        logger.info("-------------------------------ControllerLog----------------------------------------------------------------------");
     }
 
     /**

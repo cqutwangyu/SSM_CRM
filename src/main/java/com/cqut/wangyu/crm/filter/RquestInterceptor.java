@@ -37,14 +37,16 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
         response.setHeader("Content-Type", "application/json");
         // 查看请求方法
         String method = request.getMethod();
-//        if (method.equals("POST")) {
-//            System.out.println(method);
-//            Enumeration<String> enu = request.getParameterNames();
-//            while (enu.hasMoreElements()) {
-//                String paraName = enu.nextElement();
-//                System.out.println(paraName + ": " + request.getParameter(paraName));
-//            }
-//        }
+        System.out.println("-----------------------------------------------------------------------------------------------------");
+        if (method.equals("POST")) {
+            System.out.println(method);
+            Enumeration<String> enu = request.getParameterNames();
+            while (enu.hasMoreElements()) {
+                String paraName = enu.nextElement();
+                System.out.println(paraName + ": " + request.getParameter(paraName));
+            }
+        }
+        System.out.println("-----------------------------------------------------------------------------------------------------");
         return true;
 
     }

@@ -1,10 +1,7 @@
 package com.cqut.wangyu.crm.controller;
 
 import com.cqut.wangyu.crm.entity.User;
-import com.cqut.wangyu.crm.logger.LogAspect;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

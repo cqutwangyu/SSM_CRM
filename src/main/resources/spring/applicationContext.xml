@@ -4,4 +4,5 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <!--引入spring其他整合的配置文件-->
     <import resource="classpath:spring/spring-*.xml"></import>
+
 </beans>

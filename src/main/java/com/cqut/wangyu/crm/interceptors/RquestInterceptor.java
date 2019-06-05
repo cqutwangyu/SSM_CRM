@@ -1,4 +1,4 @@
-package com.cqut.wangyu.crm.filter;
+package com.cqut.wangyu.crm.interceptors;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -21,8 +21,7 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
      * 不会继续调用其他的拦截器或处理器，此时我们需要通过response来产生响应；
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-            throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 允许客户端携带跨域cookie
         // 当Access-Control-Allow-Credentials设为true的时候，Access-Control-Allow-Origin不能设为星号
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -39,7 +38,7 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
         String method = request.getMethod();
         System.out.println("-----------------------------------------------------------------------------------------------------");
         if (method.equals("POST")) {
-            System.out.println(method);
+            System.out.println(method+"请求所有参数：");
             Enumeration<String> enu = request.getParameterNames();
             while (enu.hasMoreElements()) {
                 String paraName = enu.nextElement();

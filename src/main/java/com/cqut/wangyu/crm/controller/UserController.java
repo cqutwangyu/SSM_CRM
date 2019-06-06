@@ -25,13 +25,22 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
+    public ResultDTO login(User user) {
+        ResultDTO dto = new ResultDTO();
+        Boolean resutl = userService.login(user);
+        dto.setCode(resutl ? 200 : 500);
+        dto.setMessage(resutl ? "登录成功" : "登录失败");
+        return dto;
+    }
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public ResultDTO register(User user) {
         ResultDTO dto = new ResultDTO();
         Boolean resutl = userService.register(user);
         dto.setCode(resutl ? 200 : 500);
-        dto.setMassage(resutl ? "注册成功" : "注册失败");
+        dto.setMessage(resutl ? "注册成功" : "注册失败");
         return dto;
     }
 

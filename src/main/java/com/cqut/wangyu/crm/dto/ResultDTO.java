@@ -9,7 +9,7 @@ package com.cqut.wangyu.crm.dto;
  */
 public class ResultDTO {
     private Integer code;
-    private String massage;
+    private String message;
 
     public Integer getCode() {
         return code;
@@ -19,11 +19,11 @@ public class ResultDTO {
         this.code = code;
     }
 
-    public String getMassage() {
-        return massage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMassage(String massage) {
-        this.massage = massage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

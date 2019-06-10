@@ -3,6 +3,7 @@ package com.cqut.wangyu.crm.controller;
 import com.cqut.wangyu.crm.dto.ResultDTO;
 import com.cqut.wangyu.crm.entity.User;
 import com.cqut.wangyu.crm.service.UserService;
+import com.cqut.wangyu.crm.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +33,10 @@ public class UserController {
         Boolean resutl = userService.login(user);
         dto.setCode(resutl ? 200 : 500);
         dto.setMessage(resutl ? "登录成功" : "登录失败");
+        if(resutl){
+            String sign = TokenUtil.sign(user.getUserName(), user.getPassword());
+            dto.setToken(sign);
+        }
         return dto;
     }
     @RequestMapping(value = "/register", method = RequestMethod.POST)

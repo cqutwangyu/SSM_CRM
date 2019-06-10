@@ -1,5 +1,7 @@
 package com.cqut.wangyu.crm.dto;
 
+import com.cqut.wangyu.crm.entity.User;
+
 /**
  * @ClassName ResultDTO
  * @Description
@@ -10,6 +12,16 @@ package com.cqut.wangyu.crm.dto;
 public class ResultDTO {
     private Integer code;
     private String message;
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
 
     public Integer getCode() {
         return code;

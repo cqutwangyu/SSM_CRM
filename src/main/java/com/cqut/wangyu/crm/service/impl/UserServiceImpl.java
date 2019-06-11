@@ -4,7 +4,6 @@ import com.cqut.wangyu.crm.dao.UserDao;
 import com.cqut.wangyu.crm.entity.User;
 import com.cqut.wangyu.crm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

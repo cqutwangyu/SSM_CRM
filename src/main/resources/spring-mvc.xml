@@ -41,10 +41,6 @@
             <mvc:mapping path="/**"/><!--匹配所有路径-->
             <bean class="com.cqut.wangyu.crm.interceptors.RquestInterceptor"/>
         </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <bean class="com.cqut.wangyu.crm.interceptors.MethodTimerInterceptors"/>
-        </mvc:interceptor>
     </mvc:interceptors>
     <!-- 文件上传解析器-->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -26,23 +27,43 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public ResultDTO login(User user) {
         ResultDTO dto = new ResultDTO();
-        Boolean result= userService.login(user);
+        Boolean result = userService.login(user);
         dto.setCode(result ? 200 : 500);
         dto.setMessage(result ? "登录成功" : "登录失败");
-        if(result){
+        if (result) {
             String sign = TokenUtil.sign(user.getUserName(), user.getPassword());
             dto.setToken(sign);
         }
         return dto;
     }
 
-    @RequestMapping(value = "/info", method = RequestMethod.POST)
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
     @ResponseBody
-    public void info() {
+    public ResultDTO logout() {
+        ResultDTO dto = new ResultDTO();
+        dto.setCode(200);
+        dto.setMessage("退出成功");
+        return dto;
+    }
+
+    @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
+    @ResponseBody
+    public ResultDTO getUserInfo() {
+        ResultDTO dto = new ResultDTO();
+        String token = request.getHeader("X-Token");
+        String userName = TokenUtil.getUserName(token);
+        User userByName = findUserByName(userName);
+        dto.setCode(userByName != null ? 200 : 500);
+        dto.setMessage(userByName != null ? "获取成功" : "获取失败");
+        dto.setData(userByName);
+        return dto;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

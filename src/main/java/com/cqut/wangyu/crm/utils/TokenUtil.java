@@ -3,6 +3,7 @@ package com.cqut.wangyu.crm.utils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.util.Date;
@@ -61,6 +62,21 @@ public class TokenUtil {
             return true;
         } catch (Exception e){
             return false;
+        }
+    }
+
+    /**
+     * 从token中获取username信息
+     * @param **token**
+     * @return
+     */
+    public static String getUserName(String token){
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getClaim("loginName").asString();
+        } catch (JWTDecodeException e){
+            e.printStackTrace();
+            return null;
         }
     }
 }

@@ -30,22 +30,28 @@ public class UserController {
     @ResponseBody
     public ResultDTO login(User user) {
         ResultDTO dto = new ResultDTO();
-        Boolean resutl = userService.login(user);
-        dto.setCode(resutl ? 200 : 500);
-        dto.setMessage(resutl ? "登录成功" : "登录失败");
-        if(resutl){
+        Boolean result= userService.login(user);
+        dto.setCode(result ? 200 : 500);
+        dto.setMessage(result ? "登录成功" : "登录失败");
+        if(result){
             String sign = TokenUtil.sign(user.getUserName(), user.getPassword());
             dto.setToken(sign);
         }
         return dto;
     }
+
+    @RequestMapping(value = "/info", method = RequestMethod.POST)
+    @ResponseBody
+    public void info() {
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public ResultDTO register(User user) {
         ResultDTO dto = new ResultDTO();
-        Boolean resutl = userService.register(user);
-        dto.setCode(resutl ? 200 : 500);
-        dto.setMessage(resutl ? "注册成功" : "注册失败");
+        Boolean result = userService.register(user);
+        dto.setCode(result ? 200 : 500);
+        dto.setMessage(result ? "注册成功" : "注册失败");
         return dto;
     }
 

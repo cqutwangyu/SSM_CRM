@@ -24,8 +24,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean register(User user) {
-        User u= userDao.findUserByName(user.getUserName());
-        if (u!=null){
+        User u = userDao.findUserByName(user.getUserName());
+        if (u != null) {
             return false;
         }
         Integer rows = userDao.registerUser(user);
@@ -61,14 +61,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAllUser() {
-        List<User> list= userDao.findAllUser();
+        List<User> list = userDao.findAllUser();
         return list;
     }
 
     @Override
     public Boolean login(User inputUser) {
-        User user= userDao.findUserByName(inputUser.getUserName());
-        if(user.getPassword().equals(inputUser.getPassword())){
+        User user = userDao.findUserByName(inputUser.getUserName());
+        System.out.println(user.toString());
+        if (user != null && user.getPassword().equals(inputUser.getPassword())) {
             return true;
         }
         return false;

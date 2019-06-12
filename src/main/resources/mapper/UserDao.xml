@@ -4,12 +4,10 @@
     <!--注册-->
     <insert id="registerUser" parameterType="com.cqut.wangyu.crm.entity.User">
         insert into users(
-        id ,
         userName ,
         password
         )
         values(
-        null ,
         #{userName} ,
         #{password}
         )

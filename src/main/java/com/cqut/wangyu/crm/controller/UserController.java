@@ -5,6 +5,7 @@ import com.cqut.wangyu.crm.entity.User;
 import com.cqut.wangyu.crm.service.UserService;
 import com.cqut.wangyu.crm.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,6 +35,8 @@ public class UserController {
     @ResponseBody
     public ResultDTO login(User user) {
         ResultDTO dto = new ResultDTO();
+        String md5Password= DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+        user.setPassword(md5Password);
         Boolean result = userService.login(user);
         dto.setCode(result ? 200 : 500);
         dto.setMessage(result ? "登录成功" : "登录失败");
@@ -70,6 +73,8 @@ public class UserController {
     @ResponseBody
     public ResultDTO register(User user) {
         ResultDTO dto = new ResultDTO();
+        String md5Password= DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+        user.setPassword(md5Password);
         Boolean result = userService.register(user);
         dto.setCode(result ? 200 : 500);
         dto.setMessage(result ? "注册成功" : "注册失败");

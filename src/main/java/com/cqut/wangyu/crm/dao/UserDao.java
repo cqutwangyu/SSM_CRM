@@ -2,6 +2,7 @@ package com.cqut.wangyu.crm.dao;
 
 import com.cqut.wangyu.crm.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

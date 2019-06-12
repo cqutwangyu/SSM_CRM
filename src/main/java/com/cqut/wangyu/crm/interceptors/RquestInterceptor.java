@@ -1,11 +1,13 @@
 package com.cqut.wangyu.crm.interceptors;
 
+import com.cqut.wangyu.crm.utils.TokenUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
 
 /**
  * @ClassName RquestInterceptor
@@ -15,6 +17,8 @@ import java.util.Enumeration;
  * @GitHub https://github.com/ChongqingWangYu
  */
 public class RquestInterceptor extends HandlerInterceptorAdapter {
+    private final static Logger logger = LoggerFactory.getLogger(RquestInterceptor.class);
+
     /**
      * 预处理回调方法，实现处理器的预处理（如检查登陆），第三个参数为响应的处理器，自定义Controller
      * 返回值：true表示继续流程（如调用下一个拦截器或处理器）；false表示流程中断（如登录检查失败），
@@ -34,19 +38,22 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
         response.setHeader("Access-Control-Allow-Methods", request.getHeader("Access-Control-Request-Method"));
         // 设置响应数据格式
         response.setHeader("Content-Type", "application/json");
-        // 查看请求方法
-        String method = request.getMethod();
-        System.out.println("-----------------------------------------------------------------------------------------------------");
-        if (method.equals("POST")) {
-            System.out.println(method+"请求所有参数：");
-            Enumeration<String> enu = request.getParameterNames();
-            while (enu.hasMoreElements()) {
-                String paraName = enu.nextElement();
-                System.out.println(paraName + ": " + request.getParameter(paraName));
-            }
+        if (request.getMethod().equals("OPTIONS")) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return true;
         }
-        System.out.println("-----------------------------------------------------------------------------------------------------");
-        return true;
+        String token = request.getHeader("X-Token");
+        String requestURI = request.getRequestURI();
+        //除login和register之外的请求需验证token
+        if (requestURI.equals("/user/login") || requestURI.equals("/user/register") || TokenUtil.verify(token)) {
+            long start = System.currentTimeMillis();
+            request.setAttribute("start", start);
+            logger.info(request.getRequestURI() + "请求到达");
+            return true;
+        }
+        logger.warn("请求：" + requestURI + "Token认证失败");
+        response.setStatus(500);
+        return false;
 
     }
     /*下面的方法可以不重写*/
@@ -59,6 +66,16 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
         super.postHandle(request, response, handler, modelAndView);
+        if (!request.getMethod().equals("OPTIONS")) {
+            long start = (long) request.getAttribute("start");
+            long end = System.currentTimeMillis();
+            long spendTime = end - start;
+            if (spendTime >= 1000) {
+                logger.warn("方法耗时严重，请及时处理，耗时：" + spendTime);
+            } else {
+                logger.info("方法耗时正常，耗时：" + spendTime + "毫秒");
+            }
+        }
     }
 
     /**

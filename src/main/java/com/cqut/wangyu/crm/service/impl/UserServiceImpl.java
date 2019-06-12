@@ -4,7 +4,6 @@ import com.cqut.wangyu.crm.dao.UserDao;
 import com.cqut.wangyu.crm.entity.User;
 import com.cqut.wangyu.crm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +23,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean register(User user) {
+        User u = userDao.findUserByName(user.getUserName());
+        if (u != null) {
+            return false;
+        }
         Integer rows = userDao.registerUser(user);
         Boolean result = rows == 1 ? true : false;
         return result;
@@ -57,7 +60,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAllUser() {
-        List<User> list= userDao.findAllUser();
+        List<User> list = userDao.findAllUser();
         return list;
+    }
+
+    @Override
+    public Boolean login(User inputUser) {
+        User user = userDao.findUserByName(inputUser.getUserName());
+        System.out.println(user.toString());
+        if (user != null && user.getPassword().equals(inputUser.getPassword())) {
+            return true;
+        }
+        return false;
     }
 }

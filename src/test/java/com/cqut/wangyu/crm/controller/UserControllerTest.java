@@ -17,7 +17,10 @@ public class UserControllerTest extends BaseTest {
 
     @Test
     public void registerTest() {
-        userController.register(new User(1, "admin", "ddd"));
+        User user = new User();
+        user.setUserName("admin");
+        user.setPassword("ddd");
+        userController.register(user);
     }
 
     @Test
@@ -37,7 +40,11 @@ public class UserControllerTest extends BaseTest {
 
     @Test
     public void updateTest() {
-        userController.updateUserByID(new User(1, "kkk", "xxx"));
+        User user = new User();
+        user.setId(1);
+        user.setUserName("admin");
+        user.setPassword("ddd");
+        userController.updateUserByID(user);
     }
 
     @Test

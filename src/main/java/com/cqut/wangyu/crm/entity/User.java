@@ -12,11 +12,27 @@ public class User {
     private Integer id;
     private String userName;
     private String password;
+    private String petName;
+    private String avatar;
 
-    public User(Integer id, String userName, String password) {
-        this.id = id;
-        this.userName = userName;
-        this.password = password;
+
+    public User() {
+    }
+
+    public String getPetName() {
+        return petName;
+    }
+
+    public void setPetName(String petName) {
+        this.petName = petName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public int getId() {
@@ -49,6 +65,8 @@ public class User {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
+                ", petName='" + petName + '\'' +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }

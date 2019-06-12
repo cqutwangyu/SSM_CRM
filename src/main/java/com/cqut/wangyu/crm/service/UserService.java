@@ -26,4 +26,5 @@ public interface UserService {
 
     List<User> findAllUser();
 
+    Boolean login(User user);
 }

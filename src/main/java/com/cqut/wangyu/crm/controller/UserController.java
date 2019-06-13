@@ -35,16 +35,10 @@ public class UserController {
     @ResponseBody
     public ResultDTO login(User user) {
         ResultDTO dto = new ResultDTO();
-        String md5Password= DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+        String md5Password = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
         user.setPassword(md5Password);
-        Boolean result = userService.login(user);
-        dto.setCode(result ? 200 : 500);
-        dto.setMessage(result ? "登录成功" : "登录失败");
-        if (result) {
-            String sign = TokenUtil.sign(user.getUserName(), user.getPassword());
-            dto.setToken(sign);
-        }
-        return dto;
+        dto.setData(user);
+        return userService.login(dto);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
@@ -62,23 +56,20 @@ public class UserController {
         ResultDTO dto = new ResultDTO();
         String token = request.getHeader("X-Token");
         String userName = TokenUtil.getUserName(token);
-        User userByName = findUserByName(userName);
-        dto.setCode(userByName != null ? 200 : 500);
-        dto.setMessage(userByName != null ? "获取成功" : "获取失败");
-        dto.setData(userByName);
-        return dto;
+        User u=new User();
+        u.setUserName(userName);
+        dto.setData(u);
+        return userService.findUserByName(dto);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public ResultDTO register(User user) {
         ResultDTO dto = new ResultDTO();
-        String md5Password= DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
+        String md5Password = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
         user.setPassword(md5Password);
-        Boolean result = userService.register(user);
-        dto.setCode(result ? 200 : 500);
-        dto.setMessage(result ? "注册成功" : "注册失败");
-        return dto;
+        dto.setData(user);
+        return userService.register(dto);
     }
 
     @RequestMapping(value = "/findUserByID", method = RequestMethod.POST)
@@ -87,8 +78,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/findUserByName", method = RequestMethod.POST)
-    public User findUserByName(String name) {
-        return userService.findUserByName(name);
+    public ResultDTO findUserByName(String name) {
+        ResultDTO dto=new ResultDTO();
+        User u=new User();
+        u.setUserName(name);
+        return userService.findUserByName(dto);
     }
 
     @RequestMapping(value = "/deleteUserByID", method = RequestMethod.POST)

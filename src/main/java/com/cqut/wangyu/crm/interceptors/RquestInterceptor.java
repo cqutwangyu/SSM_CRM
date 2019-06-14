@@ -1,5 +1,6 @@
 package com.cqut.wangyu.crm.interceptors;
 
+import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.utils.TokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @ClassName RquestInterceptor
@@ -53,6 +56,15 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
         }
         logger.warn("请求：" + requestURI + "Token认证失败");
         response.setStatus(500);
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+            ResponseDTO responseDTO=new ResponseDTO();
+            responseDTO.setCode(50008);
+            out.append(responseDTO.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return false;
 
     }

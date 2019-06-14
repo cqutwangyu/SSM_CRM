@@ -1,6 +1,7 @@
 package com.cqut.wangyu.crm.service;
 
-import com.cqut.wangyu.crm.dto.ResultDTO;
+import com.cqut.wangyu.crm.dto.ResponseDTO;
+import com.cqut.wangyu.crm.dto.UserRequestDTO;
 import com.cqut.wangyu.crm.entity.User;
 
 import java.util.List;
@@ -15,17 +16,17 @@ import java.util.List;
  */
 public interface UserService {
 
-    ResultDTO register(ResultDTO dto);
+    ResponseDTO register(User user);
 
-    User findUserById(Integer id);
+    ResponseDTO findUserById(Integer id);
 
-    ResultDTO findUserByName(ResultDTO resultDTO);
+    ResponseDTO findUserByName(String userName);
 
-    Boolean deleteUserByID(Integer id);
+    ResponseDTO deleteUserByID(Integer id);
 
-    Boolean updateUserByID(User user);
+    ResponseDTO updateUserByID(User user);
 
-    List<User> findAllUser();
+    ResponseDTO findAllUser();
 
-    ResultDTO login(ResultDTO resultDTO);
+    ResponseDTO login(User user);
 }

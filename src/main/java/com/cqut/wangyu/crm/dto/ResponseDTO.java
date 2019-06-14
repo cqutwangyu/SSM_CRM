@@ -1,14 +1,14 @@
 package com.cqut.wangyu.crm.dto;
 
 /**
- * @ClassName ResultDTO
+ * @ClassName ResponseDTO
  * @Description
  * @Author ChongqingWangYu
  * @DateTime 2019/6/4 14:57
  * @GitHub https://github.com/ChongqingWangYu
  */
-public class ResultDTO {
-    private Integer code;
+public class ResponseDTO {
+    private Integer code = 20000;
     private String message;
     private String token;
     private Object data;
@@ -44,5 +44,15 @@ public class ResultDTO {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "ResponseDTO{" +
+                "code=" + code +
+                ", message='" + message + '\'' +
+                ", token='" + token + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

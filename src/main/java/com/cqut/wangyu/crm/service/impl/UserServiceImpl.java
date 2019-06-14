@@ -1,8 +1,11 @@
 package com.cqut.wangyu.crm.service.impl;
 
 import com.cqut.wangyu.crm.dao.UserDao;
+import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.User;
 import com.cqut.wangyu.crm.service.UserService;
+import com.cqut.wangyu.crm.utils.MD5Util;
+import com.cqut.wangyu.crm.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +13,7 @@ import java.util.List;
 
 /**
  * @ClassName UserServiceImpl
- * @Description 用户服务实例
+ * @Description 用户服务实例（负责业务逻辑）
  * @Author ChongqingWangYu
  * @DateTime 2019/5/28 14:15
  * @GitHub https://github.com/ChongqingWangYu
@@ -22,55 +25,78 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public Boolean register(User user) {
-        User u = userDao.findUserByName(user.getUserName());
-        if (u != null) {
-            return false;
+    public ResponseDTO register(User user) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        User dbUser = userDao.findUserByName(user.getUserName());
+        Integer rows = 0;
+        if (dbUser == null) {
+            String md5Password = MD5Util.encode(user.getPassword());
+            user.setPassword(md5Password);
+            rows = userDao.registerUser(user);
+        } else {
+            responseDTO.setMessage("用户名已存在");
+            return responseDTO;
         }
-        Integer rows = userDao.registerUser(user);
-        Boolean result = rows == 1 ? true : false;
-        return result;
+        responseDTO.setMessage(rows == 1 ? "注册成功" : "注册失败");
+        return responseDTO;
     }
 
     @Override
-    public User findUserById(Integer id) {
+    public ResponseDTO findUserById(Integer id) {
         User user = userDao.findUserByID(id);
-        return user;
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setMessage(user != null ? "获取成功" : "获取失败");
+        responseDTO.setData(user);
+        return responseDTO;
     }
 
     @Override
-    public User findUserByName(String name) {
-        User user = userDao.findUserByName(name);
-        return user;
+    public ResponseDTO findUserByName(String userName) {
+        ResponseDTO dto = new ResponseDTO();
+        User user = userDao.findUserByName(userName);
+        dto.setMessage(user != null ? "获取成功" : "获取失败");
+        dto.setData(user);
+        return dto;
     }
 
     @Override
-    public Boolean deleteUserByID(Integer id) {
+    public ResponseDTO deleteUserByID(Integer id) {
+        ResponseDTO responseDTO = new ResponseDTO();
         Integer rows = userDao.deleteUserByID(id);
-        Boolean result = rows == 1 ? true : false;
-        return result;
+        responseDTO.setMessage(rows == 1 ? "注册成功" : "注册失败");
+        return responseDTO;
     }
 
     @Override
-    public Boolean updateUserByID(User user) {
+    public ResponseDTO updateUserByID(User user) {
         Integer rows = userDao.updateUserByID(user);
-        Boolean result = rows == 1 ? true : false;
-        return result;
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setMessage(rows == 1 ? "修改成功" : "修改失败");
+        return responseDTO;
     }
 
     @Override
-    public List<User> findAllUser() {
+    public ResponseDTO findAllUser() {
         List<User> list = userDao.findAllUser();
-        return list;
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setData(list);
+        return responseDTO;
     }
 
     @Override
-    public Boolean login(User inputUser) {
-        User user = userDao.findUserByName(inputUser.getUserName());
-        System.out.println(user.toString());
-        if (user != null && user.getPassword().equals(inputUser.getPassword())) {
-            return true;
+    public ResponseDTO login(User user) {
+        String md5Password = MD5Util.encode(user.getPassword());
+        user.setPassword(md5Password);
+        User dbUser = userDao.findUserByName(user.getUserName());
+        ResponseDTO responseDTO = new ResponseDTO();
+        //验证用户是否存在、密码是否正确
+        if (dbUser != null && dbUser.getPassword().equals(user.getPassword())) {
+            responseDTO.setData(dbUser);
+            responseDTO.setToken(TokenUtil.sign(dbUser.getUserName(), dbUser.getPassword()));
+            responseDTO.setMessage("登录成功");
+        } else {
+            responseDTO.setMessage("登录失败");
         }
-        return false;
+        return responseDTO;
     }
 }

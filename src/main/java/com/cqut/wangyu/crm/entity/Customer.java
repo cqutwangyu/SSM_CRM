@@ -12,7 +12,7 @@ public class Customer {
     private Integer cusId;
     private String cusNo;
     private String cusName;
-    private String cusRegion;
+    private String cusPhone;
     private String cusAddr;
     private String cusUrl;
     private String cusLevel;
@@ -42,12 +42,12 @@ public class Customer {
         this.cusName = cusName;
     }
 
-    public String getCusRegion() {
-        return cusRegion;
+    public String getCusPhone() {
+        return cusPhone;
     }
 
-    public void setCusRegion(String cusRegion) {
-        this.cusRegion = cusRegion;
+    public void setCusPhone(String cusPhone) {
+        this.cusPhone = cusPhone;
     }
 
     public String getCusAddr() {

@@ -18,7 +18,8 @@ import java.util.Map;
  * @GitHub https://github.com/ChongqingWangYu
  */
 public class TokenUtil {
-    private static final long EXPIRE_TIME = 15 * 60 * 1000;
+    /*token有效期*/
+    private static final long EXPIRE_TIME = 60 * 60 * 1000;
     private static final String TOKEN_SECRET = "ssm_crm_token";
     /**
      * 生成签名，15分钟过期

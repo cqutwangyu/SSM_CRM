@@ -6,7 +6,7 @@
         insert into customer(
             cusNo ,
             cusName,
-            cusRegion,
+            cusPhone,
             cusAddr,
             cusUrl,
             cusLevel,
@@ -15,7 +15,7 @@
         values(
             #{cusNo} ,
             #{cusName},
-            #{cusRegion},
+            #{cusPhone},
             #{cusAddr},
             #{cusUrl},
             #{cusLevel},
@@ -36,7 +36,7 @@
     <update id="updateCustomer" parameterType="Customer">
         update customer
         set cusName=#{cusName},
-            cusRegion=#{cusRegion},
+            cusPhone=#{cusPhone},
             cusAddr=#{cusAddr},
             cusUrl=#{cusUrl},
             cusLevel=#{cusLevel},

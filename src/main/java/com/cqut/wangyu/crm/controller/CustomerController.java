@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * @ClassName CustomerController
  * @Description 客户控制
@@ -57,7 +55,7 @@ public class CustomerController {
 
     @RequestMapping(value = "/findAllCustomer", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseDTO findAllCustomer() {
-        return customerService.findAllCustomer();
+    public ResponseDTO findAllCustomer(Integer page, Integer limit) {
+        return customerService.findAllCustomer(page,limit);
     }
 }

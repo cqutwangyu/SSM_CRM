@@ -6,7 +6,7 @@ import com.cqut.wangyu.crm.entity.Customer;
 public interface CustomerService {
     ResponseDTO addCustomer(Customer customer);
 
-    ResponseDTO findAllCustomer();
+    ResponseDTO findAllCustomer(Integer page, Integer limit);
 
     /**
      * 删除客户

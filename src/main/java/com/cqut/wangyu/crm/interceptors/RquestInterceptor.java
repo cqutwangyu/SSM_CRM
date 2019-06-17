@@ -55,7 +55,7 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         logger.warn("请求：" + requestURI + "Token认证失败");
-        response.setStatus(500);
+//        response.setStatus(500);
         PrintWriter out = null;
         try {
             out = response.getWriter();

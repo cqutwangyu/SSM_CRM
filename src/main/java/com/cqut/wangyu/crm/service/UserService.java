@@ -1,10 +1,7 @@
 package com.cqut.wangyu.crm.service;
 
 import com.cqut.wangyu.crm.dto.ResponseDTO;
-import com.cqut.wangyu.crm.dto.UserRequestDTO;
 import com.cqut.wangyu.crm.entity.User;
-
-import java.util.List;
 
 
 /**

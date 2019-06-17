@@ -58,27 +58,32 @@ public class UserController {
     }
 
     @RequestMapping(value = "/findUserByID", method = RequestMethod.POST)
+    @ResponseBody
     public ResponseDTO findUserById(Integer id) {
         return userService.findUserById(id);
     }
 
     @RequestMapping(value = "/findUserByName", method = RequestMethod.POST)
+    @ResponseBody
     public ResponseDTO findUserByName(String name) {
         return userService.findUserByName(name);
     }
 
     @RequestMapping(value = "/deleteUserByID", method = RequestMethod.POST)
+    @ResponseBody
     public ResponseDTO deleteUserByID(Integer id) {
         return userService.deleteUserByID(id);
     }
 
     @RequestMapping(value = "/updateUserByID", method = RequestMethod.POST)
+    @ResponseBody
     public ResponseDTO updateUserByID(User user) {
         return userService.updateUserByID(user);
     }
 
     @RequestMapping(value = "/findAllUser", method = RequestMethod.GET)
-    public ResponseDTO findAll() {
+    @ResponseBody
+    public ResponseDTO findAllUser() {
         return userService.findAllUser();
     }
 }

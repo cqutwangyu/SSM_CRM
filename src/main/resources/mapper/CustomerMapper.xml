@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.wangyu.crm.dao.CustomerDao">
+    <!--注册-->
+    <insert id="insertCustomer" parameterType="com.cqut.wangyu.crm.entity.Customer">
+        insert into customer(
+            cusNo ,
+            cusName,
+            cusRegion,
+            cusAddr,
+            cusUrl,
+            cusLevel,
+            cusCredit
+        )
+        values(
+            #{cusNo} ,
+            #{cusName},
+            #{cusRegion},
+            #{cusAddr},
+            #{cusUrl},
+            #{cusLevel},
+            #{cusCredit}
+        )
+    </insert>
+    <!--根据ID查用户-->
+    <select id="selectCustomerById" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.entity.Customer">
+        select * from customer
+        where cusId = #{cusId}
+    </select>
+    <!--根据用户名查用户-->
+    <select id="selectCustomerByName" parameterType="java.lang.String" resultType="com.cqut.wangyu.crm.entity.Customer">
+        select * from customer
+        where cusName = #{cusName}
+    </select>
+    <!--根据ID修改用户-->
+    <update id="updateCustomer" parameterType="Customer">
+        update customer
+        set cusName=#{cusName},
+            cusRegion=#{cusRegion},
+            cusAddr=#{cusAddr},
+            cusUrl=#{cusUrl},
+            cusLevel=#{cusLevel},
+            cusCredit=#{cusCredit}
+        where
+            cusId = #{cusId}
+    </update>
+    <!--根据ID删除用户-->
+    <delete id="deleteCustomer" parameterType="java.lang.Integer">
+        delete from customer
+        where cusId=#{cusId}
+    </delete>
+    <!--查询所有用户-->
+    <select id="selectAllCustomer" resultType="com.cqut.wangyu.crm.entity.Customer">
+        select * from customer
+        order by cusId
+    </select>
+</mapper>

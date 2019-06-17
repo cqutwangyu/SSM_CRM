@@ -49,6 +49,6 @@ public class UserControllerTest extends BaseTest {
 
     @Test
     public void findAllTest() {
-        userController.findAll();
+        userController.findAllUser();
     }
 }

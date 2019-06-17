@@ -10,17 +10,17 @@ import java.util.List;
 @Mapper
 @Component(value = "userDao")
 public interface UserDao {
-    Integer registerUser(User user);
+    Integer insertUser(User user);
 
-    User findUserByID(Integer id);
+    User selectUserByID(Integer id);
 
-    User findUserByName(String name);
+    User selectUserByName(String name);
 
     Integer deleteUserByID(Integer id);
 
     Integer updateUserByID(User user);
 
-    List<User> findAllUser();
+    List<User> selectAll();
 
 }
 

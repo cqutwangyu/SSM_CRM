@@ -27,12 +27,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseDTO register(User user) {
         ResponseDTO responseDTO = new ResponseDTO();
-        User dbUser = userDao.findUserByName(user.getUserName());
+        User dbUser = userDao.selectUserByName(user.getUserName());
         Integer rows = 0;
         if (dbUser == null) {
             String md5Password = MD5Util.encode(user.getPassword());
             user.setPassword(md5Password);
-            rows = userDao.registerUser(user);
+            rows = userDao.insertUser(user);
         } else {
             responseDTO.setMessage("用户名已存在");
             return responseDTO;
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseDTO findUserById(Integer id) {
-        User user = userDao.findUserByID(id);
+        User user = userDao.selectUserByID(id);
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setMessage(user != null ? "获取成功" : "获取失败");
         responseDTO.setData(user);
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseDTO findUserByName(String userName) {
         ResponseDTO dto = new ResponseDTO();
-        User user = userDao.findUserByName(userName);
+        User user = userDao.selectUserByName(userName);
         dto.setMessage(user != null ? "获取成功" : "获取失败");
         dto.setData(user);
         return dto;
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseDTO findAllUser() {
-        List<User> list = userDao.findAllUser();
+        List<User> list = userDao.selectAll();
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setData(list);
         return responseDTO;
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
     public ResponseDTO login(User user) {
         String md5Password = MD5Util.encode(user.getPassword());
         user.setPassword(md5Password);
-        User dbUser = userDao.findUserByName(user.getUserName());
+        User dbUser = userDao.selectUserByName(user.getUserName());
         ResponseDTO responseDTO = new ResponseDTO();
         //验证用户是否存在、密码是否正确
         if (dbUser != null && dbUser.getPassword().equals(user.getPassword())) {

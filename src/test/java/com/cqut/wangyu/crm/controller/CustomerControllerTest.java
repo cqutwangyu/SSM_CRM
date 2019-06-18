@@ -68,7 +68,7 @@ public class CustomerControllerTest extends BaseTest {
     @Test
     public void addCustomerDataFromExcle() {
         try {
-            List<Customer> customerLIst = POIUtil.readExcel("C:\\Users\\Administrator\\Desktop\\SSM_CRM_Customer.xlsx");
+            List<Customer> customerLIst = POIUtil.readExcel("C:\\Users\\Administrator\\Desktop\\customer.xlsx");
             for (int i = 0; i < customerLIst.size(); i++) {
                 customerController.addCustomer(customerLIst.get(i));
             }

@@ -4,14 +4,20 @@ import com.cqut.wangyu.crm.dao.CustomerDao;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Customer;
 import com.cqut.wangyu.crm.service.CustomerService;
+import com.cqut.wangyu.crm.utils.POIUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.apache.logging.log4j.ThreadContext.isEmpty;
 
 /**
  * @ClassName CustomerServiceImpl
@@ -36,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseDTO findAllCustomer(Integer page, Integer limit) {
-        PageHelper.startPage(page,limit);
+        PageHelper.startPage(page, limit);
         ResponseDTO responseDTO = new ResponseDTO();
         List<Customer> customerList = customerDao.selectAllCustomer();
         PageInfo<Customer> pageInfo = new PageInfo(customerList);
@@ -101,6 +107,51 @@ public class CustomerServiceImpl implements CustomerService {
         ResponseDTO responseDTO = new ResponseDTO();
         Customer customer = customerDao.selectCustomerById(cusId);
         responseDTO.setData(customer);
+        return responseDTO;
+    }
+
+    /**
+     * 上传excel文件并导入数据到数据库
+     *
+     * @param file
+     * @param request
+     * @return
+     */
+    @Override
+    public ResponseDTO importCustomerFromExcel(MultipartFile file, HttpServletRequest request) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        Integer error = 0;
+        Integer succeed = 0;
+        if (!file.isEmpty()) {
+            String filePath = file.getOriginalFilename();
+            //windows
+            String savePath = request.getSession().getServletContext().getRealPath(filePath);
+            //linux
+            //String savePath = "/home/odcuser/webapps/file";
+            try {
+                File targetFile = new File(savePath);
+                if (!targetFile.exists()) {
+                    targetFile.mkdirs();
+                }
+                file.transferTo(targetFile);
+                List<Customer> customerList = POIUtil.readExcel(targetFile);
+                for (int i = 0; i < customerList.size(); i++) {
+                    Customer customer = customerList.get(i);
+                    List<Customer> customerListDB = customerDao.selectCustomerByName(customer.getCusName());
+                    if (customerListDB.isEmpty()) {
+                        customerDao.insertCustomer(customer);
+                        succeed++;
+                    } else {
+                        error++;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            responseDTO.setMessage("导入成功：" + succeed + "项,导入失败：" + error + "项");
+        } else {
+            responseDTO.setMessage("导入失败");
+        }
         return responseDTO;
     }
 }

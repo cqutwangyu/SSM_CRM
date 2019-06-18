@@ -4,10 +4,10 @@ import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Customer;
 import com.cqut.wangyu.crm.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @ClassName CustomerController
@@ -23,10 +23,13 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
     @ResponseBody
     public ResponseDTO addCustomer(Customer customer) {
-       return customerService.addCustomer(customer);
+        return customerService.addCustomer(customer);
     }
 
     @RequestMapping(value = "/deleteCustomer", method = RequestMethod.POST)
@@ -56,6 +59,14 @@ public class CustomerController {
     @RequestMapping(value = "/findAllCustomer", method = RequestMethod.GET)
     @ResponseBody
     public ResponseDTO findAllCustomer(Integer page, Integer limit) {
-        return customerService.findAllCustomer(page,limit);
+        return customerService.findAllCustomer(page, limit);
     }
+
+    @RequestMapping(value = "/importCustomerFromExcel", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDTO importCustomerFromExcel(MultipartFile file) {
+        return customerService.importCustomerFromExcel(file, request);
+    }
+
+
 }

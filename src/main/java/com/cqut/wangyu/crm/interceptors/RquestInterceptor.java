@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 
 /**
  * @ClassName RquestInterceptor
@@ -47,6 +48,11 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
         }
         String token = request.getHeader("X-Token");
         String requestURI = request.getRequestURI();
+        Enumeration<String> enu = request.getParameterNames();
+        while (enu.hasMoreElements()) {
+            String paraName = enu.nextElement();
+            System.out.println(paraName + ": " + request.getParameter(paraName));
+        }
         //除login和register之外的请求需验证token
         if (requestURI.equals("/user/login") || requestURI.equals("/user/register") || TokenUtil.verify(token)) {
             long start = System.currentTimeMillis();

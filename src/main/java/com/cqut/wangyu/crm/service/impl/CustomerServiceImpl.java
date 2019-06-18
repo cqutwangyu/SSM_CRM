@@ -120,8 +120,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseDTO importCustomerFromExcel(MultipartFile file, HttpServletRequest request) {
         ResponseDTO responseDTO = new ResponseDTO();
-        Integer error = 0;
-        Integer succeed = 0;
+        int succeed = 0,error=0;
         if (!file.isEmpty()) {
             String filePath = file.getOriginalFilename();
             //windows
@@ -141,14 +140,14 @@ public class CustomerServiceImpl implements CustomerService {
                     if (customerListDB.isEmpty()) {
                         customerDao.insertCustomer(customer);
                         succeed++;
-                    } else {
+                    }else {
                         error++;
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            responseDTO.setMessage("导入成功：" + succeed + "项,导入失败：" + error + "项");
+            responseDTO.setMessage("导入成功："+succeed+"条,失败："+error+"条");
         } else {
             responseDTO.setMessage("导入失败");
         }

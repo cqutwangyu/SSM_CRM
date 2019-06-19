@@ -1,5 +1,6 @@
 package com.cqut.wangyu.crm.service;
 
+import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Customer;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 public interface CustomerService {
     ResponseDTO addCustomer(Customer customer);
 
-    ResponseDTO findAllCustomer(Integer page, Integer limit);
+    ResponseDTO findAllCustomer(PageQueryDTO pageQueryDTO);
 
     /**
      * 删除客户

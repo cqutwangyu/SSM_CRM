@@ -1,5 +1,6 @@
 package com.cqut.wangyu.crm.controller;
 
+import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Customer;
 import com.cqut.wangyu.crm.service.CustomerService;
@@ -56,10 +57,10 @@ public class CustomerController {
         return customerService.findCustomerById(cusId);
     }
 
-    @RequestMapping(value = "/findAllCustomer", method = RequestMethod.GET)
+    @RequestMapping(value = "/findAllCustomer", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findAllCustomer(Integer page, Integer limit) {
-        return customerService.findAllCustomer(page, limit);
+    public ResponseDTO findAllCustomer(PageQueryDTO pageQueryDTO) {
+        return customerService.findAllCustomer(pageQueryDTO);
     }
 
     @RequestMapping(value = "/importCustomerFromExcel", method = RequestMethod.POST)

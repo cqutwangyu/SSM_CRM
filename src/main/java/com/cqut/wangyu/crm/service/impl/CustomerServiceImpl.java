@@ -1,6 +1,7 @@
 package com.cqut.wangyu.crm.service.impl;
 
 import com.cqut.wangyu.crm.dao.CustomerDao;
+import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Customer;
 import com.cqut.wangyu.crm.service.CustomerService;
@@ -41,10 +42,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseDTO findAllCustomer(Integer page, Integer limit) {
-        PageHelper.startPage(page, limit);
+    public ResponseDTO findAllCustomer(PageQueryDTO pageQueryDTO) {
+        PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Customer> customerList = customerDao.selectAllCustomer();
+        List<Customer> customerList = customerDao.selectAllCustomer(pageQueryDTO);
         PageInfo<Customer> pageInfo = new PageInfo(customerList);
 
         Map<String, Object> map = new HashMap<>();

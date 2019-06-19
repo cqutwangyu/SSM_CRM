@@ -1,5 +1,6 @@
 package com.cqut.wangyu.crm.dao;
 
+import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.entity.Customer;
 
 import java.util.List;
@@ -8,7 +9,7 @@ public interface CustomerDao {
 
     Integer insertCustomer(Customer customer);
 
-    List<Customer> selectAllCustomer();
+    List<Customer> selectAllCustomer(PageQueryDTO pageQueryDTO);
 
     Integer deleteCustomer(Integer cusId);
 

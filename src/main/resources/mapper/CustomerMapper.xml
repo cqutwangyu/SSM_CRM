@@ -50,8 +50,9 @@
         where cusId=#{cusId}
     </delete>
     <!--查询所有用户-->
-    <select id="selectAllCustomer" resultType="com.cqut.wangyu.crm.entity.Customer">
+    <select id="selectAllCustomer" parameterType="com.cqut.wangyu.crm.dto.PageQueryDTO" resultType="com.cqut.wangyu.crm.entity.Customer">
         select * from customer
+        where ${sql}
         order by cusId
     </select>
 </mapper>

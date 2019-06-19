@@ -18,8 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.logging.log4j.ThreadContext.isEmpty;
-
 /**
  * @ClassName CustomerServiceImpl
  * @Description
@@ -121,34 +119,42 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseDTO importCustomerFromExcel(MultipartFile file, HttpServletRequest request) {
         ResponseDTO responseDTO = new ResponseDTO();
-        int succeed = 0,error=0;
+        int succeed = 0, error = 0;
         if (!file.isEmpty()) {
             String filePath = file.getOriginalFilename();
             //windows
             String savePath = request.getSession().getServletContext().getRealPath(filePath);
             //linux
             //String savePath = "/home/odcuser/webapps/file";
+            List<Customer> customerList = null;
             try {
                 File targetFile = new File(savePath);
                 if (!targetFile.exists()) {
                     targetFile.mkdirs();
                 }
                 file.transferTo(targetFile);
-                List<Customer> customerList = POIUtil.readExcel(targetFile);
-                for (int i = 0; i < customerList.size(); i++) {
-                    Customer customer = customerList.get(i);
-                    List<Customer> customerListDB = customerDao.selectCustomerByName(customer.getCusName());
-                    if (customerListDB.isEmpty()) {
-                        customerDao.insertCustomer(customer);
-                        succeed++;
-                    }else {
-                        error++;
-                    }
-                }
+                customerList = POIUtil.readExcel(targetFile);
+                succeed = customerDao.insertForeach(customerList);
+
             } catch (Exception e) {
                 e.printStackTrace();
+            } finally {
+                if (succeed == 0) {
+                    for (int i = 0; i < customerList.size(); i++) {
+                        Customer customer = customerList.get(i);
+                        List<Customer> customerListDB = customerDao.selectCustomerByName(customer.getCusName());
+                        if (customerListDB.isEmpty()) {
+                            customerDao.insertCustomer(customer);
+                            succeed++;
+                        } else {
+                            error++;
+                        }
+                    }
+                } else {
+                    error = customerList.size() - succeed;
+                }
             }
-            responseDTO.setMessage("导入成功："+succeed+"条,失败："+error+"条");
+            responseDTO.setMessage("导入成功：" + succeed + "条,失败：" + error + "条");
         } else {
             responseDTO.setMessage("导入失败");
         }

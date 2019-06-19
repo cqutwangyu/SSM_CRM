@@ -14,7 +14,7 @@ public class PageQueryDTO {
     Integer limit;
     String[] columnsName;
     String[] columnsValue;
-    String sql = "1=1";
+    String sql;
 
     public Integer getPage() {
         return page;
@@ -58,9 +58,6 @@ public class PageQueryDTO {
     }
 
     public void assembleSql() {
-        if (columnsName == null || columnsValue == null || columnsName.length != columnsValue.length) {
-            return;
-        }
         this.sql = SQLUtil.assembleSql(columnsName, columnsValue);
     }
 }

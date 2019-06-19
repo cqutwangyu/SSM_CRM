@@ -55,4 +55,21 @@
         where ${sql}
         order by cusId
     </select>
+    <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into customer
+        ( cusId,cusNo,cusName,cusPhone,cusAddr,cusUrl,cusLevel,cusCredit)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            null,
+            #{item.cusNo},
+            #{item.cusName},
+            #{item.cusPhone},
+            #{item.cusAddr},
+            #{item.cusUrl},
+            #{item.cusLevel},
+            #{item.cusCredit}
+            )
+        </foreach>
+    </insert>
 </mapper>

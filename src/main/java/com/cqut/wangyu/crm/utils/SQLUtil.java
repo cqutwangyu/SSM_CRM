@@ -10,27 +10,33 @@ package com.cqut.wangyu.crm.utils;
 public class SQLUtil {
     private static final String like = " like ";
     private static final String and = " and ";
+    private static final String likeAll = "1=1";
 
     public static String assembleSql(String[] columnsName, String[] columnsValue) {
-        String sql = "";
         if (null == columnsName || null == columnsValue || columnsName.length != columnsValue.length || columnsValue.length == 0 || columnsValue.length == 0) {
-            return " like '%'";
+            return likeAll;
         }
+        String sql = "";
+        int count = 0;
         for (int i = 0; i < columnsName.length; i++) {
-            String name = columnsName[i];
+            String columnName = columnsName[i];
             String value = columnsValue[i];
-            if (name == null || value == null || name == "" || value == "") {
+            if (columnName == null || value == null || columnName == "" || value == "") {
                 continue;
             }
-            if (i > 0) {
+            if (count > 0) {
                 sql += and;
             }
-            sql += name + like + strValue(value);
+            sql += columnName + like + strValue(value);
+            count++;
+        }
+        if (count == 0) {
+            return likeAll;
         }
         return sql;
     }
 
     public static String strValue(String value) {
-        return "'" + value + "'";
+        return "'%" + value + "%'";
     }
 }

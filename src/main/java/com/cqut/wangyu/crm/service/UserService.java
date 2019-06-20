@@ -2,6 +2,9 @@ package com.cqut.wangyu.crm.service;
 
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.User;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -26,4 +29,12 @@ public interface UserService {
     ResponseDTO findAllUser();
 
     ResponseDTO login(User user);
+
+    /**
+     * 上传图片并存入avatar到数据库
+     * @param avatar
+     * @param request
+     * @return
+     */
+    ResponseDTO uploadImage(MultipartFile avatar, HttpServletRequest request);
 }

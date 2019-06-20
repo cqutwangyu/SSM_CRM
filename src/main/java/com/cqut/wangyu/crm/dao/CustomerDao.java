@@ -23,4 +23,5 @@ public interface CustomerDao {
     Integer insertForeach(@Param("list") List<Customer> customerList);
 
     List<Customer> selectAllCustomer();
+
 }

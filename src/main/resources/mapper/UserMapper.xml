@@ -3,41 +3,39 @@
 <mapper namespace="com.cqut.wangyu.crm.dao.UserDao">
     <!--注册-->
     <insert id="insertUser" parameterType="com.cqut.wangyu.crm.entity.User">
-        insert into users(
-        userName ,
-        password
-        )
-        values(
-        #{userName} ,
-        #{password}
-        )
+        insert into users (userName, password)
+        values (#{userName}, #{password})
     </insert>
     <!--根据ID查用户-->
     <select id="selectUserByID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.entity.User">
-        select * from users
+        select *
+        from users
         where id = #{id}
     </select>
     <!--根据用户名查用户-->
     <select id="selectUserByName" parameterType="java.lang.String" resultType="com.cqut.wangyu.crm.entity.User">
-        select * from users
+        select *
+        from users
         where userName = #{name}
     </select>
     <!--根据ID修改用户-->
     <update id="updateUserByID">
         update users
-        set userName = #{userName},
-            password = #{password}
-        where
-                id = #{id}
+        set password = #{password},
+            petName  = #{petName},
+            avatar   = #{avatar}
+        where id = #{id}
     </update>
     <!--根据ID删除用户-->
     <delete id="deleteUserByID" parameterType="java.lang.Integer">
-        delete from users
-        where id=#{id}
+        delete
+        from users
+        where id = #{id}
     </delete>
     <!--查询所有用户-->
     <select id="selectAll" resultType="com.cqut.wangyu.crm.entity.User">
-        select * from users
+        select *
+        from users
         order by id
     </select>
 </mapper>

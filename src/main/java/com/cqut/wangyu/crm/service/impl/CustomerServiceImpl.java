@@ -5,7 +5,10 @@ import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Customer;
 import com.cqut.wangyu.crm.service.CustomerService;
+import com.cqut.wangyu.crm.utils.MD5Util;
+import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
+import com.cqut.wangyu.crm.utils.TokenUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +126,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (!file.isEmpty()) {
             String filePath = file.getOriginalFilename();
             //windows
-            String savePath = request.getSession().getServletContext().getRealPath(filePath);
+            String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.excelPath + filePath);
             //linux
             //String savePath = "/home/odcuser/webapps/file";
             List<Customer> customerList = null;
@@ -168,10 +171,12 @@ public class CustomerServiceImpl implements CustomerService {
      */
     @Override
     public ResponseDTO getAllCustomer() {
-        ResponseDTO responseDTO=new ResponseDTO();
+        ResponseDTO responseDTO = new ResponseDTO();
         List<Customer> customerList = customerDao.selectAllCustomer();
         responseDTO.setData(customerList);
-        responseDTO.setMessage("共"+customerList.size()+"条数据");
+        responseDTO.setMessage("共" + customerList.size() + "条数据");
         return responseDTO;
     }
+
+
 }

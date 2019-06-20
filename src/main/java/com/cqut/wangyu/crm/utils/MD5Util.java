@@ -1,6 +1,9 @@
 package com.cqut.wangyu.crm.utils;
 
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * @ClassName MD5Util
@@ -13,5 +16,9 @@ public class MD5Util {
 
     public static String encode(String input) {
         return DigestUtils.md5DigestAsHex(input.getBytes());
+    }
+
+    public static String encodeFile(MultipartFile file) throws IOException {
+        return DigestUtils.md5DigestAsHex(file.getBytes());
     }
 }

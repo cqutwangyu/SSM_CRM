@@ -1,5 +1,7 @@
 package com.cqut.wangyu.crm.entity;
 
+import com.cqut.wangyu.crm.utils.MyFileUtil;
+
 /**
  * @ClassName User
  * @Description 用户实体

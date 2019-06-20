@@ -5,10 +5,14 @@ import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.User;
 import com.cqut.wangyu.crm.service.UserService;
 import com.cqut.wangyu.crm.utils.MD5Util;
+import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -97,6 +101,45 @@ public class UserServiceImpl implements UserService {
         } else {
             responseDTO.setMessage("登录失败");
         }
+        return responseDTO;
+    }
+
+    /**
+     * 上传图片并存入avatar到数据库
+     *
+     * @param file
+     * @param request
+     * @return
+     */
+    @Override
+    public ResponseDTO uploadImage(MultipartFile file, HttpServletRequest request) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        boolean succeed = false;
+        if (!file.isEmpty()) {
+            try {
+                String md5FileName = MD5Util.encodeFile(file);
+                String filePath = file.getOriginalFilename();
+                filePath = filePath.replace(file.getName(), md5FileName);
+                //windows
+                String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.imgPath + filePath);
+                File targetFile = new File(savePath);
+                if (!targetFile.exists()) {
+                    targetFile.mkdirs();
+                }
+                file.transferTo(targetFile);
+                String token = request.getHeader("X-Token");
+                String userName = TokenUtil.getUserName(token);
+                User user = userDao.selectUserByName(userName);
+                if (user != null) {
+                    user.setAvatar(MyFileUtil.ServerAddress + MyFileUtil.imgRequest + MyFileUtil.imgPath + filePath);
+                    userDao.updateUserByID(user);
+                    succeed = true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        responseDTO.setMessage(succeed ? "上传成功" : "上传失败");
         return responseDTO;
     }
 }

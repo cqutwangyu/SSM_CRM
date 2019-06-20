@@ -44,15 +44,20 @@
         where
             cusId = #{cusId}
     </update>
-    <!--根据ID删除用户-->
+    <!--根据ID删除客户-->
     <delete id="deleteCustomer" parameterType="java.lang.Integer">
         delete from customer
         where cusId=#{cusId}
     </delete>
-    <!--查询所有用户-->
-    <select id="selectAllCustomer" parameterType="com.cqut.wangyu.crm.dto.PageQueryDTO" resultType="com.cqut.wangyu.crm.entity.Customer">
+    <!--查询页内满足条件的客户-->
+    <select id="selectPageCustomer" parameterType="com.cqut.wangyu.crm.dto.PageQueryDTO" resultType="com.cqut.wangyu.crm.entity.Customer">
         select * from customer
         where ${sql}
+        order by cusId
+    </select>
+    <!--查询所有客户-->
+    <select id="selectAllCustomer" resultType="com.cqut.wangyu.crm.entity.Customer">
+        select * from customer
         order by cusId
     </select>
     <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">

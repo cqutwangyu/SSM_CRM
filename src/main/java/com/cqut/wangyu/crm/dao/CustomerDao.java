@@ -10,7 +10,7 @@ public interface CustomerDao {
 
     Integer insertCustomer(Customer customer);
 
-    List<Customer> selectAllCustomer(PageQueryDTO pageQueryDTO);
+    List<Customer> selectPageCustomer(PageQueryDTO pageQueryDTO);
 
     Integer deleteCustomer(Integer cusId);
 
@@ -21,4 +21,6 @@ public interface CustomerDao {
     Customer selectCustomerById(Integer cusId);
 
     Integer insertForeach(@Param("list") List<Customer> customerList);
+
+    List<Customer> selectAllCustomer();
 }

@@ -40,10 +40,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseDTO findAllCustomer(PageQueryDTO pageQueryDTO) {
+    public ResponseDTO findPageCustomer(PageQueryDTO pageQueryDTO) {
         PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Customer> customerList = customerDao.selectAllCustomer(pageQueryDTO);
+        List<Customer> customerList = customerDao.selectPageCustomer(pageQueryDTO);
         PageInfo<Customer> pageInfo = new PageInfo(customerList);
 
         Map<String, Object> map = new HashMap<>();
@@ -158,6 +158,20 @@ public class CustomerServiceImpl implements CustomerService {
         } else {
             responseDTO.setMessage("导入失败");
         }
+        return responseDTO;
+    }
+
+    /**
+     * 不分页的情况下查询所有客户
+     *
+     * @return
+     */
+    @Override
+    public ResponseDTO getAllCustomer() {
+        ResponseDTO responseDTO=new ResponseDTO();
+        List<Customer> customerList = customerDao.selectAllCustomer();
+        responseDTO.setData(customerList);
+        responseDTO.setMessage("共"+customerList.size()+"条数据");
         return responseDTO;
     }
 }

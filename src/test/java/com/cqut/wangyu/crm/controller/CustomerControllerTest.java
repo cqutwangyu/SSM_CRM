@@ -62,7 +62,7 @@ public class CustomerControllerTest extends BaseTest {
 
     @Test
     public void findAllCustomerTest() {
-//        customerController.findAllCustomer(1, 10);
+//        customerController.findPageCustomer(1, 10);
     }
 
     @Test

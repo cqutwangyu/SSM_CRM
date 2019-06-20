@@ -57,10 +57,16 @@ public class CustomerController {
         return customerService.findCustomerById(cusId);
     }
 
-    @RequestMapping(value = "/findAllCustomer", method = RequestMethod.POST)
+    @RequestMapping(value = "/findPageCustomer", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findAllCustomer(PageQueryDTO pageQueryDTO) {
-        return customerService.findAllCustomer(pageQueryDTO);
+    public ResponseDTO findPageCustomer(PageQueryDTO pageQueryDTO) {
+        return customerService.findPageCustomer(pageQueryDTO);
+    }
+
+    @RequestMapping(value = "/getAllCustomer", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseDTO getAllCustomer() {
+        return customerService.getAllCustomer();
     }
 
     @RequestMapping(value = "/importCustomerFromExcel", method = RequestMethod.POST)

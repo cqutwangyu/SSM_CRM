@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 public interface CustomerService {
     ResponseDTO addCustomer(Customer customer);
 
-    ResponseDTO findAllCustomer(PageQueryDTO pageQueryDTO);
+    ResponseDTO findPageCustomer(PageQueryDTO pageQueryDTO);
 
     /**
      * 删除客户
@@ -47,4 +47,10 @@ public interface CustomerService {
      * @return
      */
     ResponseDTO importCustomerFromExcel(MultipartFile file, HttpServletRequest request);
+
+    /**
+     * 不分页的情况下查询所有客户
+     * @return
+     */
+    ResponseDTO getAllCustomer();
 }

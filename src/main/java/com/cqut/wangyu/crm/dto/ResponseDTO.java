@@ -48,11 +48,11 @@ public class ResponseDTO {
 
     @Override
     public String toString() {
-        return "ResponseDTO{" +
-                "code=" + code +
-                ", message='" + message + '\'' +
-                ", token='" + token + '\'' +
-                ", data=" + data +
+        return "{" +
+                "\"code\":" + code + "," +
+                "\"message\":\"" + message + "\"" + "," +
+                "\"token\" :\"" + token + "\" " + ", " +
+                "\"data\" :" + data +
                 '}';
     }
 }

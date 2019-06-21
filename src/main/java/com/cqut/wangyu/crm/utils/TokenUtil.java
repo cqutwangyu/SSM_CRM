@@ -22,7 +22,7 @@ public class TokenUtil {
     private static final long EXPIRE_TIME = 60 * 60 * 1000;
     private static final String TOKEN_SECRET = "ssm_crm_token";
     /**
-     * 生成签名，15分钟过期
+     * 生成签名，60分钟过期
      * @param **username**
      * @param **password**
      * @return

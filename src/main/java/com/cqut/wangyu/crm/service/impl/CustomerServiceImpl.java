@@ -37,8 +37,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseDTO addCustomer(Customer customer) {
         ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = customerDao.insertCustomer(customer);
-        responseDTO.setMessage(rows == 1 ? "添加成功" : "添加失败");
+        Customer cNo = customerDao.selectCustomerByNo(customer.getCusNo());
+        List<Customer> cName = customerDao.selectCustomerByName(customer.getCusName());
+        if (cNo == null && cName.isEmpty()) {
+            Integer rows = customerDao.insertCustomer(customer);
+            responseDTO.setMessage(rows == 1 ? "添加成功" : "添加失败");
+            responseDTO.setData("succeed");
+        } else {
+            responseDTO.setMessage(cNo != null ? "客户编号已存在" : "客户名称已存在");
+            responseDTO.setData("error");
+        }
         return responseDTO;
     }
 
@@ -146,7 +154,8 @@ public class CustomerServiceImpl implements CustomerService {
                     for (int i = 0; i < customerList.size(); i++) {
                         Customer customer = customerList.get(i);
                         List<Customer> customerListDB = customerDao.selectCustomerByName(customer.getCusName());
-                        if (customerListDB.isEmpty()) {
+                        Customer customerDB = customerDao.selectCustomerByNo(customer.getCusNo());
+                        if (customerListDB.isEmpty() && customerDB == null) {
                             customerDao.insertCustomer(customer);
                             succeed++;
                         } else {
@@ -157,9 +166,16 @@ public class CustomerServiceImpl implements CustomerService {
                     error = customerList.size() - succeed;
                 }
             }
-            responseDTO.setMessage("导入成功：" + succeed + "条,失败：" + error + "条");
+            responseDTO.setMessage("导入成功：" + succeed + "条,已存在：" + error + "条");
         } else {
             responseDTO.setMessage("导入失败");
+        }
+        if (succeed < error) {
+            responseDTO.setData("warn");
+        } else if (error == 0) {
+            responseDTO.setData("succeed");
+        }else {
+            responseDTO.setData("info");
         }
         return responseDTO;
     }

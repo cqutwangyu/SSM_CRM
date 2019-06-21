@@ -24,4 +24,5 @@ public interface CustomerDao {
 
     List<Customer> selectAllCustomer();
 
+    Customer selectCustomerByNo(String cusNo);
 }

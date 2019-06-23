@@ -54,7 +54,7 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
             System.out.println(paraName + ": " + request.getParameter(paraName));
         }
         //除login和register之外的请求需验证token
-        if (requestURI.equals("/file/img") ||requestURI.equals("/user/login") || requestURI.equals("/user/register") || TokenUtil.verify(token)) {
+        if (requestURI.equals("/file/getImage") ||requestURI.equals("/user/login") || requestURI.equals("/user/register") || TokenUtil.verify(token)) {
             long start = System.currentTimeMillis();
             request.setAttribute("start", start);
             logger.info(request.getRequestURI() + "请求到达");

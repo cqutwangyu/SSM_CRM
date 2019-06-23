@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @ClassName UserController
@@ -90,7 +91,7 @@ public class UserController {
 
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO uploadImage(MultipartFile avatar) {
+    public ResponseDTO uploadImage(MultipartFile avatar, HttpServletResponse response) {
         return userService.uploadImage(avatar, request);
     }
 }

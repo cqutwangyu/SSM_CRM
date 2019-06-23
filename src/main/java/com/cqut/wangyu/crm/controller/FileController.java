@@ -24,8 +24,11 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
-    @RequestMapping(value = "/image", method = RequestMethod.GET)
-    public void getFile(String path, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        fileService.ioReadImage(path,request,response);
+    @Autowired
+    private HttpServletRequest request;
+
+    @RequestMapping(value = "/getImage", method = RequestMethod.GET)
+    public void getImage(String path, HttpServletResponse response) throws IOException {
+        fileService.ioReadImage(path, request, response);
     }
 }

@@ -5,10 +5,8 @@ import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Customer;
 import com.cqut.wangyu.crm.service.CustomerService;
-import com.cqut.wangyu.crm.utils.MD5Util;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
-import com.cqut.wangyu.crm.utils.TokenUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,7 +128,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseDTO importCustomerFromExcel(MultipartFile file, HttpServletRequest request) {
         ResponseDTO responseDTO = new ResponseDTO();
-        int succeed = 0, error = 0;
+        int inserted = 0, updated = 0, notChanged = 0, error = 0;
         if (!file.isEmpty()) {
             String filePath = file.getOriginalFilename();
             //windows
@@ -145,36 +143,50 @@ public class CustomerServiceImpl implements CustomerService {
                 }
                 file.transferTo(targetFile);
                 customerList = POIUtil.readExcel(targetFile);
-                succeed = customerDao.insertForeach(customerList);
+                inserted = customerDao.insertForeach(customerList);
 
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (succeed == 0) {
+                if (inserted == 0) {
                     for (int i = 0; i < customerList.size(); i++) {
                         Customer customer = customerList.get(i);
                         List<Customer> customerListDB = customerDao.selectCustomerByName(customer.getCusName());
                         Customer customerDB = customerDao.selectCustomerByNo(customer.getCusNo());
                         if (customerListDB.isEmpty() && customerDB == null) {
+                            //不存在，插入数据
                             customerDao.insertCustomer(customer);
-                            succeed++;
+                            inserted++;
                         } else {
-                            error++;
+                            //已存在，更新数据
+                            customer.setCusId(customerDB.getCusId());
+                            if (!customer.equals(customerDB)) {
+                                Integer updateRows = customerDao.updateCustomer(customer);
+                                if (updateRows == 1) {
+                                    updated++;
+                                } else {
+                                    error++;
+                                }
+                            } else {
+                                notChanged++;
+                            }
                         }
                     }
                 } else {
-                    error = customerList.size() - succeed;
+                    error = customerList.size() - inserted;
                 }
             }
-            responseDTO.setMessage("导入成功：" + succeed + "条,已存在：" + error + "条");
+            responseDTO.setMessage("新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
         } else {
             responseDTO.setMessage("导入失败");
         }
-        if (succeed < error) {
+        if (inserted + updated + notChanged == 0) {
+            responseDTO.setData("error");
+        } else if (inserted + updated + notChanged <= error) {
             responseDTO.setData("warn");
         } else if (error == 0) {
             responseDTO.setData("succeed");
-        }else {
+        } else {
             responseDTO.setData("info");
         }
         return responseDTO;

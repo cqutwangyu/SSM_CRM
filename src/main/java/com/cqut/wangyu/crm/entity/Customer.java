@@ -1,5 +1,7 @@
 package com.cqut.wangyu.crm.entity;
 
+import java.util.Objects;
+
 /**
  * @ClassName Customer
  * @Description 客户实体类
@@ -80,5 +82,25 @@ public class Customer {
 
     public void setCusCredit(String cusCredit) {
         this.cusCredit = cusCredit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return Objects.equals(cusId, customer.cusId) &&
+                Objects.equals(cusNo, customer.cusNo) &&
+                Objects.equals(cusName, customer.cusName) &&
+                Objects.equals(cusPhone, customer.cusPhone) &&
+                Objects.equals(cusAddr, customer.cusAddr) &&
+                Objects.equals(cusUrl, customer.cusUrl) &&
+                Objects.equals(cusLevel, customer.cusLevel) &&
+                Objects.equals(cusCredit, customer.cusCredit);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cusId, cusNo, cusName, cusPhone, cusAddr, cusUrl, cusLevel, cusCredit);
     }
 }

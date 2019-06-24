@@ -21,7 +21,8 @@
     <!--根据ID修改用户-->
     <update id="updateCustomer" parameterType="Customer">
         update customer
-        set cusName   = #{cusName},
+        set cusNo   = #{cusNo},
+            cusName   = #{cusName},
             cusPhone  = #{cusPhone},
             cusAddr   = #{cusAddr},
             cusUrl    = #{cusUrl},

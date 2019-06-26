@@ -43,12 +43,12 @@ public class LogAspect {
         HttpServletRequest request = attributes.getRequest();
         HttpSession session = request.getSession();
         logger.debug("-----------------------------------------------------------------------------------------------------");
-        logger.debug("时间 = {}", DateUtil.getNowDateTime());
-        logger.debug("访问url = {}", request.getRequestURI());
-        logger.debug("请求方法类型 = {}", request.getMethod());
-        logger.debug("来源ip地址 = {}", request.getRemoteAddr());
-        logger.debug("调用方法 = {}", joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        logger.debug("请求参数 = {}", joinPoint.getArgs());
+        logger.info("时间 = {}", DateUtil.getNowDateTime());
+        logger.info("访问url = {}", request.getRequestURI());
+        logger.info("请求方法类型 = {}", request.getMethod());
+        logger.info("来源ip地址 = {}", request.getRemoteAddr());
+        logger.info("调用方法 = {}", joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+        logger.info("请求参数 = {}", joinPoint.getArgs());
         logger.debug("-----------------------------------------------------------------------------------------------------");
     }
 

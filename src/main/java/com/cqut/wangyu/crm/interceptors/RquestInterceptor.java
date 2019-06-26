@@ -54,13 +54,13 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
             System.out.println(paraName + ": " + request.getParameter(paraName));
         }
         //除login和register之外的请求需验证token
-        if (requestURI.equals("/file/getImage") ||requestURI.equals("/user/login") || requestURI.equals("/user/register") || TokenUtil.verify(token)) {
+        if (requestURI.equals("/SSM_CRM/file/getImage") ||requestURI.equals("/SSM_CRM/user/login") || requestURI.equals("/SSM_CRM/user/register") || TokenUtil.verify(token)) {
             long start = System.currentTimeMillis();
             request.setAttribute("start", start);
             logger.info(request.getRequestURI() + "请求到达");
             return true;
         }
-        logger.warn("请求：" + requestURI + "Token认证失败");
+        logger.info("请求：" + requestURI + "Token认证失败");
 //        response.setStatus(500);
         PrintWriter out = null;
         try {

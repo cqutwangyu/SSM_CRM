@@ -23,6 +23,21 @@ import java.util.Enumeration;
 public class RquestInterceptor extends HandlerInterceptorAdapter {
     private final static Logger logger = LoggerFactory.getLogger(RquestInterceptor.class);
 
+    private final static class MethodType {
+        /*axios请求时，会先发送一个OPTIONS请求*/
+        private final static String OPTIONS = "OPTIONS";
+    }
+
+    /*除以下请求之外都需要验证Token才能通过*/
+    private final static class UrlPath {
+        /*请求服务器图片*/
+        private final static String getImage = "/SSM_CRM/file/getImage";
+        /*登录请求*/
+        private final static String login = "/SSM_CRM/user/login";
+        /*注册请求*/
+        private final static String register = "/SSM_CRM/user/register";
+    }
+
     /**
      * 预处理回调方法，实现处理器的预处理（如检查登陆），第三个参数为响应的处理器，自定义Controller
      * 返回值：true表示继续流程（如调用下一个拦截器或处理器）；false表示流程中断（如登录检查失败），
@@ -42,7 +57,7 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
         response.setHeader("Access-Control-Allow-Methods", request.getHeader("Access-Control-Request-Method"));
         // 设置响应数据格式
         response.setHeader("Content-Type", "application/json");
-        if (request.getMethod().equals("OPTIONS")) {
+        if (request.getMethod().equals(MethodType.OPTIONS)) {
             response.setStatus(HttpServletResponse.SC_OK);
             return true;
         }
@@ -54,7 +69,8 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
             System.out.println(paraName + ": " + request.getParameter(paraName));
         }
         //除login和register之外的请求需验证token
-        if (requestURI.equals("/SSM_CRM/file/getImage") ||requestURI.equals("/SSM_CRM/user/login") || requestURI.equals("/SSM_CRM/user/register") || TokenUtil.verify(token)) {
+        if (requestURI.equals(UrlPath.getImage) || requestURI.equals(UrlPath.login)
+                || requestURI.equals(UrlPath.register) || TokenUtil.verify(token)) {
             long start = System.currentTimeMillis();
             request.setAttribute("start", start);
             logger.info(request.getRequestURI() + "请求到达");
@@ -65,7 +81,7 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            ResponseDTO responseDTO=new ResponseDTO();
+            ResponseDTO responseDTO = new ResponseDTO();
             responseDTO.setCode(50008);
             responseDTO.setMessage("身份认证失败，请重新登录。");
             out.print(responseDTO);
@@ -85,7 +101,7 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
         super.postHandle(request, response, handler, modelAndView);
-        if (!request.getMethod().equals("OPTIONS")) {
+        if (!"OPTIONS".equals(request.getMethod())) {
             long start = (long) request.getAttribute("start");
             long end = System.currentTimeMillis();
             long spendTime = end - start;
@@ -112,6 +128,7 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
      * 不是HandlerInterceptor的接口实现，是AsyncHandlerInterceptor的
      * AsyncHandlerInterceptor实现了HandlerInterceptor
      */
+    @Override
     public void afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         super.afterConcurrentHandlingStarted(request, response, handler);

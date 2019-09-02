@@ -9,7 +9,10 @@ package com.cqut.wangyu.crm.utils;
  */
 public class MyFileUtil {
     public final static String ServerAddress = "http://127.0.0.1:8080/";
-    public final static String imgRequest = "SSM_CRM/file/getImage?path=";
+//    public final static String ServerAddress = "http://39.108.252.228/SSM_CRM/";
+
+    public final static String imgRequest = "file/getImage?path=";
+
     public final static String imgPath = "UploadingResources/Images/";
     public final static String excelPath = "UploadingResources/Excel/";
 

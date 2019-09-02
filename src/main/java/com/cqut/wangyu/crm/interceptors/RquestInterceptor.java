@@ -30,12 +30,16 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
 
     /*除以下请求之外都需要验证Token才能通过*/
     private final static class UrlPath {
-        /*请求服务器图片*/
-        private final static String getImage = "/SSM_CRM/file/getImage";
-        /*登录请求*/
-        private final static String login = "/SSM_CRM/user/login";
-        /*注册请求*/
-        private final static String register = "/SSM_CRM/user/register";
+//        /*请求服务器图片*/
+//        private final static String getImage = "/SSM_CRM/file/getImage";
+//        /*登录请求*/
+//        private final static String login = "/SSM_CRM/user/login";
+//        /*注册请求*/
+//        private final static String register = "/SSM_CRM/user/register";
+
+        private final static String getImage = "/file/getImage";
+        private final static String login = "/user/login";
+        private final static String register = "/user/register";
     }
 
     /**

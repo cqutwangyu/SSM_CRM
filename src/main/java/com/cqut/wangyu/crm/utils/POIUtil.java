@@ -76,9 +76,9 @@ public class POIUtil {
 //                    Cell cusId = hssfRow.getCell(0);
                     Cell cusNo = hssfRow.getCell(1);
                     Cell cusName = hssfRow.getCell(2);
-                    Cell cusRegion = hssfRow.getCell(3);
+                    Cell cusPhone = hssfRow.getCell(3);
 //                    解决文本自动转为数字
-                    cusRegion.setCellType(CellType.STRING);
+//                    cusPhone.setCellType(CellType.STRING);
                     Cell cusAddr = hssfRow.getCell(4);
                     Cell cusUrl = hssfRow.getCell(5);
                     Cell cusLevel = hssfRow.getCell(6);
@@ -87,7 +87,7 @@ public class POIUtil {
 //                    customer.setCusId(Integer.valueOf(cusId.toString()));
                     customer.setCusNo(cusNo.toString());
                     customer.setCusName(cusName.toString());
-                    customer.setCusPhone(cusRegion.toString());
+                    customer.setCusPhone(cusPhone.toString());
                     customer.setCusAddr(cusAddr.toString());
                     customer.setCusUrl(cusUrl.toString());
                     customer.setCusLevel(cusLevel.toString());

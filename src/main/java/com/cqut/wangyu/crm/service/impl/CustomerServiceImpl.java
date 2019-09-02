@@ -144,7 +144,6 @@ public class CustomerServiceImpl implements CustomerService {
                 file.transferTo(targetFile);
                 customerList = POIUtil.readExcel(targetFile);
                 inserted = customerDao.insertForeach(customerList);
-
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {

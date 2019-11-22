@@ -35,14 +35,13 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseDTO addCustomer(Customer customer) {
         ResponseDTO responseDTO = new ResponseDTO();
-        Customer cNo = customerDao.selectCustomerByNo(customer.getCusNo());
-        List<Customer> cName = customerDao.selectCustomerByName(customer.getCusName());
-        if (cNo == null && cName.isEmpty()) {
+        List<Customer> cName = customerDao.selectCustomerByName(customer.getCustomerName());
+        if (cName.isEmpty()) {
             Integer rows = customerDao.insertCustomer(customer);
             responseDTO.setMessage(rows == 1 ? "添加成功" : "添加失败");
             responseDTO.setData("succeed");
         } else {
-            responseDTO.setMessage(cNo != null ? "客户编号已存在" : "客户名称已存在");
+            responseDTO.setMessage("客户名称已存在");
             responseDTO.setData("error");
         }
         return responseDTO;
@@ -150,16 +149,14 @@ public class CustomerServiceImpl implements CustomerService {
                 if (inserted == 0) {
                     for (int i = 0; i < customerList.size(); i++) {
                         Customer customer = customerList.get(i);
-                        List<Customer> customerListDB = customerDao.selectCustomerByName(customer.getCusName());
-                        Customer customerDB = customerDao.selectCustomerByNo(customer.getCusNo());
-                        if (customerListDB.isEmpty() && customerDB == null) {
+                        List<Customer> customerListDB = customerDao.selectCustomerByName(customer.getCustomerName());
+                        if (customerListDB.isEmpty()) {
                             //不存在，插入数据
                             customerDao.insertCustomer(customer);
                             inserted++;
                         } else {
                             //已存在，更新数据
-                            customer.setCusId(customerDB.getCusId());
-                            if (!customer.equals(customerDB)) {
+                            if (!customer.equals(customerListDB.get(0))) {
                                 Integer updateRows = customerDao.updateCustomer(customer);
                                 if (updateRows == 1) {
                                     updated++;

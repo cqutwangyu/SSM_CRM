@@ -6,105 +6,92 @@ import java.util.Objects;
  * @ClassName Customer
  * @Description 客户实体类
  * @Author ChongqingWangYu
- * @DateTime 2019/6/17 8:39
+ * @DateTime 2019/11/22 13:56
  * @GitHub https://github.com/ChongqingWangYu
  */
 public class Customer {
+    private Integer customerID;
+    private String customerName;
+    private String customerPhone;
+    private String customerAddress;
+    private String customerUrl;
+    //1、有意向 2、无意向 3、已成交
+    private Integer customerType;
+    //1、待商谈 2、已商谈 3、待签约 4、已签约
+    private Integer customerStatus;
 
-    private Integer cusId;
-    private String cusNo;
-    private String cusName;
-    private String cusPhone;
-    private String cusAddr;
-    private String cusUrl;
-    private String cusLevel;
-    private String cusCredit;
-
-    public Integer getCusId() {
-        return cusId;
+    public Integer getCustomerID() {
+        return customerID;
     }
 
-    public void setCusId(Integer cusId) {
-        this.cusId = cusId;
+    public void setCustomerID(Integer customerID) {
+        this.customerID = customerID;
     }
 
-    public String getCusNo() {
-        return cusNo;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setCusNo(String cusNo) {
-        this.cusNo = cusNo;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    public String getCusName() {
-        return cusName;
+    public String getCustomerPhone() {
+        return customerPhone;
     }
 
-    public void setCusName(String cusName) {
-        this.cusName = cusName;
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
     }
 
-    public String getCusPhone() {
-        return cusPhone;
+    public String getCustomerAddress() {
+        return customerAddress;
     }
 
-    public void setCusPhone(String cusPhone) {
-        this.cusPhone = cusPhone;
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
     }
 
-    public String getCusAddr() {
-        return cusAddr;
+    public String getCustomerUrl() {
+        return customerUrl;
     }
 
-    public void setCusAddr(String cusAddr) {
-        this.cusAddr = cusAddr;
+    public void setCustomerUrl(String customerUrl) {
+        this.customerUrl = customerUrl;
     }
 
-    public String getCusUrl() {
-        return cusUrl;
+    public Integer getCustomerType() {
+        return customerType;
     }
 
-    public void setCusUrl(String cusUrl) {
-        this.cusUrl = cusUrl;
+    public void setCustomerType(Integer customerType) {
+        this.customerType = customerType;
     }
 
-    public String getCusLevel() {
-        return cusLevel;
+    public Integer getCustomerStatus() {
+        return customerStatus;
     }
 
-    public void setCusLevel(String cusLevel) {
-        this.cusLevel = cusLevel;
-    }
-
-    public String getCusCredit() {
-        return cusCredit;
-    }
-
-    public void setCusCredit(String cusCredit) {
-        this.cusCredit = cusCredit;
+    public void setCustomerStatus(Integer customerStatus) {
+        this.customerStatus = customerStatus;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return Objects.equals(cusId, customer.cusId) &&
-                Objects.equals(cusNo, customer.cusNo) &&
-                Objects.equals(cusName, customer.cusName) &&
-                Objects.equals(cusPhone, customer.cusPhone) &&
-                Objects.equals(cusAddr, customer.cusAddr) &&
-                Objects.equals(cusUrl, customer.cusUrl) &&
-                Objects.equals(cusLevel, customer.cusLevel) &&
-                Objects.equals(cusCredit, customer.cusCredit);
+        return Objects.equals(customerID, customer.customerID) &&
+                Objects.equals(customerName, customer.customerName) &&
+                Objects.equals(customerPhone, customer.customerPhone) &&
+                Objects.equals(customerAddress, customer.customerAddress) &&
+                Objects.equals(customerUrl, customer.customerUrl) &&
+                Objects.equals(customerType, customer.customerType) &&
+                Objects.equals(customerStatus, customer.customerStatus);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cusId, cusNo, cusName, cusPhone, cusAddr, cusUrl, cusLevel, cusCredit);
+        return Objects.hash(customerID, customerName, customerPhone, customerAddress, customerUrl, customerType, customerStatus);
     }
 }

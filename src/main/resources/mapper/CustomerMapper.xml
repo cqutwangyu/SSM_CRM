@@ -3,38 +3,42 @@
 <mapper namespace="com.cqut.wangyu.crm.dao.CustomerDao">
     <!--注册-->
     <insert id="insertCustomer" parameterType="com.cqut.wangyu.crm.entity.Customer">
-        insert into customer (cusNo, cusName, cusPhone, cusAddr, cusUrl, cusLevel, cusCredit)
-        values (#{cusNo}, #{cusName}, #{cusPhone}, #{cusAddr}, #{cusUrl}, #{cusLevel}, #{cusCredit})
+        insert into customer (customerName, customerPhone, customerAddress, customerUrl, customerType, customerStatus)
+        values (#{customerName},
+                #{customerPhone},
+                #{customerAddress},
+                #{customerUrl},
+                #{customerType},
+                #{customerStatus})
     </insert>
     <!--根据ID查用户-->
     <select id="selectCustomerById" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.entity.Customer">
         select *
         from customer
-        where cusId = #{cusId}
+        where customerID = #{cusId}
     </select>
     <!--根据用户名查用户-->
     <select id="selectCustomerByName" parameterType="java.lang.String" resultType="com.cqut.wangyu.crm.entity.Customer">
         select *
         from customer
-        where cusName = #{cusName}
+        where customerName = #{cusName}
     </select>
     <!--根据ID修改用户-->
     <update id="updateCustomer" parameterType="Customer">
         update customer
-        set cusNo   = #{cusNo},
-            cusName   = #{cusName},
-            cusPhone  = #{cusPhone},
-            cusAddr   = #{cusAddr},
-            cusUrl    = #{cusUrl},
-            cusLevel  = #{cusLevel},
-            cusCredit = #{cusCredit}
-        where cusId = #{cusId}
+        set customerName    = #{customerName},
+            customerPhone   = #{customerPhone},
+            customerAddress = #{customerAddress},
+            customerUrl     = #{customerUrl},
+            customerType    = #{customerType},
+            customerStatus  = #{customerStatus}
+        where customerID = #{customerID}
     </update>
     <!--根据ID删除客户-->
     <delete id="deleteCustomer" parameterType="java.lang.Integer">
         delete
         from customer
-        where cusId = #{cusId}
+        where customerID = #{cusId}
     </delete>
     <!--根据cusNo查询客户-->
     <select id="selectCustomerByNo" parameterType="String" resultType="Customer">
@@ -48,13 +52,13 @@
         select *
         from customer
         where ${sql}
-        order by cusId
+        order by customerID
     </select>
     <!--查询所有客户-->
     <select id="selectAllCustomer" resultType="com.cqut.wangyu.crm.entity.Customer">
         select *
         from customer
-        order by cusId
+        order by customerID
     </select>
     <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
         insert into customer

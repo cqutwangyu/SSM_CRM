@@ -21,13 +21,12 @@ public class CustomerControllerTest extends BaseTest {
     @Test
     public void addCustomer() {
         Customer customer = new Customer();
-        customer.setCusNo("900001");
-        customer.setCusName("重庆理工大学");
-        customer.setCusPhone("西南");
-        customer.setCusAddr("重庆市巴南区");
-        customer.setCusUrl("www.cqut.edu.cn");
-        customer.setCusLevel("战略合作伙伴");
-        customer.setCusCredit("普通客户");
+        customer.setCustomerName("重庆理工大学");
+        customer.setCustomerPhone("13883688888");
+        customer.setCustomerAddress("重庆市巴南区");
+        customer.setCustomerUrl("www.cqut.edu.cn");
+        customer.setCustomerType(1);
+        customer.setCustomerStatus(2);
         customerController.addCustomer(customer);
     }
 
@@ -49,14 +48,13 @@ public class CustomerControllerTest extends BaseTest {
     @Test
     public void updateTest() {
         Customer customer = new Customer();
-        customer.setCusId(2);
-        customer.setCusNo("900002");
-        customer.setCusName("重庆理工大学");
-        customer.setCusPhone("西南");
-        customer.setCusAddr("重庆市巴南区");
-        customer.setCusUrl("www.cqut.edu.cn");
-        customer.setCusLevel("战略合作伙伴");
-        customer.setCusCredit("普通客户1");
+        customer.setCustomerID(2);
+        customer.setCustomerName("重庆理工大学1");
+        customer.setCustomerPhone("13883688889");
+        customer.setCustomerAddress("重庆市巴南区1");
+        customer.setCustomerUrl("www.cqut.edu.com");
+        customer.setCustomerType(2);
+        customer.setCustomerStatus(3);
         customerController.updateCustomer(customer);
     }
 
@@ -68,7 +66,8 @@ public class CustomerControllerTest extends BaseTest {
     @Test
     public void addCustomerDataFromExcle() {
         try {
-            List<Customer> customerLIst = POIUtil.readExcel("C:\\Users\\Administrator\\Desktop\\customer.xlsx");
+            String fileName="G:\\ProjectBackups\\SQLdata\\CRM_contact.xlsx";
+            List<Customer> customerLIst = POIUtil.readExcel(fileName);
             for (int i = 0; i < customerLIst.size(); i++) {
                 customerController.addCustomer(customerLIst.get(i));
             }

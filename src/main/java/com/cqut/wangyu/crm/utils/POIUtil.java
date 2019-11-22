@@ -36,8 +36,6 @@ public class POIUtil {
     }
 
     public static List<Customer> readExcel(String fileName) throws Exception {
-//        String[] level={"一级","二级","三级","四级","五级"};
-//        String[] credit={"青铜","白银","黄金","铂金","钻石"};
         InputStream is = new FileInputStream(new File(fileName));
         Workbook hssfWorkbook = null;
         if (fileName.endsWith("xlsx")) {
@@ -73,25 +71,23 @@ public class POIUtil {
                 Row hssfRow = hssfSheet.getRow(rowNum);
                 if (hssfRow != null) {
                     customer = new Customer();
-//                    Cell cusId = hssfRow.getCell(0);
-                    Cell cusNo = hssfRow.getCell(1);
-                    Cell cusName = hssfRow.getCell(2);
-                    Cell cusPhone = hssfRow.getCell(3);
+                    Cell cusID = hssfRow.getCell(0);
+                    Cell cusName = hssfRow.getCell(1);
+                    Cell cusPhone = hssfRow.getCell(2);
 //                    解决文本自动转为数字
 //                    cusPhone.setCellType(CellType.STRING);
-                    Cell cusAddr = hssfRow.getCell(4);
-                    Cell cusUrl = hssfRow.getCell(5);
-                    Cell cusLevel = hssfRow.getCell(6);
-                    Cell cusCredit = hssfRow.getCell(7);
+                    Cell cusAddr = hssfRow.getCell(3);
+                    Cell cusUrl = hssfRow.getCell(4);
+                    Cell cusType= hssfRow.getCell(5);
+                    Cell cusStatus= hssfRow.getCell(6);
                     //这里是自己的逻辑
-//                    customer.setCusId(Integer.valueOf(cusId.toString()));
-                    customer.setCusNo(cusNo.toString());
-                    customer.setCusName(cusName.toString());
-                    customer.setCusPhone(cusPhone.toString());
-                    customer.setCusAddr(cusAddr.toString());
-                    customer.setCusUrl(cusUrl.toString());
-                    customer.setCusLevel(cusLevel.toString());
-                    customer.setCusCredit(cusCredit.toString());
+                    customer.setCustomerID(Double.valueOf(cusID.toString()).intValue());
+                    customer.setCustomerName(cusName.toString());
+                    customer.setCustomerPhone(cusPhone.toString());
+                    customer.setCustomerAddress(cusAddr.toString());
+                    customer.setCustomerUrl(cusUrl.toString());
+                    customer.setCustomerType(Double.valueOf(cusType.toString()).intValue());
+                    customer.setCustomerStatus(Double.valueOf(cusStatus.toString()).intValue());
                     list.add(customer);
                 }
             }

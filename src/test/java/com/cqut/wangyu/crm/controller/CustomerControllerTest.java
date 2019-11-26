@@ -1,5 +1,6 @@
 package com.cqut.wangyu.crm.controller;
 
+import com.cqut.wangyu.crm.entity.Contact;
 import com.cqut.wangyu.crm.entity.Customer;
 import com.cqut.wangyu.crm.utils.POIUtil;
 import org.junit.Test;
@@ -17,6 +18,8 @@ import java.util.List;
 public class CustomerControllerTest extends BaseTest {
     @Autowired
     private CustomerController customerController;
+    @Autowired
+    private ContactController contactController;
 
     @Test
     public void addCustomer() {
@@ -67,10 +70,15 @@ public class CustomerControllerTest extends BaseTest {
     public void addCustomerDataFromExcle() {
         try {
             String fileName="G:\\ProjectBackups\\SQLdata\\CRM_contact.xlsx";
-            List<Customer> customerLIst = POIUtil.readExcel(fileName);
+            List<Contact> customerLIst = POIUtil.readContactExcel(fileName);
             for (int i = 0; i < customerLIst.size(); i++) {
-                customerController.addCustomer(customerLIst.get(i));
+                contactController.addContact(customerLIst.get(i));
             }
+//            String fileName="G:\\ProjectBackups\\SQLdata\\CRM_contact.xlsx";
+//            List<Customer> customerLIst = POIUtil.readCustomerExcel(fileName);
+//            for (int i = 0; i < customerLIst.size(); i++) {
+//                customerController.addCustomer(customerLIst.get(i));
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

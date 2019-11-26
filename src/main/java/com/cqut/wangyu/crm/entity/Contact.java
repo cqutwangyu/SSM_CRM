@@ -9,7 +9,8 @@ package com.cqut.wangyu.crm.entity;
  */
 public class Contact {
     private Integer contactID;
-    private String customerID;
+    private Integer customerID;
+    private String customerName;
     private String contactPosition;
     private String contactName;
     //1、男 2、女
@@ -17,6 +18,14 @@ public class Contact {
     private String contactPhone;
     private String contactQQ;
     private String contactEmail;
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
     public Integer getContactID() {
         return contactID;
@@ -26,11 +35,11 @@ public class Contact {
         this.contactID = contactID;
     }
 
-    public String getCustomerID() {
+    public Integer getCustomerID() {
         return customerID;
     }
 
-    public void setCustomerID(String customerID) {
+    public void setCustomerID(Integer customerID) {
         this.customerID = customerID;
     }
 

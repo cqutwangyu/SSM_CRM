@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.wangyu.crm.dao.ContactDao">
+    <!--注册-->
+    <insert id="insertContact" parameterType="com.cqut.wangyu.crm.entity.Contact">
+        insert into contact (customerName, contactPosition, contactName, contactSex, contactPhone,contactQQ,contactEmail,customerID)
+        values (
+                #{customerName},
+                #{contactPosition},
+                #{contactName},
+                #{contactSex},
+                #{contactPhone},
+                #{contactQQ},
+                #{contactEmail},
+                #{customerID})
+    </insert>
+    <!--根据ID查用户-->
+    <select id="selectContactById" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.entity.Contact">
+        select *
+        from contact
+        where contactID = #{conId}
+    </select>
+    <!--根据用户名查用户-->
+    <select id="selectContactByName" parameterType="java.lang.String" resultType="com.cqut.wangyu.crm.entity.Contact">
+        select *
+        from contact
+        where contactName = #{conName}
+    </select>
+    <!--根据ID修改用户-->
+    <update id="updateContact" parameterType="Contact">
+        update contact
+        set contactName    = #{contactName},
+            contactPosition = #{contactPosition},
+            contactSex     = #{contactSex},
+            contactPhone    = #{contactPhone},
+            contactQQ    = #{contactQQ},
+            contactEmail    = #{contactEmail}
+        where contactID = #{contactID}
+    </update>
+    <!--根据ID删除客户-->
+    <delete id="deleteContact" parameterType="java.lang.Integer">
+        delete
+        from contact
+        where contactID = #{conId}
+    </delete>
+    <!--查询页内满足条件的客户-->
+    <select id="selectPageContact" parameterType="com.cqut.wangyu.crm.dto.PageQueryDTO"
+            resultType="com.cqut.wangyu.crm.entity.Contact">
+        select *
+        from contact
+        where ${sql}
+        order by contactID
+    </select>
+    <!--查询所有客户-->
+    <select id="selectAllContact" resultType="com.cqut.wangyu.crm.entity.Contact">
+        select *
+        from contact
+        order by contactID
+    </select>
+    <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into contact
+        (contactID, customerName, contactPosition, contactName, contactSex, contactPhone,contactQQ,contactEmail,customerID)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            null,
+            #{item.customerName},
+            #{item.contactPosition},
+            #{item.contactName},
+            #{item.contactSex},
+            #{item.contactPhone},
+            #{item.contactQQ},
+            #{item.contactEmail},
+            #{item.customerID}
+            )
+        </foreach>
+    </insert>
+</mapper>

@@ -1,10 +1,10 @@
 package com.cqut.wangyu.crm.service.impl;
 
-import com.cqut.wangyu.crm.dao.CustomerDao;
+import com.cqut.wangyu.crm.dao.ContactDao;
 import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
-import com.cqut.wangyu.crm.entity.Customer;
-import com.cqut.wangyu.crm.service.CustomerService;
+import com.cqut.wangyu.crm.entity.Contact;
+import com.cqut.wangyu.crm.service.ContactService;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
 import com.github.pagehelper.PageHelper;
@@ -20,24 +20,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @ClassName CustomerServiceImpl
- * @Description
+ * @ClassName ContactServiceImpl
+ * @Description 联系人服务实现
  * @Author ChongqingWangYu
- * @DateTime 2019/6/17 8:36
+ * @DateTime 2019/11/26 9:15
  * @GitHub https://github.com/ChongqingWangYu
  */
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class ContactServiceImpl implements ContactService {
 
     @Autowired
-    private CustomerDao customerDao;
+    private ContactDao contactDao;
 
     @Override
-    public ResponseDTO addCustomer(Customer customer) {
+    public ResponseDTO addContact(Contact contact) {
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Customer> cName = customerDao.selectCustomerByName(customer.getCustomerName());
+        List<Contact> cName = contactDao.selectContactByName(contact.getContactName());
         if (cName.isEmpty()) {
-            Integer rows = customerDao.insertCustomer(customer);
+            Integer rows = contactDao.insertContact(contact);
             responseDTO.setMessage(rows == 1 ? "添加成功" : "添加失败");
             responseDTO.setData("succeed");
         } else {
@@ -48,71 +48,71 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public ResponseDTO findPageCustomer(PageQueryDTO pageQueryDTO) {
+    public ResponseDTO findPageContact(PageQueryDTO pageQueryDTO) {
         PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Customer> customerList = customerDao.selectPageCustomer(pageQueryDTO);
-        PageInfo<Customer> pageInfo = new PageInfo(customerList);
+        List<Contact> contactList = contactDao.selectPageContact(pageQueryDTO);
+        PageInfo<Contact> pageInfo = new PageInfo(contactList);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", pageInfo.getTotal());
-        map.put("items", customerList);
+        map.put("items", contactList);
         responseDTO.setData(map);
         return responseDTO;
     }
 
     /**
-     * 删除客户
+     * 删除联系人
      *
-     * @param cusId 客户Id
+     * @param conId 联系人Id
      * @return
      */
     @Override
-    public ResponseDTO deleteCustomer(Integer cusId) {
+    public ResponseDTO deleteContact(Integer contactID) {
         ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = customerDao.deleteCustomer(cusId);
+        Integer rows = contactDao.deleteContact(contactID);
         responseDTO.setMessage(rows == 1 ? "删除成功" : "删除失败");
         return responseDTO;
     }
 
     /**
-     * 修改客户信息
+     * 修改联系人信息
      *
-     * @param customer
+     * @param contact
      * @return
      */
     @Override
-    public ResponseDTO updateCustomer(Customer customer) {
+    public ResponseDTO updateContact(Contact contact) {
         ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = customerDao.updateCustomer(customer);
+        Integer rows = contactDao.updateContact(contact);
         responseDTO.setMessage(rows == 1 ? "修改成功" : "修改失败");
         return responseDTO;
     }
 
     /**
-     * 根据客户名查询客户
+     * 根据联系人姓名查询联系人
      *
-     * @param cusName
+     * @param conName
      * @return
      */
     @Override
-    public ResponseDTO findCustomerByName(String cusName) {
+    public ResponseDTO findContactByName(String conName) {
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Customer> customerList = customerDao.selectCustomerByName(cusName);
+        List<Contact> customerList = contactDao.selectContactByName(conName);
         responseDTO.setData(customerList);
         return responseDTO;
     }
 
     /**
-     * 根据客户ID查询客户
+     * 根据客户ID查询联系人
      *
-     * @param cusId
+     * @param conId
      * @return
      */
     @Override
-    public ResponseDTO findCustomerById(Integer cusId) {
+    public ResponseDTO findContactById(Integer conId) {
         ResponseDTO responseDTO = new ResponseDTO();
-        Customer customer = customerDao.selectCustomerById(cusId);
+        Contact customer = contactDao.selectContactById(conId);
         responseDTO.setData(customer);
         return responseDTO;
     }
@@ -125,7 +125,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @return
      */
     @Override
-    public ResponseDTO importCustomerFromExcel(MultipartFile file, HttpServletRequest request) {
+    public ResponseDTO importContactFromExcel(MultipartFile file, HttpServletRequest request) {
         ResponseDTO responseDTO = new ResponseDTO();
         int inserted = 0, updated = 0, notChanged = 0, error = 0;
         if (!file.isEmpty()) {
@@ -134,30 +134,30 @@ public class CustomerServiceImpl implements CustomerService {
             String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.excelPath + filePath);
             //linux
             //String savePath = "/home/odcuser/webapps/file";
-            List<Customer> customerList = null;
+            List<Contact> contactList = null;
             try {
                 File targetFile = new File(savePath);
                 if (!targetFile.exists()) {
                     targetFile.mkdirs();
                 }
                 file.transferTo(targetFile);
-                customerList = POIUtil.readCustomerExcel(targetFile);
-                inserted = customerDao.insertForeach(customerList);
+                contactList = POIUtil.readContactExcel(targetFile);
+                inserted = contactDao.insertForeach(contactList);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 if (inserted == 0) {
-                    for (int i = 0; i < customerList.size(); i++) {
-                        Customer customer = customerList.get(i);
-                        List<Customer> customerListDB = customerDao.selectCustomerByName(customer.getCustomerName());
+                    for (int i = 0; i < contactList.size(); i++) {
+                        Contact contact = contactList.get(i);
+                        List<Contact> customerListDB = contactDao.selectContactByName(contact.getContactName());
                         if (customerListDB.isEmpty()) {
                             //不存在，插入数据
-                            customerDao.insertCustomer(customer);
+                            contactDao.insertContact(contact);
                             inserted++;
                         } else {
                             //已存在，更新数据
-                            if (!customer.equals(customerListDB.get(0))) {
-                                Integer updateRows = customerDao.updateCustomer(customer);
+                            if (!contact.equals(customerListDB.get(0))) {
+                                Integer updateRows = contactDao.updateContact(contact);
                                 if (updateRows == 1) {
                                     updated++;
                                 } else {
@@ -169,7 +169,7 @@ public class CustomerServiceImpl implements CustomerService {
                         }
                     }
                 } else {
-                    error = customerList.size() - inserted;
+                    error = contactList.size() - inserted;
                 }
             }
             responseDTO.setMessage("新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
@@ -189,18 +189,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     /**
-     * 不分页的情况下查询所有客户
+     * 不分页的情况下查询所有联系人
      *
      * @return
      */
     @Override
-    public ResponseDTO getAllCustomer() {
+    public ResponseDTO getAllContact() {
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Customer> customerList = customerDao.selectAllCustomer();
-        responseDTO.setData(customerList);
-        responseDTO.setMessage("共" + customerList.size() + "条数据");
+        List<Contact> contactList = contactDao.selectAllContact();
+        responseDTO.setData(contactList);
+        responseDTO.setMessage("共" + contactList.size() + "条数据");
         return responseDTO;
     }
-
-
 }

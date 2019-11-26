@@ -27,7 +27,11 @@ public class SQLUtil {
             if (count > 0) {
                 sql += and;
             }
-            sql += columnName + like + strValue(value);
+            if(columnName.endsWith("ID")){
+                sql += columnName + like + strValue(value);
+            }else {
+                sql += columnName + like + strDimValue(value);
+            }
             count++;
         }
         if (count == 0) {
@@ -36,7 +40,11 @@ public class SQLUtil {
         return sql;
     }
 
-    public static String strValue(String value) {
+    public static String strDimValue(String value) {
         return "'%" + value + "%'";
+    }
+
+    public static String strValue(String value) {
+        return "'" + value + "'";
     }
 }

@@ -2,6 +2,7 @@ package com.cqut.wangyu.crm.utils;
 
 import com.cqut.wangyu.crm.entity.Contact;
 import com.cqut.wangyu.crm.entity.Customer;
+import com.cqut.wangyu.crm.entity.Follow;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -9,6 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,6 +174,77 @@ public class POIUtil {
                     contact.setContactEmail(contactEmail.toString());
                     contact.setCustomerID(Double.valueOf(customerID.toString()).intValue());
                     list.add(contact);
+                }
+            }
+        }
+    }
+    /*follow*/
+    public static List<Follow> readFollowExcel(File file) throws Exception {
+        String fileName = file.getName();
+        InputStream is = new FileInputStream(file);
+        Workbook hssfWorkbook = null;
+        if (fileName.endsWith("xlsx")) {
+            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
+        } else if (fileName.endsWith("xls")) {
+            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
+        }
+        Follow follow = null;
+        List<Follow> list = new ArrayList<Follow>();
+        // 循环工作表Sheet
+        forechFollowDataToList(hssfWorkbook, list);
+        return list;
+    }
+
+    public static List<Follow> readFollowExcel(String fileName) throws Exception {
+        InputStream is = new FileInputStream(new File(fileName));
+        Workbook hssfWorkbook = null;
+        if (fileName.endsWith("xlsx")) {
+            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
+        } else if (fileName.endsWith("xls")) {
+            hssfWorkbook = new HSSFWorkbook(is);//Excel 2003
+
+        }
+        Follow follow = null;
+        List<Follow> list = new ArrayList<Follow>();
+        // 循环工作表Sheet
+        forechFollowDataToList(hssfWorkbook, list);
+        return list;
+    }
+
+    /**
+     * 将数据读入list
+     *
+     * @param hssfWorkbook
+     * @param list
+     */
+    private static void forechFollowDataToList(Workbook hssfWorkbook, List<Follow> list) {
+        Follow follow;
+        for (int numSheet = 0; numSheet < hssfWorkbook.getNumberOfSheets(); numSheet++) {
+            //HSSFSheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            Sheet hssfSheet = hssfWorkbook.getSheetAt(numSheet);
+            if (hssfSheet == null) {
+                continue;
+            }
+            // 循环行Row
+            for (int rowNum = 1; rowNum <= hssfSheet.getLastRowNum(); rowNum++) {
+                //HSSFRow hssfRow = hssfSheet.getRow(rowNum);
+                Row hssfRow = hssfSheet.getRow(rowNum);
+                if (hssfRow != null) {
+                    follow = new Follow();
+                    Cell followID = hssfRow.getCell(0);
+                    Cell customerName = hssfRow.getCell(1);
+                    Cell followContent = hssfRow.getCell(2);
+                    Cell followDate = hssfRow.getCell(3);
+                    Cell followType = hssfRow.getCell(4);
+                    Cell customerID = hssfRow.getCell(5);
+                    //这里是自己的逻辑
+                    follow.setFollowID(Double.valueOf(followID.toString()).intValue());
+                    follow.setCustomerName(customerName.toString());
+                    follow.setFollowContent(followContent.toString());
+                    follow.setFollowDate(DateUtil.formatDate(followDate.getDateCellValue()));
+                    follow.setFollowType(Double.valueOf(followType.toString()).intValue());
+                    follow.setCustomerID(Double.valueOf(customerID.toString()).intValue());
+                    list.add(follow);
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.cqut.wangyu.crm.controller;
 
 import com.cqut.wangyu.crm.entity.Contact;
 import com.cqut.wangyu.crm.entity.Customer;
+import com.cqut.wangyu.crm.entity.Follow;
 import com.cqut.wangyu.crm.utils.POIUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class CustomerControllerTest extends BaseTest {
     private CustomerController customerController;
     @Autowired
     private ContactController contactController;
+    @Autowired
+    private FollowController followController;
 
     @Test
     public void addCustomer() {
@@ -69,11 +72,18 @@ public class CustomerControllerTest extends BaseTest {
     @Test
     public void addCustomerDataFromExcle() {
         try {
-            String fileName="G:\\ProjectBackups\\SQLdata\\CRM_contact.xlsx";
-            List<Contact> customerLIst = POIUtil.readContactExcel(fileName);
-            for (int i = 0; i < customerLIst.size(); i++) {
-                contactController.addContact(customerLIst.get(i));
+            String fileName="G:\\ProjectBackups\\SQLdata\\CRM_follow.xlsx";
+            List<Follow> followLIst = POIUtil.readFollowExcel(fileName);
+            for (int i = 0; i < followLIst.size(); i++) {
+                followController.addFollow(followLIst.get(i));
             }
+
+//           String fileName="G:\\ProjectBackups\\SQLdata\\CRM_contact.xlsx";
+//            List<Contact> contactList = POIUtil.readContactExcel(fileName);
+//            for (int i = 0; i < contactList.size(); i++) {
+//                contactController.addContact(contactList.get(i));
+//            }
+
 //            String fileName="G:\\ProjectBackups\\SQLdata\\CRM_contact.xlsx";
 //            List<Customer> customerLIst = POIUtil.readCustomerExcel(fileName);
 //            for (int i = 0; i < customerLIst.size(); i++) {

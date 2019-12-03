@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqut.wangyu.crm.dao.OrderDao">
+    <!--注册-->
+    <insert id="insertOrder" parameterType="com.cqut.wangyu.crm.entity.Order">
+        insert into orderform (orderName, orderDate, orderAmount, orderNote, customerID, contactID)
+        values (#{orderName}, #{orderDate}, #{orderAmount}, #{orderNote}, #{customerID}, #{contactID})
+    </insert>
+    <!--根据ID查用户-->
+    <select id="selectOrderByOrdID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.entity.Order">
+        select *
+        from orderform
+        where orderID = #{ordID}
+    </select>
+    <!--根据ID查用户-->
+    <select id="selectOrderByCusID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.dto.OrderDTO">
+        select *
+        from orderform
+                 left join contact c on orderform.contactID = c.contactID
+                 left join customer c2 on orderform.customerID = c2.customerID
+        where orderform.customerID = #{cusID}
+    </select>
+    <!--根据用户名查用户-->
+    <select id="findOrderByCustomerName" parameterType="java.lang.String"
+            resultType="com.cqut.wangyu.crm.entity.Order">
+        select *
+        from orderform
+        where customerName = #{cusName}
+    </select>
+    <!--根据ID修改用户-->
+    <update id="updateOrder" parameterType="Order">
+        update orderform
+        set orderName = #{orderName},
+            orderDate    = #{orderDate},
+            orderAmount    = #{orderAmount},
+            orderNote   = #{orderNote},
+            contactID    = #{contactID},
+            customerID  = #{customerID}
+        where orderID = #{orderID}
+    </update>
+    <!--根据ID删除客户-->
+    <delete id="deleteOrder" parameterType="java.lang.Integer">
+        delete
+        from orderform
+        where orderID = #{ordID}
+    </delete>
+    <!--查询页内满足条件的客户-->
+    <select id="selectPageOrder" parameterType="com.cqut.wangyu.crm.dto.PageQueryDTO"
+            resultType="com.cqut.wangyu.crm.dto.OrderDTO">
+        select *
+        from orderform
+                 left join contact c on orderform.contactID = c.contactID
+                 left join customer c2 on c.customerID = c2.customerID
+        where ${sql}
+        order by orderID
+    </select>
+    <!--查询所有客户-->
+    <select id="selectAllOrder" resultType="com.cqut.wangyu.crm.dto.OrderDTO">
+        select *
+        from orderform
+                 left join contact c on orderform.contactID = c.contactID
+                 left join customer c2 on c.customerID = c2.customerID
+        order by orderID
+    </select>
+    <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into order
+        (orderID, orderContent, orderDate, orderType, customerID,contactID)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            null,
+            #{item.orderContent},
+            #{item.orderDate},
+            #{item.orderType},
+            #{item.customerID},
+            #{item.contactID}
+            )
+        </foreach>
+    </insert>
+</mapper>

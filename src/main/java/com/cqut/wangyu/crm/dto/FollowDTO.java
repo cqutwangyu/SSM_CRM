@@ -1,4 +1,4 @@
-package com.cqut.wangyu.crm.entity;
+package com.cqut.wangyu.crm.dto;
 
 /**
  * @ClassName Follow
@@ -7,14 +7,50 @@ package com.cqut.wangyu.crm.entity;
  * @DateTime 2019/11/22 14:00
  * @GitHub https://github.com/ChongqingWangYu
  */
-public class Follow {
+public class FollowDTO {
     private Integer followID;
     private Integer customerID;
+    private String customerName;
     private String followContent;
     private String followDate;
     //1、电话 2、短信 3、QQ 4、微信 5、邮箱
     private Integer followType;
     private Integer contactID;
+    private String contactName;
+    private String contactPhone;
+    private String contactPosition;
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getContactName() {
+        return contactName;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public String getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(String contactPhone) {
+        this.contactPhone = contactPhone;
+    }
+
+    public String getContactPosition() {
+        return contactPosition;
+    }
+
+    public void setContactPosition(String contactPosition) {
+        this.contactPosition = contactPosition;
+    }
 
     public Integer getContactID() {
         return contactID;

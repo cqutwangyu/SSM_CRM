@@ -1,6 +1,7 @@
 package com.cqut.wangyu.crm.service.impl;
 
 import com.cqut.wangyu.crm.dao.ContactDao;
+import com.cqut.wangyu.crm.dto.ContactDTO;
 import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Contact;
@@ -51,8 +52,8 @@ public class ContactServiceImpl implements ContactService {
     public ResponseDTO findPageContact(PageQueryDTO pageQueryDTO) {
         PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Contact> contactList = contactDao.selectPageContact(pageQueryDTO);
-        PageInfo<Contact> pageInfo = new PageInfo(contactList);
+        List<ContactDTO> contactList = contactDao.selectPageContact(pageQueryDTO);
+        PageInfo<ContactDTO> pageInfo = new PageInfo(contactList);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", pageInfo.getTotal());
@@ -64,7 +65,7 @@ public class ContactServiceImpl implements ContactService {
     /**
      * 删除联系人
      *
-     * @param conId 联系人Id
+     * @param contactID 联系人Id
      * @return
      */
     @Override
@@ -110,9 +111,9 @@ public class ContactServiceImpl implements ContactService {
      * @return
      */
     @Override
-    public ResponseDTO findContactById(Integer conId) {
+    public ResponseDTO findContactByConID(Integer conId) {
         ResponseDTO responseDTO = new ResponseDTO();
-        Contact customer = contactDao.selectContactById(conId);
+        ContactDTO customer = contactDao.selectContactByConID(conId);
         responseDTO.setData(customer);
         return responseDTO;
     }
@@ -196,9 +197,17 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ResponseDTO getAllContact() {
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Contact> contactList = contactDao.selectAllContact();
+        List<ContactDTO> contactList = contactDao.selectAllContact();
         responseDTO.setData(contactList);
         responseDTO.setMessage("共" + contactList.size() + "条数据");
+        return responseDTO;
+    }
+
+    @Override
+    public ResponseDTO findContactByCusID(Integer cusID) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        List<ContactDTO> customer = contactDao.selectContactByCusID(cusID);
+        responseDTO.setData(customer);
         return responseDTO;
     }
 }

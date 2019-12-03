@@ -1,4 +1,4 @@
-package com.cqut.wangyu.crm.entity;
+package com.cqut.wangyu.crm.dto;
 
 /**
  * @ClassName Contact
@@ -7,16 +7,25 @@ package com.cqut.wangyu.crm.entity;
  * @DateTime 2019/11/22 13:58
  * @GitHub https://github.com/ChongqingWangYu
  */
-public class Contact {
+public class ContactDTO {
     private Integer contactID;
     private Integer customerID;
     private String contactPosition;
     private String contactName;
+    private String customerName;
     //1、男 2、女
     private Integer contactSex;
     private String contactPhone;
     private String contactQQ;
     private String contactEmail;
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
     public Integer getContactID() {
         return contactID;

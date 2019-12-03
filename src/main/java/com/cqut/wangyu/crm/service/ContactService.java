@@ -35,11 +35,19 @@ public interface ContactService {
     ResponseDTO findContactByName(String conName);
 
     /**
-     * 根据客户ID查询联系人
-     * @param conId
+     * 根据ID查询联系人
+     * @param conID
      * @return
      */
-    ResponseDTO findContactById(Integer conId);
+    ResponseDTO findContactByConID(Integer conID);
+
+
+    /**
+     * 根据客户ID查询联系人
+     * @param cusID
+     * @return
+     */
+    ResponseDTO findContactByCusID(Integer cusID);
 
     /**
      * 上传excel文件并导入数据到数据库
@@ -54,4 +62,5 @@ public interface ContactService {
      * @return
      */
     ResponseDTO getAllContact();
+
 }

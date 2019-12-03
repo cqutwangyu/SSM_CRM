@@ -60,6 +60,13 @@ public class FollowController {
         return followService.findFollowById(cusId);
     }
 
+
+    @RequestMapping(value = "/findFollowByCusID", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDTO findFollowByCusID(Integer cusID) {
+        return followService.findFollowByCusID(cusID);
+    }
+
     @RequestMapping(value = "/findPageFollow", method = RequestMethod.POST)
     @ResponseBody
     public ResponseDTO findPageFollow(PageQueryDTO pageQueryDTO) {

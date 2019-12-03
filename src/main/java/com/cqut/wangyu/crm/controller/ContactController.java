@@ -35,7 +35,6 @@ public class ContactController {
     public ResponseDTO addContact(Contact contact) {
         return contactService.addContact(contact);
     }
-
     @RequestMapping(value = "/deleteContact", method = RequestMethod.POST)
     @ResponseBody
     public ResponseDTO deleteContact(Integer contactID) {
@@ -54,10 +53,17 @@ public class ContactController {
         return contactService.findContactByName(cusName);
     }
 
-    @RequestMapping(value = "/findContactById", method = RequestMethod.POST)
+    @RequestMapping(value = "/findContactByConID", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findContactById(Integer cusId) {
-        return contactService.findContactById(cusId);
+    public ResponseDTO findContactByConID(Integer conID) {
+        return contactService.findContactByConID(conID);
+    }
+
+
+    @RequestMapping(value = "/findContactByCusID", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseDTO findContactByCusID(Integer cusID) {
+        return contactService.findContactByCusID(cusID);
     }
 
     @RequestMapping(value = "/findPageContact", method = RequestMethod.POST)
@@ -65,7 +71,6 @@ public class ContactController {
     public ResponseDTO findPageContact(PageQueryDTO pageQueryDTO) {
         return contactService.findPageContact(pageQueryDTO);
     }
-
     @RequestMapping(value = "/getAllContact", method = RequestMethod.GET)
     @ResponseBody
     public ResponseDTO getAllContact() {

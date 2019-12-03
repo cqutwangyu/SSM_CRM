@@ -1,6 +1,7 @@
 package com.cqut.wangyu.crm.service.impl;
 
 import com.cqut.wangyu.crm.dao.FollowDao;
+import com.cqut.wangyu.crm.dto.FollowDTO;
 import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Follow;
@@ -51,8 +52,8 @@ public class FollowServiceImpl implements FollowService {
     public ResponseDTO findPageFollow(PageQueryDTO pageQueryDTO) {
         PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Follow> followList = followDao.selectPageFollow(pageQueryDTO);
-        PageInfo<Follow> pageInfo = new PageInfo(followList);
+        List<FollowDTO> followList = followDao.selectPageFollow(pageQueryDTO);
+        PageInfo<FollowDTO> pageInfo = new PageInfo(followList);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", pageInfo.getTotal());
@@ -196,9 +197,17 @@ public class FollowServiceImpl implements FollowService {
     @Override
     public ResponseDTO getAllFollow() {
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Follow> followList = followDao.selectAllFollow();
+        List<FollowDTO> followList = followDao.selectAllFollow();
         responseDTO.setData(followList);
         responseDTO.setMessage("共" + followList.size() + "条数据");
+        return responseDTO;
+    }
+
+    @Override
+    public ResponseDTO findFollowByCusID(Integer cusID) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        List<FollowDTO> customer = followDao.selectFollowByCusID(cusID);
+        responseDTO.setData(customer);
         return responseDTO;
     }
 }

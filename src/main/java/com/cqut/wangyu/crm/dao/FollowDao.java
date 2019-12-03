@@ -1,5 +1,6 @@
 package com.cqut.wangyu.crm.dao;
 
+import com.cqut.wangyu.crm.dto.FollowDTO;
 import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.entity.Follow;
 import org.apache.ibatis.annotations.Param;
@@ -10,7 +11,7 @@ public interface FollowDao {
 
     Integer insertFollow(Follow follow);
 
-    List<Follow> selectPageFollow(PageQueryDTO pageQueryDTO);
+    List<FollowDTO> selectPageFollow(PageQueryDTO pageQueryDTO);
 
     Integer deleteFollow(Integer folId);
 
@@ -22,6 +23,7 @@ public interface FollowDao {
 
     Integer insertForeach(@Param("list") List<Follow> followList);
 
-    List<Follow> selectAllFollow();
+    List<FollowDTO> selectAllFollow();
 
+    List<FollowDTO> selectFollowByCusID(Integer cusID);
 }

@@ -1,5 +1,6 @@
 package com.cqut.wangyu.crm.dao;
 
+import com.cqut.wangyu.crm.dto.ContactDTO;
 import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.entity.Contact;
 import org.apache.ibatis.annotations.Param;
@@ -10,7 +11,7 @@ public interface ContactDao {
 
     Integer insertContact(Contact contact);
 
-    List<Contact> selectPageContact(PageQueryDTO pageQueryDTO);
+    List<ContactDTO> selectPageContact(PageQueryDTO pageQueryDTO);
 
     Integer deleteContact(Integer conId);
 
@@ -18,10 +19,12 @@ public interface ContactDao {
 
     List<Contact> selectContactByName(String conName);
 
-    Contact selectContactById(Integer conId);
+    ContactDTO selectContactByConID(Integer conID);
+
+    List<ContactDTO> selectContactByCusID(Integer cusID);
 
     Integer insertForeach(@Param("list") List<Contact> contactList);
 
-    List<Contact> selectAllContact();
+    List<ContactDTO> selectAllContact();
 
 }

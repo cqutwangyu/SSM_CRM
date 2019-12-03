@@ -151,21 +151,19 @@ public class POIUtil {
                 if (hssfRow != null) {
                     contact = new Contact();
                     Cell contactID = hssfRow.getCell(0);
-                    Cell customerName = hssfRow.getCell(1);
-                    Cell contactPosition = hssfRow.getCell(2);
+                    Cell contactPosition = hssfRow.getCell(1);
 //                    解决文本自动转为数字
 //                    conPhone.setCellType(CellType.STRING);
-                    Cell contactName = hssfRow.getCell(3);
-                    Cell contactSex = hssfRow.getCell(4);
-                    Cell contactPhone = hssfRow.getCell(5);
+                    Cell contactName = hssfRow.getCell(2);
+                    Cell contactSex = hssfRow.getCell(3);
+                    Cell contactPhone = hssfRow.getCell(4);
                     contactPhone.setCellType(CellType.STRING);
-                    Cell contactQQ = hssfRow.getCell(6);
+                    Cell contactQQ = hssfRow.getCell(5);
                     contactQQ.setCellType(CellType.STRING);
-                    Cell contactEmail = hssfRow.getCell(7);
-                    Cell customerID = hssfRow.getCell(8);
+                    Cell contactEmail = hssfRow.getCell(6);
+                    Cell customerID = hssfRow.getCell(7);
                     //这里是自己的逻辑
                     contact.setContactID(Double.valueOf(contactID.toString()).intValue());
-                    contact.setCustomerName(customerName.toString());
                     contact.setContactPosition(contactPosition.toString());
                     contact.setContactName(contactName.toString());
                     contact.setContactSex(contactSex.toString().equals("男") ? 1 : 2);
@@ -232,18 +230,18 @@ public class POIUtil {
                 if (hssfRow != null) {
                     follow = new Follow();
                     Cell followID = hssfRow.getCell(0);
-                    Cell customerName = hssfRow.getCell(1);
-                    Cell followContent = hssfRow.getCell(2);
-                    Cell followDate = hssfRow.getCell(3);
-                    Cell followType = hssfRow.getCell(4);
-                    Cell customerID = hssfRow.getCell(5);
+                    Cell followContent = hssfRow.getCell(1);
+                    Cell followDate = hssfRow.getCell(2);
+                    Cell followType = hssfRow.getCell(3);
+                    Cell customerID = hssfRow.getCell(4);
+                    Cell contactID = hssfRow.getCell(5);
                     //这里是自己的逻辑
                     follow.setFollowID(Double.valueOf(followID.toString()).intValue());
-                    follow.setCustomerName(customerName.toString());
                     follow.setFollowContent(followContent.toString());
                     follow.setFollowDate(DateUtil.formatDate(followDate.getDateCellValue()));
                     follow.setFollowType(Double.valueOf(followType.toString()).intValue());
                     follow.setCustomerID(Double.valueOf(customerID.toString()).intValue());
+                    follow.setContactID(Double.valueOf(contactID.toString()).intValue());
                     list.add(follow);
                 }
             }

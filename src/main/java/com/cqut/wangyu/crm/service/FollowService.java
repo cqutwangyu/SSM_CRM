@@ -54,4 +54,6 @@ public interface FollowService {
      * @return
      */
     ResponseDTO getAllFollow();
+
+    ResponseDTO findFollowByCusID(Integer cusID);
 }

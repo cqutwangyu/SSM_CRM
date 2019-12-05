@@ -83,6 +83,7 @@ public class POIUtil {
                     Cell cusUrl = hssfRow.getCell(4);
                     Cell cusType = hssfRow.getCell(5);
                     Cell cusStatus = hssfRow.getCell(6);
+                    Cell cusDate = hssfRow.getCell(7);
                     //这里是自己的逻辑
                     customer.setCustomerID(Double.valueOf(cusID.toString()).intValue());
                     customer.setCustomerName(cusName.toString());
@@ -91,6 +92,7 @@ public class POIUtil {
                     customer.setCustomerUrl(cusUrl.toString());
                     customer.setCustomerType(Double.valueOf(cusType.toString()).intValue());
                     customer.setCustomerStatus(Double.valueOf(cusStatus.toString()).intValue());
+                    customer.setCustomerDate(DateUtil.formatDate(cusDate.getDateCellValue()));
                     list.add(customer);
                 }
             }
@@ -162,6 +164,7 @@ public class POIUtil {
                     contactQQ.setCellType(CellType.STRING);
                     Cell contactEmail = hssfRow.getCell(6);
                     Cell customerID = hssfRow.getCell(7);
+                    Cell contactDate = hssfRow.getCell(8);
                     //这里是自己的逻辑
                     contact.setContactID(Double.valueOf(contactID.toString()).intValue());
                     contact.setContactPosition(contactPosition.toString());
@@ -171,6 +174,7 @@ public class POIUtil {
                     contact.setContactQQ(contactQQ.toString());
                     contact.setContactEmail(contactEmail.toString());
                     contact.setCustomerID(Double.valueOf(customerID.toString()).intValue());
+                    contact.setContactDate(DateUtil.formatDate(contactDate.getDateCellValue()));
                     list.add(contact);
                 }
             }

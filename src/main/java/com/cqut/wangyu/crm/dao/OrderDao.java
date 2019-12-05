@@ -26,4 +26,8 @@ public interface OrderDao {
     List<OrderDTO> selectAllOrder();
 
     List<OrderDTO> selectOrderByCusID(Integer cusID);
+
+    List<Integer> selectMonthlyStatistics();
+
+    List<Integer> selectMonthlyStatisticsAmount();
 }

@@ -18,6 +18,15 @@ public class ContactDTO {
     private String contactPhone;
     private String contactQQ;
     private String contactEmail;
+    private String contactDate;
+
+    public String getContactDate() {
+        return contactDate;
+    }
+
+    public void setContactDate(String contactDate) {
+        this.contactDate = contactDate;
+    }
 
     public String getCustomerName() {
         return customerName;

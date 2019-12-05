@@ -3,7 +3,7 @@
 <mapper namespace="com.cqut.wangyu.crm.dao.ContactDao">
     <!--注册-->
     <insert id="insertContact" parameterType="com.cqut.wangyu.crm.entity.Contact">
-        insert into contact ( contactPosition, contactName, contactSex, contactPhone,contactQQ,contactEmail,customerID)
+        insert into contact ( contactPosition, contactName, contactSex, contactPhone,contactQQ,contactEmail,customerID,contactDate)
         values (
                 #{contactPosition},
                 #{contactName},
@@ -11,7 +11,8 @@
                 #{contactPhone},
                 #{contactQQ},
                 #{contactEmail},
-                #{customerID})
+                #{customerID},
+                #{contactDate})
     </insert>
     <!--根据ID查用户-->
     <select id="selectContactByConID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.dto.ContactDTO">
@@ -39,7 +40,8 @@
             contactSex     = #{contactSex},
             contactPhone    = #{contactPhone},
             contactQQ    = #{contactQQ},
-            contactEmail    = #{contactEmail}
+            contactEmail    = #{contactEmail},
+            contactDate    = #{contactDate}
         where contactID = #{contactID}
     </update>
     <!--根据ID删除客户-->
@@ -62,9 +64,15 @@
         from contact left join customer cus on contact.customerID = cus.customerID
         order by contactID
     </select>
+    <select id="selectMonthlyStatistics" resultType="java.lang.Integer">
+        select count(*)
+        from contact
+        where year(contactDate) = DATE_FORMAT(NOW(), '%Y')
+        group by month(contactDate)
+    </select>
     <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
         insert into contact
-        (contactID, contactPosition, contactName, contactSex, contactPhone,contactQQ,contactEmail,customerID)
+        (contactID, contactPosition, contactName, contactSex, contactPhone,contactQQ,contactEmail,customerID,contactDate)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -75,7 +83,8 @@
             #{item.contactPhone},
             #{item.contactQQ},
             #{item.contactEmail},
-            #{item.customerID}
+            #{item.customerID},
+            #{item.contactDate}
             )
         </foreach>
     </insert>

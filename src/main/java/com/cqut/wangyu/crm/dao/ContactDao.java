@@ -27,4 +27,5 @@ public interface ContactDao {
 
     List<ContactDTO> selectAllContact();
 
+    List<Integer> selectMonthlyStatistics();
 }

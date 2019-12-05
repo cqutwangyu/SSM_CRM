@@ -19,6 +19,15 @@ public class Customer {
     private Integer customerType;
     //1、待商谈 2、已商谈 3、待签约 4、已签约
     private Integer customerStatus;
+    private String customerDate;
+
+    public String getCustomerDate() {
+        return customerDate;
+    }
+
+    public void setCustomerDate(String customerDate) {
+        this.customerDate = customerDate;
+    }
 
     public Integer getCustomerID() {
         return customerID;

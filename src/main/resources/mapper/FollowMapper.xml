@@ -27,16 +27,21 @@
         from follow
         where customerName = #{cusName}
     </select>
+    <select id="selectMonthlyStatistics" resultType="java.lang.Integer">
+        select count(*)
+        from follow
+        where year(followDate) = DATE_FORMAT(NOW(), '%Y')
+        group by month(followDate)
+    </select>
     <!--根据ID修改用户-->
     <update id="updateFollow" parameterType="Follow">
         update follow
-        set customerName  = #{customerName},
+        set
             followContent = #{followContent},
             followDate    = #{followDate},
             followType    = #{followType},
             customerID    = #{customerID},
-            contactID     = #{contactID},
-            contactName   = #{contactName}
+            contactID     = #{contactID}
         where followID = #{followID}
     </update>
     <!--根据ID删除客户-->

@@ -3,13 +3,20 @@
 <mapper namespace="com.cqut.wangyu.crm.dao.CustomerDao">
     <!--注册-->
     <insert id="insertCustomer" parameterType="com.cqut.wangyu.crm.entity.Customer">
-        insert into customer (customerName, customerPhone, customerAddress, customerUrl, customerType, customerStatus)
+        insert into customer (customerName,
+                              customerPhone,
+                              customerAddress,
+                              customerUrl,
+                              customerType,
+                              customerStatus,
+                              customerDate)
         values (#{customerName},
                 #{customerPhone},
                 #{customerAddress},
                 #{customerUrl},
                 #{customerType},
-                #{customerStatus})
+                #{customerStatus},
+                #{customerDate})
     </insert>
     <!--根据ID查用户-->
     <select id="selectCustomerById" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.entity.Customer">
@@ -31,7 +38,8 @@
             customerAddress = #{customerAddress},
             customerUrl     = #{customerUrl},
             customerType    = #{customerType},
-            customerStatus  = #{customerStatus}
+            customerStatus  = #{customerStatus},
+            customerDate    = #{customerDate}
         where customerID = #{customerID}
     </update>
     <!--根据ID删除客户-->
@@ -60,9 +68,16 @@
         from customer
         order by customerID
     </select>
+    <!--查询所有客户-->
+    <select id="selectMonthlyStatistics" resultType="java.lang.Integer">
+        select count(*)
+        from customer
+        where year(customerDate) = DATE_FORMAT(NOW(), '%Y')
+        group by month(customerDate)
+    </select>
     <insert id="insertForeach" parameterType="java.util.List" useGeneratedKeys="false">
         insert into customer
-        ( cusId,cusNo,cusName,cusPhone,cusAddr,cusUrl,cusLevel,cusCredit)
+        ( cusId,cusNo,cusName,cusPhone,cusAddr,cusUrl,cusLevel,cusCredit,customerDate)
         values
         <foreach collection="list" item="item" index="index" separator=",">
             (
@@ -73,7 +88,8 @@
             #{item.cusAddr},
             #{item.cusUrl},
             #{item.cusLevel},
-            #{item.cusCredit}
+            #{item.cusCredit},
+            #{item.customerDate}
             )
         </foreach>
     </insert>

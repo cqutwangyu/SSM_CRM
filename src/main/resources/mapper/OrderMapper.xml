@@ -20,6 +20,18 @@
                  left join customer c2 on orderform.customerID = c2.customerID
         where orderform.customerID = #{cusID}
     </select>
+    <!--<select id="selectMonthlyStatistics" resultType="java.lang.Integer">-->
+        <!--select count(*)-->
+        <!--from orderform-->
+        <!--where year(orderDate) = DATE_FORMAT(NOW(), '%Y')-->
+        <!--group by month(orderDate)-->
+    <!--</select>-->
+    <select id="selectMonthlyStatistics" resultType="java.lang.Integer">
+        select sum(orderAmount)
+        from orderform
+        where year(orderDate) = DATE_FORMAT(NOW(), '%Y')
+        group by month(orderDate)
+    </select>
     <!--根据用户名查用户-->
     <select id="findOrderByCustomerName" parameterType="java.lang.String"
             resultType="com.cqut.wangyu.crm.entity.Order">
@@ -30,11 +42,11 @@
     <!--根据ID修改用户-->
     <update id="updateOrder" parameterType="Order">
         update orderform
-        set orderName = #{orderName},
-            orderDate    = #{orderDate},
-            orderAmount    = #{orderAmount},
+        set orderName   = #{orderName},
+            orderDate   = #{orderDate},
+            orderAmount = #{orderAmount},
             orderNote   = #{orderNote},
-            contactID    = #{contactID},
+            contactID   = #{contactID},
             customerID  = #{customerID}
         where orderID = #{orderID}
     </update>
@@ -50,7 +62,7 @@
         select *
         from orderform
                  left join contact c on orderform.contactID = c.contactID
-                 left join customer c2 on c.customerID = c2.customerID
+                 left join customer c2 on orderform.customerID = c2.customerID
         where ${sql}
         order by orderID
     </select>

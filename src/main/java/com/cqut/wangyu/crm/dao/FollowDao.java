@@ -26,4 +26,6 @@ public interface FollowDao {
     List<FollowDTO> selectAllFollow();
 
     List<FollowDTO> selectFollowByCusID(Integer cusID);
+
+    List<Integer> selectMonthlyStatistics();
 }

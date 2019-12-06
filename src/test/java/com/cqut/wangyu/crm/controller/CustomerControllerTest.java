@@ -78,18 +78,18 @@ public class CustomerControllerTest extends BaseTest {
             for (int i = 0; i < customerLIst.size(); i++) {
                 customerController.addCustomer(customerLIst.get(i));
             }
+//
+//            String fileName2="G:\\ProjectBackups\\SQLdata\\CRM_contact.xlsx";
+//            List<Contact> contactList = POIUtil.readContactExcel(fileName2);
+//            for (int i = 0; i < contactList.size(); i++) {
+//                contactController.addContact(contactList.get(i));
+//            }
 
-            String fileName2="G:\\ProjectBackups\\SQLdata\\CRM_contact.xlsx";
-            List<Contact> contactList = POIUtil.readContactExcel(fileName2);
-            for (int i = 0; i < contactList.size(); i++) {
-                contactController.addContact(contactList.get(i));
-            }
-
-            String fileName3="G:\\ProjectBackups\\SQLdata\\CRM_follow.xlsx";
-            List<Follow> followLIst = POIUtil.readFollowExcel(fileName3);
-            for (int i = 0; i < followLIst.size(); i++) {
-                followController.addFollow(followLIst.get(i));
-            }
+//            String fileName3="G:\\ProjectBackups\\SQLdata\\CRM_follow.xlsx";
+//            List<Follow> followLIst = POIUtil.readFollowExcel(fileName3);
+//            for (int i = 0; i < followLIst.size(); i++) {
+//                followController.addFollow(followLIst.get(i));
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();

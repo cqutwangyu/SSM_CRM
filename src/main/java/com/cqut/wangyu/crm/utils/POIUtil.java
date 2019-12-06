@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -92,7 +93,7 @@ public class POIUtil {
                     customer.setCustomerUrl(cusUrl.toString());
                     customer.setCustomerType(Double.valueOf(cusType.toString()).intValue());
                     customer.setCustomerStatus(Double.valueOf(cusStatus.toString()).intValue());
-                    customer.setCustomerDate(DateUtil.formatDate(cusDate.getDateCellValue()));
+                    customer.setCustomerDate(cusDate.toString());
                     list.add(customer);
                 }
             }

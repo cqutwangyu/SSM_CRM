@@ -10,12 +10,14 @@ import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,8 +73,25 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public ResponseDTO deleteContact(Integer contactID) {
         ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = contactDao.deleteContact(contactID);
-        responseDTO.setMessage(rows == 1 ? "删除成功" : "删除失败");
+        Integer rows = -1;
+        try {
+            rows = contactDao.deleteContact(contactID);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            switch (rows) {
+                case -1:
+                    responseDTO.setMessage("该联系人关联其他表数据，请先删除关联数据");
+                    break;
+                case 0:
+                    responseDTO.setMessage("删除失败");
+                    break;
+                case 1:
+                    responseDTO.setMessage("删除成功");
+                    break;
+            }
+        }
+
         return responseDTO;
     }
 

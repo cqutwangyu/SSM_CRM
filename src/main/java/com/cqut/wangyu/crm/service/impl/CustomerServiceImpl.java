@@ -70,8 +70,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseDTO deleteCustomer(Integer cusId) {
         ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = customerDao.deleteCustomer(cusId);
-        responseDTO.setMessage(rows == 1 ? "删除成功" : "删除失败");
+        Integer rows = 0;
+        try {
+            rows = customerDao.deleteCustomer(cusId);
+        } catch (Exception e) {
+
+        } finally {
+            responseDTO.setMessage(rows == 1 ? "删除成功" : "删除失败");
+        }
         return responseDTO;
     }
 

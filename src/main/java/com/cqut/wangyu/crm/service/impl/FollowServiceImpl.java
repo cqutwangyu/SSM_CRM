@@ -6,6 +6,7 @@ import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Follow;
 import com.cqut.wangyu.crm.service.FollowService;
+import com.cqut.wangyu.crm.utils.Constant;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
 import com.github.pagehelper.PageHelper;
@@ -37,13 +38,13 @@ public class FollowServiceImpl implements FollowService {
     public ResponseDTO addFollow(Follow follow) {
         ResponseDTO responseDTO = new ResponseDTO();
         Follow cName = followDao.selectFollowById(follow.getFollowID());
-        if (null==cName) {
+        if (null == cName) {
             Integer rows = followDao.insertFollow(follow);
-            responseDTO.setMessage(rows == 1 ? "添加成功" : "添加失败");
-            responseDTO.setData("succeed");
+            responseDTO.setMessage(rows == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE);
+            responseDTO.setData(Constant.SUCCEED);
         } else {
-            responseDTO.setMessage("ID已存在");
-            responseDTO.setData("error");
+            responseDTO.setMessage(Constant.INSERT_ID_REPETITION);
+            responseDTO.setData(Constant.ERROR);
         }
         return responseDTO;
     }
@@ -72,7 +73,7 @@ public class FollowServiceImpl implements FollowService {
     public ResponseDTO deleteFollow(Integer followID) {
         ResponseDTO responseDTO = new ResponseDTO();
         Integer rows = followDao.deleteFollow(followID);
-        responseDTO.setMessage(rows == 1 ? "删除成功" : "删除失败");
+        responseDTO.setMessage(rows == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE);
         return responseDTO;
     }
 
@@ -86,7 +87,7 @@ public class FollowServiceImpl implements FollowService {
     public ResponseDTO updateFollow(Follow follow) {
         ResponseDTO responseDTO = new ResponseDTO();
         Integer rows = followDao.updateFollow(follow);
-        responseDTO.setMessage(rows == 1 ? "修改成功" : "修改失败");
+        responseDTO.setMessage(rows == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE);
         return responseDTO;
     }
 
@@ -151,7 +152,7 @@ public class FollowServiceImpl implements FollowService {
                     for (int i = 0; i < followList.size(); i++) {
                         Follow follow = followList.get(i);
                         Follow customerListDB = followDao.selectFollowById(follow.getFollowID());
-                        if (null==customerListDB) {
+                        if (null == customerListDB) {
                             //不存在，插入数据
                             followDao.insertFollow(follow);
                             inserted++;
@@ -175,16 +176,16 @@ public class FollowServiceImpl implements FollowService {
             }
             responseDTO.setMessage("新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
         } else {
-            responseDTO.setMessage("导入失败");
+            responseDTO.setMessage(Constant.IMPORT_FAILURE);
         }
         if (inserted + updated + notChanged == 0) {
-            responseDTO.setData("error");
+            responseDTO.setData(Constant.ERROR);
         } else if (inserted + updated + notChanged <= error) {
-            responseDTO.setData("warn");
+            responseDTO.setData(Constant.WARN);
         } else if (error == 0) {
-            responseDTO.setData("succeed");
+            responseDTO.setData(Constant.SUCCEED);
         } else {
-            responseDTO.setData("info");
+            responseDTO.setData(Constant.INFO);
         }
         return responseDTO;
     }

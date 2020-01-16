@@ -6,6 +6,7 @@ import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Contact;
 import com.cqut.wangyu.crm.service.ContactService;
+import com.cqut.wangyu.crm.utils.Constant;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
 import com.github.pagehelper.PageHelper;
@@ -41,7 +42,7 @@ public class ContactServiceImpl implements ContactService {
         List<Contact> cName = contactDao.selectContactByName(contact.getContactName());
         if (cName.isEmpty()) {
             Integer rows = contactDao.insertContact(contact);
-            responseDTO.setMessage(rows == 1 ? "添加成功" : "添加失败");
+            responseDTO.setMessage(rows == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE);
             responseDTO.setData("succeed");
         } else {
             responseDTO.setMessage("客户名称已存在");
@@ -81,13 +82,13 @@ public class ContactServiceImpl implements ContactService {
         } finally {
             switch (rows) {
                 case -1:
-                    responseDTO.setMessage("该联系人关联其他表数据，请先删除关联数据");
+                    responseDTO.setMessage(Constant.DELETE_FAILURE_FOREIGN_KEY);
                     break;
                 case 0:
-                    responseDTO.setMessage("删除失败");
+                    responseDTO.setMessage(Constant.DELETE_FAILURE);
                     break;
                 case 1:
-                    responseDTO.setMessage("删除成功");
+                    responseDTO.setMessage(Constant.DELETE_SUCCEED);
                     break;
             }
         }
@@ -105,7 +106,7 @@ public class ContactServiceImpl implements ContactService {
     public ResponseDTO updateContact(Contact contact) {
         ResponseDTO responseDTO = new ResponseDTO();
         Integer rows = contactDao.updateContact(contact);
-        responseDTO.setMessage(rows == 1 ? "修改成功" : "修改失败");
+        responseDTO.setMessage(rows == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE);
         return responseDTO;
     }
 
@@ -194,16 +195,16 @@ public class ContactServiceImpl implements ContactService {
             }
             responseDTO.setMessage("新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
         } else {
-            responseDTO.setMessage("导入失败");
+            responseDTO.setMessage(Constant.IMPORT_FAILURE);
         }
         if (inserted + updated + notChanged == 0) {
-            responseDTO.setData("error");
+            responseDTO.setData(Constant.ERROR);
         } else if (inserted + updated + notChanged <= error) {
-            responseDTO.setData("warn");
+            responseDTO.setData(Constant.WARN);
         } else if (error == 0) {
-            responseDTO.setData("succeed");
+            responseDTO.setData(Constant.SUCCEED);
         } else {
-            responseDTO.setData("info");
+            responseDTO.setData(Constant.INFO);
         }
         return responseDTO;
     }

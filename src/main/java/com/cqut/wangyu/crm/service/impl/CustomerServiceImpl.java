@@ -5,6 +5,7 @@ import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Customer;
 import com.cqut.wangyu.crm.service.CustomerService;
+import com.cqut.wangyu.crm.utils.Constant;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
 import com.github.pagehelper.PageHelper;
@@ -38,11 +39,11 @@ public class CustomerServiceImpl implements CustomerService {
         List<Customer> cName = customerDao.selectCustomerByName(customer.getCustomerName());
         if (cName.isEmpty()) {
             Integer rows = customerDao.insertCustomer(customer);
-            responseDTO.setMessage(rows == 1 ? "添加成功" : "添加失败");
-            responseDTO.setData("succeed");
+            responseDTO.setMessage(rows == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE);
+            responseDTO.setData(Constant.SUCCEED);
         } else {
-            responseDTO.setMessage("客户名称已存在");
-            responseDTO.setData("error");
+            responseDTO.setMessage(Constant.INSERT_CUSTOMERNAME_REPETITION);
+            responseDTO.setData(Constant.ERROR);
         }
         return responseDTO;
     }
@@ -76,7 +77,7 @@ public class CustomerServiceImpl implements CustomerService {
         } catch (Exception e) {
 
         } finally {
-            responseDTO.setMessage(rows == 1 ? "删除成功" : "删除失败");
+            responseDTO.setMessage(rows == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE);
         }
         return responseDTO;
     }
@@ -91,7 +92,7 @@ public class CustomerServiceImpl implements CustomerService {
     public ResponseDTO updateCustomer(Customer customer) {
         ResponseDTO responseDTO = new ResponseDTO();
         Integer rows = customerDao.updateCustomer(customer);
-        responseDTO.setMessage(rows == 1 ? "修改成功" : "修改失败");
+        responseDTO.setMessage(rows == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE);
         return responseDTO;
     }
 
@@ -180,16 +181,16 @@ public class CustomerServiceImpl implements CustomerService {
             }
             responseDTO.setMessage("新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
         } else {
-            responseDTO.setMessage("导入失败");
+            responseDTO.setMessage(Constant.IMPORT_FAILURE);
         }
         if (inserted + updated + notChanged == 0) {
-            responseDTO.setData("error");
+            responseDTO.setData(Constant.ERROR);
         } else if (inserted + updated + notChanged <= error) {
-            responseDTO.setData("warn");
+            responseDTO.setData(Constant.WARN);
         } else if (error == 0) {
-            responseDTO.setData("succeed");
+            responseDTO.setData(Constant.SUCCEED);
         } else {
-            responseDTO.setData("info");
+            responseDTO.setData(Constant.INFO);
         }
         return responseDTO;
     }

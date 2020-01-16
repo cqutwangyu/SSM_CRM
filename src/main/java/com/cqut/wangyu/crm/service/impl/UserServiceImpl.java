@@ -4,6 +4,7 @@ import com.cqut.wangyu.crm.dao.UserDao;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.User;
 import com.cqut.wangyu.crm.service.UserService;
+import com.cqut.wangyu.crm.utils.Constant;
 import com.cqut.wangyu.crm.utils.MD5Util;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.TokenUtil;
@@ -38,10 +39,10 @@ public class UserServiceImpl implements UserService {
             user.setPassword(md5Password);
             rows = userDao.insertUser(user);
         } else {
-            responseDTO.setMessage("用户名已存在");
+            responseDTO.setMessage(Constant.REGISTER_USERNAME_REPETITION);
             return responseDTO;
         }
-        responseDTO.setMessage(rows == 1 ? "注册成功" : "注册失败");
+        responseDTO.setMessage(rows == 1 ? Constant.REGISTER_SUCCEED : Constant.REGISTER_FAILURE);
         return responseDTO;
     }
 
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
     public ResponseDTO findUserById(Integer id) {
         User user = userDao.selectUserByID(id);
         ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setMessage(user != null ? "获取成功" : "获取失败");
+        responseDTO.setMessage(user != null ? Constant.FIND_SUCCEED : Constant.FIND_FAILURE);
         responseDTO.setData(user);
         return responseDTO;
     }
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
     public ResponseDTO findUserByName(String userName) {
         ResponseDTO dto = new ResponseDTO();
         User user = userDao.selectUserByName(userName);
-        dto.setMessage(user != null ? "获取成功" : "获取失败");
+        dto.setMessage(user != null ? Constant.FIND_SUCCEED : Constant.FIND_FAILURE);
         dto.setData(user);
         return dto;
     }
@@ -67,7 +68,7 @@ public class UserServiceImpl implements UserService {
     public ResponseDTO deleteUserByID(Integer id) {
         ResponseDTO responseDTO = new ResponseDTO();
         Integer rows = userDao.deleteUserByID(id);
-        responseDTO.setMessage(rows == 1 ? "注册成功" : "注册失败");
+        responseDTO.setMessage(rows == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE);
         return responseDTO;
     }
 
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
     public ResponseDTO updateUserByID(User user) {
         Integer rows = userDao.updateUserByID(user);
         ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setMessage(rows == 1 ? "修改成功" : "修改失败");
+        responseDTO.setMessage(rows == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE);
         return responseDTO;
     }
 
@@ -97,9 +98,9 @@ public class UserServiceImpl implements UserService {
         if (dbUser != null && dbUser.getPassword().equals(user.getPassword())) {
             responseDTO.setData(dbUser);
             responseDTO.setToken(TokenUtil.sign(dbUser.getUserName(), dbUser.getPassword()));
-            responseDTO.setMessage("登录成功");
+            responseDTO.setMessage(Constant.LOGIN_SUCCEED);
         } else {
-            responseDTO.setMessage("登录失败");
+            responseDTO.setMessage(Constant.LOGIN_FAILURE);
         }
         return responseDTO;
     }
@@ -139,7 +140,7 @@ public class UserServiceImpl implements UserService {
                 e.printStackTrace();
             }
         }
-        responseDTO.setMessage(succeed ? "上传成功" : "上传失败");
+        responseDTO.setMessage(succeed ? Constant.UPLOAD_SUCCEED:Constant.UPLOAD_FAILURE);
         return responseDTO;
     }
 }

@@ -6,6 +6,7 @@ import com.cqut.wangyu.crm.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.dto.ResponseDTO;
 import com.cqut.wangyu.crm.entity.Order;
 import com.cqut.wangyu.crm.service.OrderService;
+import com.cqut.wangyu.crm.utils.Constant;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
 import com.github.pagehelper.PageHelper;
@@ -37,13 +38,13 @@ public class OrderServiceImpl implements OrderService {
     public ResponseDTO addOrder(Order order) {
         ResponseDTO responseDTO = new ResponseDTO();
         Order cName = orderDao.selectOrderByOrdID(order.getOrderID());
-        if (null==cName) {
+        if (null == cName) {
             Integer rows = orderDao.insertOrder(order);
-            responseDTO.setMessage(rows == 1 ? "添加成功" : "添加失败");
-            responseDTO.setData("succeed");
+            responseDTO.setMessage(rows == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE);
+            responseDTO.setData(Constant.SUCCEED);
         } else {
-            responseDTO.setMessage("ID已存在");
-            responseDTO.setData("error");
+            responseDTO.setMessage(Constant.INSERT_ID_REPETITION);
+            responseDTO.setData(Constant.ERROR);
         }
         return responseDTO;
     }
@@ -72,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
     public ResponseDTO deleteOrder(Integer orderID) {
         ResponseDTO responseDTO = new ResponseDTO();
         Integer rows = orderDao.deleteOrder(orderID);
-        responseDTO.setMessage(rows == 1 ? "删除成功" : "删除失败");
+        responseDTO.setMessage(rows == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE);
         return responseDTO;
     }
 
@@ -86,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
     public ResponseDTO updateOrder(Order order) {
         ResponseDTO responseDTO = new ResponseDTO();
         Integer rows = orderDao.updateOrder(order);
-        responseDTO.setMessage(rows == 1 ? "修改成功" : "修改失败");
+        responseDTO.setMessage(rows == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE);
         return responseDTO;
     }
 

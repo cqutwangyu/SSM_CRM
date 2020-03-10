@@ -8,13 +8,13 @@ package com.cqut.wangyu.crm.utils;
  * @GitHub https://github.com/ChongqingWangYu
  */
 public class MyFileUtil {
-    public final static String ServerAddress = "http://127.0.0.1:8080/";
-//    public final static String ServerAddress = "http://39.108.252.228/SSM_CRM/";
+    public final static String LOCAL_HOST_SERVER_ADDRESS = "http://127.0.0.1:8088/";
+//    public final static String LOCAL_HOST_SERVER_ADDRESS = "http://39.108.252.228/SSM_CRM/";
 
-    public final static String imgRequest = "file/getImage?path=";
+    public final static String IMG_REQUEST = "file/getImage?path=";
 
-    public final static String imgPath = "UploadingResources/Images/";
-    public final static String excelPath = "UploadingResources/Excel/";
+    public final static String IMG_PATH = "UploadingResources/Images/";
+    public final static String EXCEL_PATH = "UploadingResources/Excel/";
 
     public static String getContentType(String path) {
         String type = path.substring(path.indexOf(".") + 1);

@@ -2,6 +2,7 @@ package com.cqut.wangyu.crm.utils;
 
 import com.cqut.wangyu.crm.system.contact.entity.Contact;
 import com.cqut.wangyu.crm.system.customer.entity.Customer;
+import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.follow.entity.Follow;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
@@ -248,6 +249,17 @@ public class POIUtil {
                     list.add(follow);
                 }
             }
+        }
+    }
+    public static void returnImportResult(ResponseDTO responseDTO, int inserted, int updated, int notChanged, int error) {
+        if (inserted + updated + notChanged == 0) {
+            responseDTO.setData(Constant.ERROR);
+        } else if (inserted + updated + notChanged <= error) {
+            responseDTO.setData(Constant.WARN);
+        } else if (error == 0) {
+            responseDTO.setData(Constant.SUCCEED);
+        } else {
+            responseDTO.setData(Constant.INFO);
         }
     }
 }

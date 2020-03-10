@@ -8,6 +8,7 @@ import com.cqut.wangyu.crm.system.contact.entity.Contact;
 import com.cqut.wangyu.crm.utils.Constant;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
+import com.cqut.wangyu.crm.utils.Tools;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,12 +147,17 @@ public class ContactServiceImpl implements ContactService {
     public ResponseDTO importContactFromExcel(MultipartFile file, HttpServletRequest request) {
         ResponseDTO responseDTO = new ResponseDTO();
         int inserted = 0, updated = 0, notChanged = 0, error = 0;
-        if (!file.isEmpty()) {
+        if (Tools.isNotNull(file)) {
             String filePath = file.getOriginalFilename();
-            //windows
-            String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.excelPath + filePath);
-            //linux
-            //String savePath = "/home/odcuser/webapps/file";
+            String osName = Tools.getSystemStr();
+            String savePath;
+            if (Tools.isNotNull(osName) && "windows".equals(osName)) {
+                //windows
+                savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.EXCEL_PATH + filePath);
+            } else {
+                //linux
+                savePath = "/home/odcuser/webapps/file";
+            }
             List<Contact> contactList = null;
             try {
                 File targetFile = new File(savePath);
@@ -194,15 +200,7 @@ public class ContactServiceImpl implements ContactService {
         } else {
             responseDTO.setMessage(Constant.IMPORT_FAILURE);
         }
-        if (inserted + updated + notChanged == 0) {
-            responseDTO.setData(Constant.ERROR);
-        } else if (inserted + updated + notChanged <= error) {
-            responseDTO.setData(Constant.WARN);
-        } else if (error == 0) {
-            responseDTO.setData(Constant.SUCCEED);
-        } else {
-            responseDTO.setData(Constant.INFO);
-        }
+        POIUtil.returnImportResult(responseDTO, inserted, updated, notChanged, error);
         return responseDTO;
     }
 

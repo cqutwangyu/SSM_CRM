@@ -132,7 +132,7 @@ public class FollowServiceImpl implements FollowService {
         if (!file.isEmpty()) {
             String filePath = file.getOriginalFilename();
             //windows
-            String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.excelPath + filePath);
+            String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.EXCEL_PATH + filePath);
             //linux
             //String savePath = "/home/odcuser/webapps/file";
             List<Follow> followList = null;

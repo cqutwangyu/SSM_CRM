@@ -1,7 +1,6 @@
 package com.cqut.wangyu.crm.system.customer.service;
 
 import com.cqut.wangyu.crm.system.customer.dao.CustomerDao;
-import com.cqut.wangyu.crm.system.customer.entity.Point;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.customer.entity.Customer;
@@ -138,12 +137,17 @@ public class CustomerServiceImpl implements CustomerService {
     public ResponseDTO importCustomerFromExcel(MultipartFile file, HttpServletRequest request) {
         ResponseDTO responseDTO = new ResponseDTO();
         int inserted = 0, updated = 0, notChanged = 0, error = 0;
-        if (!file.isEmpty()) {
+        if (Tools.isNotNull(file)) {
             String filePath = file.getOriginalFilename();
-            //windows
-            String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.excelPath + filePath);
-            //linux
-            //String savePath = "/home/odcuser/webapps/file";
+            String osName = Tools.getSystemStr();
+            String savePath;
+            if (Tools.isNotNull(osName) && "windows".equals(osName)) {
+                //windows
+                savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.EXCEL_PATH + filePath);
+            } else {
+                //linux
+                savePath = "/home/odcuser/webapps/file";
+            }
             List<Customer> customerList = null;
             try {
                 File targetFile = new File(savePath);
@@ -186,17 +190,11 @@ public class CustomerServiceImpl implements CustomerService {
         } else {
             responseDTO.setMessage(Constant.IMPORT_FAILURE);
         }
-        if (inserted + updated + notChanged == 0) {
-            responseDTO.setData(Constant.ERROR);
-        } else if (inserted + updated + notChanged <= error) {
-            responseDTO.setData(Constant.WARN);
-        } else if (error == 0) {
-            responseDTO.setData(Constant.SUCCEED);
-        } else {
-            responseDTO.setData(Constant.INFO);
-        }
+        POIUtil.returnImportResult(responseDTO, inserted, updated, notChanged, error);
         return responseDTO;
     }
+
+
 
     /**
      * 不分页的情况下查询所有客户

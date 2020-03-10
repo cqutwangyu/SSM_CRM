@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
                 String filePath = file.getOriginalFilename();
                 filePath = filePath.replace(file.getName(), md5FileName);
                 //windows
-                String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.imgPath + filePath);
+                String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.IMG_PATH + filePath);
                 File targetFile = new File(savePath);
                 if (!targetFile.exists()) {
                     targetFile.mkdirs();
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
                 String userName = TokenUtil.getUserName(token);
                 User user = userDao.selectUserByName(userName);
                 if (user != null) {
-                    user.setAvatar(MyFileUtil.ServerAddress + MyFileUtil.imgRequest + MyFileUtil.imgPath + filePath);
+                    user.setAvatar(MyFileUtil.LOCAL_HOST_SERVER_ADDRESS + MyFileUtil.IMG_REQUEST + MyFileUtil.IMG_PATH + filePath);
                     userDao.updateUserByID(user);
                     succeed = true;
                 }

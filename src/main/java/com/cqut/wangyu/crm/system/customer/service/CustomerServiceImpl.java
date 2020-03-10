@@ -1,13 +1,11 @@
 package com.cqut.wangyu.crm.system.customer.service;
 
 import com.cqut.wangyu.crm.system.customer.dao.CustomerDao;
+import com.cqut.wangyu.crm.system.customer.entity.Point;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.customer.entity.Customer;
-import com.cqut.wangyu.crm.utils.Constant;
-import com.cqut.wangyu.crm.utils.MyFileUtil;
-import com.cqut.wangyu.crm.utils.POIUtil;
-import com.cqut.wangyu.crm.utils.Tools;
+import com.cqut.wangyu.crm.utils.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +34,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseDTO addCustomer(Customer customer) {
         ResponseDTO responseDTO = new ResponseDTO();
-        List<Customer> cName = customerDao.selectCustomerByName(customer.getCustomerName());
-        if (cName.isEmpty()) {
+        List<Customer> customerList = customerDao.selectCustomerByName(customer.getCustomerName());
+        if (customerList.isEmpty()) {
+            Point coordinate = BmapUtil.getCoordinate(customer.getCustomerAddress());
+            customer.setLng(coordinate.getLng());
+            customer.setLat(coordinate.getLat());
             Integer rows = customerDao.insertCustomer(customer);
             responseDTO.setMessage(rows == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE);
             responseDTO.setData(Constant.SUCCEED);

@@ -2,6 +2,7 @@ package com.cqut.wangyu.crm.utils;
 
 import com.cqut.wangyu.crm.system.contact.entity.Contact;
 import com.cqut.wangyu.crm.system.customer.entity.Customer;
+import com.cqut.wangyu.crm.system.customer.entity.Point;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.follow.entity.Follow;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -93,6 +94,9 @@ public class POIUtil {
                     customer.setCustomerType(Double.valueOf(cusType.toString()).intValue());
                     customer.setCustomerStatus(Double.valueOf(cusStatus.toString()).intValue());
                     customer.setCustomerDate(cusDate.toString());
+                    Point coordinate = BmapUtil.getCoordinate(customer.getCustomerAddress());
+                    customer.setLng(coordinate.getLng());
+                    customer.setLat(coordinate.getLat());
                     list.add(customer);
                 }
             }

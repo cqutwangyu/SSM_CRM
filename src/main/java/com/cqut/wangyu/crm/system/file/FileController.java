@@ -1,4 +1,4 @@
-package com.cqut.wangyu.crm.system.file.controller;
+package com.cqut.wangyu.crm.system.file;
 
 import com.cqut.wangyu.crm.system.file.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;

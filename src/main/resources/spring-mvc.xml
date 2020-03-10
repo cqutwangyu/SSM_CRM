@@ -32,7 +32,7 @@
     <!--<property name="suffix" value=".jsp"/>-->
     <!--</bean>-->
     <!-- 4.扫描web相关的bean -->
-    <context:component-scan base-package="com.cqut.wangyu.crm.system.*.controller"/>
+    <context:component-scan base-package="com.cqut.wangyu.crm.system.*"/>
     <!-- 5.拦截器，解决跨域 -->
     <mvc:interceptors>
         <!-- 注意拦截器的执行顺序，会按照这里配置顺序执行 -->

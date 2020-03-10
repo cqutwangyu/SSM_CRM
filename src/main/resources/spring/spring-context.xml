@@ -9,8 +9,7 @@
     <!-- spring容器注册-->
     <context:annotation-config/>
     <!-- 扫描bean-->
-    <context:component-scan base-package="com.cqut.wangyu.crm.system.*.service"/>
-    <context:component-scan base-package="com.cqut.wangyu.crm.system.*.controller"/>
+    <context:component-scan base-package="com.cqut.wangyu.crm.system.*"/>
     <context:component-scan base-package="com.cqut.wangyu.crm.aop"/>
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 

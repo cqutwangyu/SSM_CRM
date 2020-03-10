@@ -1,4 +1,4 @@
-package com.cqut.wangyu.crm.system.charts.controller;
+package com.cqut.wangyu.crm.system.charts;
 
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.charts.service.ChartsService;

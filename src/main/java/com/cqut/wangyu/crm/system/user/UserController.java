@@ -1,4 +1,4 @@
-package com.cqut.wangyu.crm.system.user.controller;
+package com.cqut.wangyu.crm.system.user;
 
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.user.entity.User;

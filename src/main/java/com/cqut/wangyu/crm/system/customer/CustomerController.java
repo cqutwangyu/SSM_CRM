@@ -1,4 +1,4 @@
-package com.cqut.wangyu.crm.system.customer.controller;
+package com.cqut.wangyu.crm.system.customer;
 
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;

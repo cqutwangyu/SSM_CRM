@@ -1,4 +1,4 @@
-package com.cqut.wangyu.crm.system.contact.controller;
+package com.cqut.wangyu.crm.system.contact;
 
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;

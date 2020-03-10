@@ -1,7 +1,7 @@
 package com.cqut.wangyu.crm.system.charts;
 
 import com.cqut.wangyu.crm.system.user.entity.User;
-import com.cqut.wangyu.crm.system.user.controller.UserController;
+import com.cqut.wangyu.crm.system.user.UserController;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

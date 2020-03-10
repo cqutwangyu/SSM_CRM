@@ -1,4 +1,4 @@
-package com.cqut.wangyu.crm.system.order.controller;
+package com.cqut.wangyu.crm.system.order;
 
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;

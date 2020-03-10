@@ -58,5 +58,5 @@ public interface CustomerService {
      * 不分页的情况下查询所有客户的地址
      * @return
      */
-    ResponseDTO getAllCustomerAddress();
+    ResponseDTO getAllCustomerAddress(PageQueryDTO pageQueryDTO);
 }

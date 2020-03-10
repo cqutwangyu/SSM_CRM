@@ -1,5 +1,6 @@
 package com.cqut.wangyu.crm.system.customer.dao;
 
+import com.cqut.wangyu.crm.system.customer.entity.Point;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.system.customer.entity.Customer;
 import org.apache.ibatis.annotations.Param;
@@ -24,7 +25,7 @@ public interface CustomerDao {
 
     List<Customer> selectAllCustomer();
 
-    List<String> selectAllCustomerAddress();
+    List<Customer> selectAllCustomerAddress(PageQueryDTO pageQueryDTO);
 
     Customer selectCustomerByNo(String cusNo);
 

@@ -1,12 +1,14 @@
 package com.cqut.wangyu.crm.system.customer.service;
 
 import com.cqut.wangyu.crm.system.customer.dao.CustomerDao;
+import com.cqut.wangyu.crm.system.customer.entity.Point;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.customer.entity.Customer;
 import com.cqut.wangyu.crm.utils.Constant;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
+import com.cqut.wangyu.crm.utils.Tools;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +51,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public ResponseDTO findPageCustomer(PageQueryDTO pageQueryDTO) {
-        PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
+        if (Tools.isNotNull(pageQueryDTO.getPage()) && Tools.isNotNull(pageQueryDTO.getLimit())) {
+            PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
+        }
         ResponseDTO responseDTO = new ResponseDTO();
         List<Customer> customerList = customerDao.selectPageCustomer(pageQueryDTO);
         PageInfo<Customer> pageInfo = new PageInfo(customerList);
@@ -214,9 +218,10 @@ public class CustomerServiceImpl implements CustomerService {
      * @return
      */
     @Override
-    public ResponseDTO getAllCustomerAddress() {
+    public ResponseDTO getAllCustomerAddress(PageQueryDTO pageQueryDTO) {
         ResponseDTO responseDTO = new ResponseDTO();
-        List<String> customerList = customerDao.selectAllCustomerAddress();
+        pageQueryDTO.assembleSql();
+        List<Customer> customerList = customerDao.selectAllCustomerAddress(pageQueryDTO);
         responseDTO.setData(customerList);
         responseDTO.setMessage("共" + customerList.size() + "条数据");
         return responseDTO;

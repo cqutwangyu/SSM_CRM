@@ -69,10 +69,10 @@ public class CustomerController {
         return customerService.getAllCustomer();
     }
 
-    @RequestMapping(value = "/getAllCustomerAddress", method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllCustomerAddress", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO getAllCustomerAddress() {
-        return customerService.getAllCustomerAddress();
+    public ResponseDTO getAllCustomerAddress(PageQueryDTO pageQueryDTO) {
+        return customerService.getAllCustomerAddress(pageQueryDTO);
     }
 
     @RequestMapping(value = "/importCustomerFromExcel", method = RequestMethod.POST)

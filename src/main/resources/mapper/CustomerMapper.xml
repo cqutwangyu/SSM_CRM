@@ -19,19 +19,21 @@
                 #{customerDate})
     </insert>
     <!--根据ID查用户-->
-    <select id="selectCustomerById" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.system.customer.entity.Customer">
+    <select id="selectCustomerById" parameterType="java.lang.Integer"
+            resultType="com.cqut.wangyu.crm.system.customer.entity.Customer">
         select *
         from customer
         where customerID = #{cusId}
     </select>
     <!--根据用户名查用户-->
-    <select id="selectCustomerByName" parameterType="java.lang.String" resultType="com.cqut.wangyu.crm.system.customer.entity.Customer">
+    <select id="selectCustomerByName" parameterType="java.lang.String"
+            resultType="com.cqut.wangyu.crm.system.customer.entity.Customer">
         select *
         from customer
         where customerName = #{cusName}
     </select>
     <!--根据ID修改用户-->
-    <update id="updateCustomer" parameterType="Customer">
+    <update id="updateCustomer" parameterType="com.cqut.wangyu.crm.system.customer.entity.Customer">
         update customer
         set customerName    = #{customerName},
             customerPhone   = #{customerPhone},
@@ -39,7 +41,9 @@
             customerUrl     = #{customerUrl},
             customerType    = #{customerType},
             customerStatus  = #{customerStatus},
-            customerDate    = #{customerDate}
+            customerDate    = #{customerDate},
+            lng             = #{lng},
+            lat             = #{lat}
         where customerID = #{customerID}
     </update>
     <!--根据ID删除客户-->
@@ -69,9 +73,11 @@
         order by customerID
     </select>
     <!--查询所有客户地址-->
-    <select id="selectAllCustomerAddress" resultType="String">
-        select customerAddress
+    <select id="selectAllCustomerAddress" parameterType="com.cqut.wangyu.crm.system.dto.PageQueryDTO"
+            resultType="com.cqut.wangyu.crm.system.customer.entity.Customer">
+        select *
         from customer
+        where ${sql}
         order by customerID
     </select>
     <!--查询所有客户-->

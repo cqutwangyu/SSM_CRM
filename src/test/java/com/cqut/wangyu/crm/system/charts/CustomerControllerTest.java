@@ -1,10 +1,15 @@
 package com.cqut.wangyu.crm.system.charts;
 
+import com.cqut.wangyu.crm.system.customer.entity.Point;
+import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
+import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.follow.controller.FollowController;
 import com.cqut.wangyu.crm.system.contact.controller.ContactController;
 import com.cqut.wangyu.crm.system.customer.controller.CustomerController;
 import com.cqut.wangyu.crm.system.customer.entity.Customer;
+import com.cqut.wangyu.crm.utils.BmapUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
+import com.cqut.wangyu.crm.utils.Tools;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -70,11 +75,28 @@ public class CustomerControllerTest extends BaseTest {
 //        customerController.findPageCustomer(1, 10);
     }
 
+    /*给所有没获取地图坐标的客户地址获取地图坐标*/
+    @Test
+    public void findAllNotPointCustomerTest() {
+        ResponseDTO allCustomer = customerController.getAllCustomer();
+        List<Customer> customerList = (List<Customer>) allCustomer.getData();
+        for (Customer customer : customerList) {
+            if (customer.getLat() == 0 && customer.getLng() == 0) {
+                Point coordinate = BmapUtil.getCoordinate(customer.getCustomerAddress());
+                if (Tools.isNotNull(coordinate)) {
+                    customer.setLat(coordinate.getLat());
+                    customer.setLng(coordinate.getLng());
+                    customerController.updateCustomer(customer);
+                }
+            }
+        }
+    }
+
     @Test
     public void addCustomerDataFromExcle() {
         try {
 
-            String fileName1="G:\\ProjectBackups\\SQLdata\\CRM_customer.xlsx";
+            String fileName1 = "G:\\ProjectBackups\\SQLdata\\CRM_customer.xlsx";
             List<Customer> customerLIst = POIUtil.readCustomerExcel(fileName1);
             for (int i = 0; i < customerLIst.size(); i++) {
                 customerController.addCustomer(customerLIst.get(i));

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cqut.wangyu.crm.dao.FollowDao">
+<mapper namespace="com.cqut.wangyu.crm.system.follow.dao.FollowDao">
     <!--注册-->
-    <insert id="insertFollow" parameterType="com.cqut.wangyu.crm.entity.Follow">
+    <insert id="insertFollow" parameterType="com.cqut.wangyu.crm.system.follow.entity.Follow">
         insert into follow (followContent, followDate, followType, customerID, contactID)
         values (#{followContent}, #{followDate}, #{followType}, #{customerID}, #{contactID})
     </insert>
     <!--根据ID查用户-->
-    <select id="selectFollowById" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.entity.Follow">
+    <select id="selectFollowById" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.system.follow.entity.Follow">
         select *
         from follow
         where followID = #{folId}
     </select>
     <!--根据ID查用户-->
-    <select id="selectFollowByCusID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.dto.FollowDTO">
+    <select id="selectFollowByCusID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.system.dto.FollowDTO">
         select *
         from follow
                  left join customer c on follow.customerID = c.customerID
@@ -22,7 +22,7 @@
     </select>
     <!--根据用户名查用户-->
     <select id="findFollowByCustomerName" parameterType="java.lang.String"
-            resultType="com.cqut.wangyu.crm.entity.Follow">
+            resultType="com.cqut.wangyu.crm.system.follow.entity.Follow">
         select *
         from follow
         where customerName = #{cusName}
@@ -51,8 +51,8 @@
         where followID = #{folId}
     </delete>
     <!--查询页内满足条件的客户-->
-    <select id="selectPageFollow" parameterType="com.cqut.wangyu.crm.dto.PageQueryDTO"
-            resultType="com.cqut.wangyu.crm.dto.FollowDTO">
+    <select id="selectPageFollow" parameterType="com.cqut.wangyu.crm.system.dto.PageQueryDTO"
+            resultType="com.cqut.wangyu.crm.system.dto.FollowDTO">
         select *
         from follow
                  left join contact c on follow.contactID = c.contactID
@@ -61,7 +61,7 @@
         order by followID
     </select>
     <!--查询所有客户-->
-    <select id="selectAllFollow" resultType="com.cqut.wangyu.crm.dto.FollowDTO">
+    <select id="selectAllFollow" resultType="com.cqut.wangyu.crm.system.dto.FollowDTO">
         select *
         from follow
                  left join contact c on follow.contactID = c.contactID

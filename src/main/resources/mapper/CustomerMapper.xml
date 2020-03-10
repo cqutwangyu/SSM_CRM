@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cqut.wangyu.crm.dao.CustomerDao">
+<mapper namespace="com.cqut.wangyu.crm.system.customer.dao.CustomerDao">
     <!--注册-->
-    <insert id="insertCustomer" parameterType="com.cqut.wangyu.crm.entity.Customer">
+    <insert id="insertCustomer" parameterType="com.cqut.wangyu.crm.system.customer.entity.Customer">
         insert into customer (customerName,
                               customerPhone,
                               customerAddress,
@@ -19,13 +19,13 @@
                 #{customerDate})
     </insert>
     <!--根据ID查用户-->
-    <select id="selectCustomerById" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.entity.Customer">
+    <select id="selectCustomerById" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.system.customer.entity.Customer">
         select *
         from customer
         where customerID = #{cusId}
     </select>
     <!--根据用户名查用户-->
-    <select id="selectCustomerByName" parameterType="java.lang.String" resultType="com.cqut.wangyu.crm.entity.Customer">
+    <select id="selectCustomerByName" parameterType="java.lang.String" resultType="com.cqut.wangyu.crm.system.customer.entity.Customer">
         select *
         from customer
         where customerName = #{cusName}
@@ -55,16 +55,22 @@
         where cusNo = #{cusNo}
     </select>
     <!--查询页内满足条件的客户-->
-    <select id="selectPageCustomer" parameterType="com.cqut.wangyu.crm.dto.PageQueryDTO"
-            resultType="com.cqut.wangyu.crm.entity.Customer">
+    <select id="selectPageCustomer" parameterType="com.cqut.wangyu.crm.system.dto.PageQueryDTO"
+            resultType="com.cqut.wangyu.crm.system.customer.entity.Customer">
         select *
         from customer
         where ${sql}
         order by customerID
     </select>
     <!--查询所有客户-->
-    <select id="selectAllCustomer" resultType="com.cqut.wangyu.crm.entity.Customer">
+    <select id="selectAllCustomer" resultType="com.cqut.wangyu.crm.system.customer.entity.Customer">
         select *
+        from customer
+        order by customerID
+    </select>
+    <!--查询所有客户地址-->
+    <select id="selectAllCustomerAddress" resultType="String">
+        select customerAddress
         from customer
         order by customerID
     </select>

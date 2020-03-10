@@ -28,7 +28,7 @@ public class LogAspect {
      */
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
 //    @Pointcut("execution(* com.cqut.wangyu.crm.service.impl.*.*(..))")
-//    @Pointcut("execution(* com.cqut.wangyu.crm.controller.*.*(..))")
+//    @Pointcut("execution(* com.cqut.wangyu.crm.system.charts.*.*(..))")
     public void controllerLog() {
     }
 

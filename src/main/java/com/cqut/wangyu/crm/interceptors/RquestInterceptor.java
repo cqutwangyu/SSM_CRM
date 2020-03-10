@@ -1,6 +1,6 @@
 package com.cqut.wangyu.crm.interceptors;
 
-import com.cqut.wangyu.crm.dto.ResponseDTO;
+import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.utils.TokenUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

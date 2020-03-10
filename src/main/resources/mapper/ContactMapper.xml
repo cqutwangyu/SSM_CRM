@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cqut.wangyu.crm.dao.ContactDao">
+<mapper namespace="com.cqut.wangyu.crm.system.contact.dao.ContactDao">
     <!--注册-->
-    <insert id="insertContact" parameterType="com.cqut.wangyu.crm.entity.Contact">
+    <insert id="insertContact" parameterType="com.cqut.wangyu.crm.system.contact.entity.Contact">
         insert into contact ( contactPosition, contactName, contactSex, contactPhone,contactQQ,contactEmail,customerID,contactDate)
         values (
                 #{contactPosition},
@@ -15,19 +15,19 @@
                 #{contactDate})
     </insert>
     <!--根据ID查用户-->
-    <select id="selectContactByConID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.dto.ContactDTO">
+    <select id="selectContactByConID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.system.dto.ContactDTO">
         select *
         from contact left join customer c on contact.customerID = c.customerID
         where contactID = #{conID}
     </select>
     <!--根据ID查用户-->
-    <select id="selectContactByCusID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.dto.ContactDTO">
+    <select id="selectContactByCusID" parameterType="java.lang.Integer" resultType="com.cqut.wangyu.crm.system.dto.ContactDTO">
         select *
         from contact left join customer c on contact.customerID = c.customerID
         where c.customerID = #{cusID}
     </select>
     <!--根据用户名查用户-->
-    <select id="selectContactByName" parameterType="java.lang.String" resultType="com.cqut.wangyu.crm.entity.Contact">
+    <select id="selectContactByName" parameterType="java.lang.String" resultType="com.cqut.wangyu.crm.system.contact.entity.Contact">
         select *
         from contact
         where contactName = #{conName}
@@ -51,15 +51,15 @@
         where contactID = #{conId}
     </delete>
     <!--查询页内满足条件的客户-->
-    <select id="selectPageContact" parameterType="com.cqut.wangyu.crm.dto.PageQueryDTO"
-            resultType="com.cqut.wangyu.crm.dto.ContactDTO">
+    <select id="selectPageContact" parameterType="com.cqut.wangyu.crm.system.dto.PageQueryDTO"
+            resultType="com.cqut.wangyu.crm.system.dto.ContactDTO">
         select *
         from contact left join customer cus on contact.customerID = cus.customerID
         where ${sql}
         order by contactID
     </select>
     <!--查询所有客户-->
-    <select id="selectAllContact" resultType="com.cqut.wangyu.crm.dto.ContactDTO">
+    <select id="selectAllContact" resultType="com.cqut.wangyu.crm.system.dto.ContactDTO">
         select *
         from contact left join customer cus on contact.customerID = cus.customerID
         order by contactID

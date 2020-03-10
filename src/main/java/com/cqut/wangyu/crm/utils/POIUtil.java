@@ -1,8 +1,8 @@
 package com.cqut.wangyu.crm.utils;
 
-import com.cqut.wangyu.crm.entity.Contact;
-import com.cqut.wangyu.crm.entity.Customer;
-import com.cqut.wangyu.crm.entity.Follow;
+import com.cqut.wangyu.crm.system.contact.entity.Contact;
+import com.cqut.wangyu.crm.system.customer.entity.Customer;
+import com.cqut.wangyu.crm.system.follow.entity.Follow;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -10,9 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

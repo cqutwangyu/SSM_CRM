@@ -8,6 +8,7 @@ import com.cqut.wangyu.crm.system.customer.entity.Customer;
 import com.cqut.wangyu.crm.utils.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.cqut.wangyu.crm.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -187,7 +188,7 @@ public class CustomerServiceImpl implements CustomerService {
                     error = customerList.size() - inserted;
                 }
             }
-            responseDTO.setMessage("新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
+            responseDTO.setMessage(Constant.IMPORT_SUCCEED+"新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
         } else {
             responseDTO.setMessage(Constant.IMPORT_FAILURE);
         }

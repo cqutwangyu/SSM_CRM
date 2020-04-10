@@ -1,5 +1,6 @@
 package com.cqut.wangyu.crm.system.user;
 
+import com.cqut.wangyu.crm.framework.AbstractController;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.user.entity.User;
 import com.cqut.wangyu.crm.system.user.service.UserService;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -23,13 +23,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends AbstractController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private HttpServletRequest request;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
@@ -52,9 +49,7 @@ public class UserController {
     @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
     @ResponseBody
     public ResponseDTO getUserInfo() {
-        String token = request.getHeader("X-Token");
-        String userName = TokenUtil.getUserName(token);
-        return userService.findUserByName(userName);
+        return userService.findUserByName(getUserName());
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

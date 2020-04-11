@@ -1,11 +1,14 @@
 package com.cqut.wangyu.crm.system.charts;
 
+import com.cqut.wangyu.crm.system.contact.service.ContactService;
 import com.cqut.wangyu.crm.system.customer.entity.Point;
+import com.cqut.wangyu.crm.system.customer.service.CustomerService;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.follow.FollowController;
 import com.cqut.wangyu.crm.system.contact.ContactController;
 import com.cqut.wangyu.crm.system.customer.CustomerController;
 import com.cqut.wangyu.crm.system.customer.entity.Customer;
+import com.cqut.wangyu.crm.system.follow.service.FollowService;
 import com.cqut.wangyu.crm.utils.BmapUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
 import com.cqut.wangyu.crm.utils.Tools;
@@ -23,11 +26,11 @@ import java.util.List;
  */
 public class CustomerControllerTest extends BaseTest {
     @Autowired
-    private CustomerController customerController;
+    private CustomerService customerController;
     @Autowired
-    private ContactController contactController;
+    private ContactService contactController;
     @Autowired
-    private FollowController followController;
+    private FollowService followController;
 
     @Test
     public void addCustomer() {
@@ -77,8 +80,7 @@ public class CustomerControllerTest extends BaseTest {
     /*给所有没获取地图坐标的客户地址获取地图坐标*/
     @Test
     public void findAllNotPointCustomerTest() {
-        ResponseDTO allCustomer = customerController.getAllCustomer();
-        List<Customer> customerList = (List<Customer>) allCustomer.getData();
+        List<Customer>  customerList = (List<Customer>)customerController.getAllCustomer();
         for (Customer customer : customerList) {
             if (customer.getLat() == 0 && customer.getLng() == 0) {
                 Point coordinate = BmapUtil.getCoordinate(customer.getCustomerAddress());

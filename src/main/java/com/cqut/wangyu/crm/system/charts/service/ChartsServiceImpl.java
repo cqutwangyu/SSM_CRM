@@ -36,8 +36,7 @@ public class ChartsServiceImpl implements ChartsService {
      * @return
      */
     @Override
-    public ResponseDTO getCustomerAllDataMonthlyStatistics() {
-        ResponseDTO responseDTO = new ResponseDTO();
+    public List<List<Integer>> getCustomerAllDataMonthlyStatistics() {
         List<List<Integer>> list = new ArrayList();
         List cus = customerDao.selectMonthlyStatistics();
         List con = contactDao.selectMonthlyStatistics();
@@ -47,8 +46,6 @@ public class ChartsServiceImpl implements ChartsService {
         list.add(con);
         list.add(fol);
         list.add(ord);
-        responseDTO.setData(list);
-        responseDTO.setMessage("共" + list.size() + "条数据");
-        return responseDTO;
+        return list;
     }
 }

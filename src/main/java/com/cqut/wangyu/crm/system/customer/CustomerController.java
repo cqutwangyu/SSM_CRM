@@ -1,7 +1,7 @@
 package com.cqut.wangyu.crm.system.customer;
 
+import com.cqut.wangyu.crm.framework.AbstractController;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
-import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.customer.entity.Customer;
 import com.cqut.wangyu.crm.system.customer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/customer")
-public class CustomerController {
+public class CustomerController extends AbstractController {
 
     @Autowired
     private CustomerService customerService;
@@ -29,55 +29,55 @@ public class CustomerController {
 
     @RequestMapping(value = "/addCustomer", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO addCustomer(Customer customer) {
-        return customerService.addCustomer(customer);
+    public Object addCustomer(Customer customer) {
+        return succeed(customerService.addCustomer(customer));
     }
 
     @RequestMapping(value = "/deleteCustomer", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO deleteCustomer(Integer cusId) {
-        return customerService.deleteCustomer(cusId);
+    public Object deleteCustomer(Integer cusId) {
+        return succeed(customerService.deleteCustomer(cusId));
     }
 
     @RequestMapping(value = "/updateCustomer", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO updateCustomer(Customer customer) {
-        return customerService.updateCustomer(customer);
+    public Object updateCustomer(Customer customer) {
+        return succeed(customerService.updateCustomer(customer));
     }
 
     @RequestMapping(value = "/findCustomerByName", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findCustomerByName(String cusName) {
-        return customerService.findCustomerByName(cusName);
+    public Object findCustomerByName(String cusName) {
+        return succeed(customerService.findCustomerByName(cusName));
     }
 
     @RequestMapping(value = "/findCustomerById", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findCustomerById(Integer cusId) {
-        return customerService.findCustomerById(cusId);
+    public Object findCustomerById(Integer cusId) {
+        return succeed(customerService.findCustomerById(cusId));
     }
 
     @RequestMapping(value = "/findPageCustomer", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findPageCustomer(PageQueryDTO pageQueryDTO) {
-        return customerService.findPageCustomer(pageQueryDTO);
+    public Object findPageCustomer(PageQueryDTO pageQueryDTO) {
+        return succeed(customerService.findPageCustomer(pageQueryDTO));
     }
 
     @RequestMapping(value = "/getAllCustomer", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseDTO getAllCustomer() {
-        return customerService.getAllCustomer();
+    public Object getAllCustomer() {
+        return succeed(customerService.getAllCustomer());
     }
 
     @RequestMapping(value = "/getAllCustomerAddress", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO getAllCustomerAddress(PageQueryDTO pageQueryDTO) {
-        return customerService.getAllCustomerAddress(pageQueryDTO);
+    public Object getAllCustomerAddress(PageQueryDTO pageQueryDTO) {
+        return succeed(customerService.getAllCustomerAddress(pageQueryDTO));
     }
 
     @RequestMapping(value = "/importCustomerFromExcel", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO importCustomerFromExcel(MultipartFile file) {
-        return customerService.importCustomerFromExcel(file, request);
+    public Object importCustomerFromExcel(MultipartFile file) {
+        return succeed(customerService.importCustomerFromExcel(file, request));
     }
 }

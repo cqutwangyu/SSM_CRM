@@ -3,6 +3,8 @@ package com.cqut.wangyu.crm.framework;
 import com.cqut.wangyu.crm.system.user.dao.UserDao;
 import com.cqut.wangyu.crm.system.user.entity.User;
 import com.cqut.wangyu.crm.utils.TokenUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2020/4/1 21:42
  */
 public class AbstractBase {
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private UserDao userDao;
 

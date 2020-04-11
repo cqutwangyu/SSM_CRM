@@ -1,7 +1,7 @@
 package com.cqut.wangyu.crm.system.order;
 
+import com.cqut.wangyu.crm.framework.AbstractController;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
-import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.order.entity.Order;
 import com.cqut.wangyu.crm.system.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,61 +21,58 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/order")
-public class OrderController {
+public class OrderController extends AbstractController {
 
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private HttpServletRequest request;
-
     @RequestMapping(value = "/addOrder", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO addOrder(Order order) {
-        return orderService.addOrder(order);
+    public Object addOrder(Order order) {
+        return succeed(orderService.addOrder(order));
     }
 
     @RequestMapping(value = "/deleteOrder", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO deleteOrder(Integer orderID) {
-        return orderService.deleteOrder(orderID);
+    public Object deleteOrder(Integer orderID) {
+        return succeed(orderService.deleteOrder(orderID));
     }
 
     @RequestMapping(value = "/updateOrder", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO updateOrder(Order order) {
-        return orderService.updateOrder(order);
+    public Object updateOrder(Order order) {
+        return succeed(orderService.updateOrder(order));
     }
 
     @RequestMapping(value = "/findOrderByCustomerName", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findOrderByCustomerName(String cusName) {
-        return orderService.findOrderByCustomerName(cusName);
+    public Object findOrderByCustomerName(String cusName) {
+        return succeed(orderService.findOrderByCustomerName(cusName));
     }
 
     @RequestMapping(value = "/findOrderById", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findOrderById(Integer cusId) {
-        return orderService.findOrderById(cusId);
+    public Object findOrderById(Integer cusId) {
+        return succeed(orderService.findOrderById(cusId));
     }
 
 
     @RequestMapping(value = "/findOrderByCusID", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findOrderByCusID(Integer cusID) {
-        return orderService.findOrderByCusID(cusID);
+    public Object findOrderByCusID(Integer cusID) {
+        return succeed(orderService.findOrderByCusID(cusID));
     }
 
     @RequestMapping(value = "/findPageOrder", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findPageOrder(PageQueryDTO pageQueryDTO) {
-        return orderService.findPageOrder(pageQueryDTO);
+    public Object findPageOrder(PageQueryDTO pageQueryDTO) {
+        return succeed(orderService.findPageOrder(pageQueryDTO));
     }
 
     @RequestMapping(value = "/getAllOrder", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseDTO getAllOrder() {
-        return orderService.getAllOrder();
+    public Object getAllOrder() {
+        return succeed(orderService.getAllOrder());
     }
 
 }

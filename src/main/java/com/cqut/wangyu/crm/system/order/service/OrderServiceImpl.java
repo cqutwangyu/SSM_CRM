@@ -1,9 +1,8 @@
 package com.cqut.wangyu.crm.system.order.service;
 
-import com.cqut.wangyu.crm.system.order.dao.OrderDao;
 import com.cqut.wangyu.crm.system.dto.OrderDTO;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
-import com.cqut.wangyu.crm.system.dto.ResponseDTO;
+import com.cqut.wangyu.crm.system.order.dao.OrderDao;
 import com.cqut.wangyu.crm.system.order.entity.Order;
 import com.cqut.wangyu.crm.utils.Constant;
 import com.github.pagehelper.PageHelper;
@@ -29,32 +28,20 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
 
     @Override
-    public ResponseDTO addOrder(Order order) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Order cName = orderDao.selectOrderByOrdID(order.getOrderID());
-        if (null == cName) {
-            Integer rows = orderDao.insertOrder(order);
-            responseDTO.setMessage(rows == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE);
-            responseDTO.setData(Constant.SUCCEED);
-        } else {
-            responseDTO.setMessage(Constant.INSERT_ID_REPETITION);
-            responseDTO.setData(Constant.ERROR);
-        }
-        return responseDTO;
+    public String addOrder(Order order) {
+        return orderDao.insertOrder(order) == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE;
     }
 
     @Override
-    public ResponseDTO findPageOrder(PageQueryDTO pageQueryDTO) {
+    public Map<String, Object> findPageOrder(PageQueryDTO pageQueryDTO) {
         PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
-        ResponseDTO responseDTO = new ResponseDTO();
         List<OrderDTO> orderList = orderDao.selectPageOrder(pageQueryDTO);
         PageInfo<OrderDTO> pageInfo = new PageInfo(orderList);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", pageInfo.getTotal());
         map.put("items", orderList);
-        responseDTO.setData(map);
-        return responseDTO;
+        return map;
     }
 
     /**
@@ -64,11 +51,8 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public ResponseDTO deleteOrder(Integer orderID) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = orderDao.deleteOrder(orderID);
-        responseDTO.setMessage(rows == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE);
-        return responseDTO;
+    public String deleteOrder(Integer orderID) {
+        return orderDao.deleteOrder(orderID) == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE;
     }
 
     /**
@@ -78,11 +62,8 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public ResponseDTO updateOrder(Order order) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = orderDao.updateOrder(order);
-        responseDTO.setMessage(rows == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE);
-        return responseDTO;
+    public String updateOrder(Order order) {
+        return orderDao.updateOrder(order) == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE;
     }
 
     /**
@@ -92,11 +73,8 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public ResponseDTO findOrderByCustomerName(String cusName) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<Order> customerList = orderDao.findOrderByCustomerName(cusName);
-        responseDTO.setData(customerList);
-        return responseDTO;
+    public List<Order> findOrderByCustomerName(String cusName) {
+        return orderDao.findOrderByCustomerName(cusName);
     }
 
     /**
@@ -106,11 +84,8 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public ResponseDTO findOrderById(Integer conId) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Order customer = orderDao.selectOrderByOrdID(conId);
-        responseDTO.setData(customer);
-        return responseDTO;
+    public Order findOrderById(Integer conId) {
+        return orderDao.selectOrderByOrdID(conId);
     }
 
     /**
@@ -119,19 +94,12 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public ResponseDTO getAllOrder() {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<OrderDTO> orderList = orderDao.selectAllOrder();
-        responseDTO.setData(orderList);
-        responseDTO.setMessage("共" + orderList.size() + "条数据");
-        return responseDTO;
+    public List<OrderDTO> getAllOrder() {
+        return orderDao.selectAllOrder();
     }
 
     @Override
-    public ResponseDTO findOrderByCusID(Integer cusID) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<OrderDTO> customer = orderDao.selectOrderByCusID(cusID);
-        responseDTO.setData(customer);
-        return responseDTO;
+    public List<OrderDTO> findOrderByCusID(Integer cusID) {
+        return orderDao.selectOrderByCusID(cusID);
     }
 }

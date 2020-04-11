@@ -86,7 +86,7 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
         try {
             out = response.getWriter();
             ResponseDTO responseDTO = new ResponseDTO();
-            responseDTO.setCode(50008);
+            responseDTO.setCode(401);
             responseDTO.setMessage("身份认证失败，请重新登录。");
             out.print(responseDTO);
         } catch (IOException e) {

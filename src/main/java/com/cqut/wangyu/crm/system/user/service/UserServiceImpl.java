@@ -1,5 +1,7 @@
 package com.cqut.wangyu.crm.system.user.service;
 
+import com.cqut.wangyu.crm.exception.CRMException;
+import com.cqut.wangyu.crm.system.dto.GrantedUser;
 import com.cqut.wangyu.crm.system.user.dao.UserDao;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.user.entity.User;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -29,79 +32,54 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public ResponseDTO register(User user) {
-        ResponseDTO responseDTO = new ResponseDTO();
+    public String register(User user) throws Exception {
         User dbUser = userDao.selectUserByName(user.getUserName());
-        Integer rows = 0;
         if (dbUser == null) {
             String md5Password = MD5Util.encode(user.getPassword());
             user.setPassword(md5Password);
-            rows = userDao.insertUser(user);
+            return userDao.insertUser(user) == 1 ? Constant.REGISTER_SUCCEED : Constant.REGISTER_FAILURE;
         } else {
-            responseDTO.setMessage(Constant.REGISTER_USERNAME_REPETITION);
-            return responseDTO;
+            throw new Exception(CRMException.INPUT_USER_NAME_ALREADY_EXISTS);
         }
-        responseDTO.setMessage(rows == 1 ? Constant.REGISTER_SUCCEED : Constant.REGISTER_FAILURE);
-        return responseDTO;
     }
 
     @Override
-    public ResponseDTO findUserById(Integer id) {
-        User user = userDao.selectUserByID(id);
-        ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setMessage(user != null ? Constant.FIND_SUCCEED : Constant.FIND_FAILURE);
-        responseDTO.setData(user);
-        return responseDTO;
+    public User findUserById(Integer id) {
+        return userDao.selectUserByID(id);
     }
 
     @Override
-    public ResponseDTO findUserByName(String userName) {
-        ResponseDTO dto = new ResponseDTO();
-        User user = userDao.selectUserByName(userName);
-        dto.setMessage(user != null ? Constant.FIND_SUCCEED : Constant.FIND_FAILURE);
-        dto.setData(user);
-        return dto;
+    public User findUserByName(String userName) {
+        return userDao.selectUserByName(userName);
     }
 
     @Override
-    public ResponseDTO deleteUserByID(Integer id) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = userDao.deleteUserByID(id);
-        responseDTO.setMessage(rows == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE);
-        return responseDTO;
+    public String deleteUserByID(Integer id) {
+        return userDao.deleteUserByID(id) == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE;
     }
 
     @Override
-    public ResponseDTO updateUserByID(User user) {
-        Integer rows = userDao.updateUserByID(user);
-        ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setMessage(rows == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE);
-        return responseDTO;
+    public String updateUserByID(User user) {
+        return userDao.updateUserByID(user) == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE;
     }
 
     @Override
-    public ResponseDTO findAllUser() {
-        List<User> list = userDao.selectAll();
-        ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setData(list);
-        return responseDTO;
+    public List<User> findAllUser() {
+        return userDao.selectAll();
     }
 
     @Override
-    public ResponseDTO login(User user) throws Exception{
+    public GrantedUser login(User user) {
         String md5Password = MD5Util.encode(user.getPassword());
         user.setPassword(md5Password);
         User dbUser = userDao.selectUserByName(user.getUserName());
-        ResponseDTO responseDTO = new ResponseDTO();
+        GrantedUser grantedUser = new GrantedUser();
         //验证用户是否存在、密码是否正确
         if (dbUser != null && dbUser.getPassword().equals(user.getPassword())) {
-            responseDTO.setData(dbUser);
-            responseDTO.setToken(TokenUtil.sign(dbUser.getUserName(), dbUser.getPassword()));
-            responseDTO.setMessage(Constant.LOGIN_SUCCEED);
-        } else {
-            responseDTO.setMessage(Constant.LOGIN_FAILURE);
+            grantedUser.setUserInfo(dbUser);
+            grantedUser.setToken(TokenUtil.sign(dbUser.getUserName(), dbUser.getPassword()));
         }
-        return responseDTO;
+        return grantedUser;
     }
 
     /**
@@ -112,34 +90,28 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public ResponseDTO uploadImage(MultipartFile file, HttpServletRequest request) {
-        ResponseDTO responseDTO = new ResponseDTO();
+    public String uploadImage(MultipartFile file, HttpServletRequest request) throws IOException {
         boolean succeed = false;
         if (!file.isEmpty()) {
-            try {
-                String md5FileName = MD5Util.encodeFile(file);
-                String filePath = file.getOriginalFilename();
-                filePath = filePath.replace(file.getName(), md5FileName);
-                //windows
-                String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.IMG_PATH + filePath);
-                File targetFile = new File(savePath);
-                if (!targetFile.exists()) {
-                    targetFile.mkdirs();
-                }
-                file.transferTo(targetFile);
-                String token = request.getHeader("X-Token");
-                String userName = TokenUtil.getUserName(token);
-                User user = userDao.selectUserByName(userName);
-                if (user != null) {
-                    user.setAvatar(MyFileUtil.LOCAL_HOST_SERVER_ADDRESS + MyFileUtil.IMG_REQUEST + MyFileUtil.IMG_PATH + filePath);
-                    userDao.updateUserByID(user);
-                    succeed = true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            String md5FileName = MD5Util.encodeFile(file);
+            String filePath = file.getOriginalFilename();
+            filePath = filePath.replace(file.getName(), md5FileName);
+            //windows
+            String savePath = request.getSession().getServletContext().getRealPath(MyFileUtil.IMG_PATH + filePath);
+            File targetFile = new File(savePath);
+            if (!targetFile.exists()) {
+                targetFile.mkdirs();
+            }
+            file.transferTo(targetFile);
+            String token = request.getHeader("X-Token");
+            String userName = TokenUtil.getUserName(token);
+            User user = userDao.selectUserByName(userName);
+            if (user != null) {
+                user.setAvatar(MyFileUtil.LOCAL_HOST_SERVER_ADDRESS + MyFileUtil.IMG_REQUEST + MyFileUtil.IMG_PATH + filePath);
+                userDao.updateUserByID(user);
+                succeed = true;
             }
         }
-        responseDTO.setMessage(succeed ? Constant.UPLOAD_SUCCEED:Constant.UPLOAD_FAILURE);
-        return responseDTO;
+        return succeed ? Constant.UPLOAD_SUCCEED : Constant.UPLOAD_FAILURE;
     }
 }

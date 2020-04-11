@@ -1,14 +1,13 @@
 package com.cqut.wangyu.crm.system.customer.service;
 
 import com.cqut.wangyu.crm.system.customer.dao.CustomerDao;
+import com.cqut.wangyu.crm.system.customer.entity.Customer;
 import com.cqut.wangyu.crm.system.customer.entity.Point;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
-import com.cqut.wangyu.crm.system.customer.entity.Customer;
 import com.cqut.wangyu.crm.utils.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.cqut.wangyu.crm.utils.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,37 +32,25 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerDao customerDao;
 
     @Override
-    public ResponseDTO addCustomer(Customer customer) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<Customer> customerList = customerDao.selectCustomerByName(customer.getCustomerName());
-        if (customerList.isEmpty()) {
-            Point coordinate = BmapUtil.getCoordinate(customer.getCustomerAddress());
-            customer.setLng(coordinate.getLng());
-            customer.setLat(coordinate.getLat());
-            Integer rows = customerDao.insertCustomer(customer);
-            responseDTO.setMessage(rows == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE);
-            responseDTO.setData(Constant.SUCCEED);
-        } else {
-            responseDTO.setMessage(Constant.INSERT_CUSTOMERNAME_REPETITION);
-            responseDTO.setData(Constant.ERROR);
-        }
-        return responseDTO;
+    public String addCustomer(Customer customer) {
+        Point coordinate = BmapUtil.getCoordinate(customer.getCustomerAddress());
+        customer.setLng(coordinate.getLng());
+        customer.setLat(coordinate.getLat());
+        return customerDao.insertCustomer(customer) == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE;
     }
 
     @Override
-    public ResponseDTO findPageCustomer(PageQueryDTO pageQueryDTO) {
+    public Map<String, Object> findPageCustomer(PageQueryDTO pageQueryDTO) {
         if (Tools.isNotNull(pageQueryDTO.getPage()) && Tools.isNotNull(pageQueryDTO.getLimit())) {
             PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
         }
-        ResponseDTO responseDTO = new ResponseDTO();
         List<Customer> customerList = customerDao.selectPageCustomer(pageQueryDTO);
         PageInfo<Customer> pageInfo = new PageInfo(customerList);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", pageInfo.getTotal());
         map.put("items", customerList);
-        responseDTO.setData(map);
-        return responseDTO;
+        return map;
     }
 
     /**
@@ -73,17 +60,8 @@ public class CustomerServiceImpl implements CustomerService {
      * @return
      */
     @Override
-    public ResponseDTO deleteCustomer(Integer cusId) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = 0;
-        try {
-            rows = customerDao.deleteCustomer(cusId);
-        } catch (Exception e) {
-
-        } finally {
-            responseDTO.setMessage(rows == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE);
-        }
-        return responseDTO;
+    public String deleteCustomer(Integer cusId) {
+        return customerDao.deleteCustomer(cusId) == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE;
     }
 
     /**
@@ -93,11 +71,8 @@ public class CustomerServiceImpl implements CustomerService {
      * @return
      */
     @Override
-    public ResponseDTO updateCustomer(Customer customer) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = customerDao.updateCustomer(customer);
-        responseDTO.setMessage(rows == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE);
-        return responseDTO;
+    public String updateCustomer(Customer customer) {
+        return customerDao.updateCustomer(customer) == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE;
     }
 
     /**
@@ -107,11 +82,8 @@ public class CustomerServiceImpl implements CustomerService {
      * @return
      */
     @Override
-    public ResponseDTO findCustomerByName(String cusName) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<Customer> customerList = customerDao.selectCustomerByName(cusName);
-        responseDTO.setData(customerList);
-        return responseDTO;
+    public List<Customer> findCustomerByName(String cusName) {
+        return customerDao.selectCustomerByName(cusName);
     }
 
     /**
@@ -121,11 +93,8 @@ public class CustomerServiceImpl implements CustomerService {
      * @return
      */
     @Override
-    public ResponseDTO findCustomerById(Integer cusId) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Customer customer = customerDao.selectCustomerById(cusId);
-        responseDTO.setData(customer);
-        return responseDTO;
+    public Customer findCustomerById(Integer cusId) {
+        return customerDao.selectCustomerById(cusId);
     }
 
     /**
@@ -188,7 +157,7 @@ public class CustomerServiceImpl implements CustomerService {
                     error = customerList.size() - inserted;
                 }
             }
-            responseDTO.setMessage(Constant.IMPORT_SUCCEED+"新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
+            responseDTO.setMessage(Constant.IMPORT_SUCCEED + "新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
         } else {
             responseDTO.setMessage(Constant.IMPORT_FAILURE);
         }
@@ -197,19 +166,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
-
     /**
      * 不分页的情况下查询所有客户
      *
      * @return
      */
     @Override
-    public ResponseDTO getAllCustomer() {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<Customer> customerList = customerDao.selectAllCustomer();
-        responseDTO.setData(customerList);
-        responseDTO.setMessage("共" + customerList.size() + "条数据");
-        return responseDTO;
+    public List<Customer> getAllCustomer() {
+        return customerDao.selectAllCustomer();
     }
 
     /**
@@ -218,13 +182,8 @@ public class CustomerServiceImpl implements CustomerService {
      * @return
      */
     @Override
-    public ResponseDTO getAllCustomerAddress(PageQueryDTO pageQueryDTO) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        pageQueryDTO.assembleSql();
-        List<Customer> customerList = customerDao.selectAllCustomerAddress(pageQueryDTO);
-        responseDTO.setData(customerList);
-        responseDTO.setMessage("共" + customerList.size() + "条数据");
-        return responseDTO;
+    public List<Customer> getAllCustomerAddress(PageQueryDTO pageQueryDTO) {
+        return customerDao.selectAllCustomerAddress(pageQueryDTO.assembleSql());
     }
 
 

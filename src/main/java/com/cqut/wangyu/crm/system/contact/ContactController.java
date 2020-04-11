@@ -1,9 +1,9 @@
 package com.cqut.wangyu.crm.system.contact;
 
-import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
-import com.cqut.wangyu.crm.system.dto.ResponseDTO;
+import com.cqut.wangyu.crm.framework.AbstractController;
 import com.cqut.wangyu.crm.system.contact.entity.Contact;
 import com.cqut.wangyu.crm.system.contact.service.ContactService;
+import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/contact")
-public class ContactController {
+public class ContactController extends AbstractController {
 
     @Autowired
     private ContactService contactService;
@@ -32,54 +32,64 @@ public class ContactController {
 
     @RequestMapping(value = "/addContact", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO addContact(Contact contact) {
-        return contactService.addContact(contact);
+    public Object addContact(Contact contact) {
+        try {
+            return succeed(contactService.addContact(contact));
+        } catch (Exception e) {
+            return failure(e);
+        }
     }
+
     @RequestMapping(value = "/deleteContact", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO deleteContact(Integer contactID) {
-        return contactService.deleteContact(contactID);
+    public Object deleteContact(Integer contactID) {
+        try {
+            return succeed(contactService.deleteContact(contactID));
+        } catch (Exception e) {
+            return failure(e);
+        }
     }
 
     @RequestMapping(value = "/updateContact", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO updateContact(Contact contact) {
-        return contactService.updateContact(contact);
+    public Object updateContact(Contact contact) {
+        return succeed(contactService.updateContact(contact));
     }
 
     @RequestMapping(value = "/findContactByName", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findContactByName(String cusName) {
-        return contactService.findContactByName(cusName);
+    public Object findContactByName(String cusName) {
+        return succeed(contactService.findContactByName(cusName));
     }
 
     @RequestMapping(value = "/findContactByConID", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findContactByConID(Integer conID) {
-        return contactService.findContactByConID(conID);
+    public Object findContactByConID(Integer conID) {
+        return succeed(contactService.findContactByConID(conID));
     }
 
 
     @RequestMapping(value = "/findContactByCusID", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findContactByCusID(Integer cusID) {
-        return contactService.findContactByCusID(cusID);
+    public Object findContactByCusID(Integer cusID) {
+        return succeed(contactService.findContactByCusID(cusID));
     }
 
     @RequestMapping(value = "/findPageContact", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findPageContact(PageQueryDTO pageQueryDTO) {
-        return contactService.findPageContact(pageQueryDTO);
+    public Object findPageContact(PageQueryDTO pageQueryDTO) {
+        return succeed(contactService.findPageContact(pageQueryDTO));
     }
+
     @RequestMapping(value = "/getAllContact", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseDTO getAllContact() {
-        return contactService.getAllContact();
+    public Object getAllContact() {
+        return succeed(contactService.getAllContact());
     }
 
     @RequestMapping(value = "/importContactFromExcel", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO importContactFromExcel(MultipartFile file) {
-        return contactService.importContactFromExcel(file, request);
+    public Object importContactFromExcel(MultipartFile file) {
+        return succeed(contactService.importContactFromExcel(file, request));
     }
 }

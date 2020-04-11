@@ -1,10 +1,10 @@
 package com.cqut.wangyu.crm.system.contact.service;
 
+import com.cqut.wangyu.crm.exception.CRMException;
 import com.cqut.wangyu.crm.system.contact.dao.ContactDao;
+import com.cqut.wangyu.crm.system.contact.entity.Contact;
 import com.cqut.wangyu.crm.system.dto.ContactDTO;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
-import com.cqut.wangyu.crm.system.dto.ResponseDTO;
-import com.cqut.wangyu.crm.system.contact.entity.Contact;
 import com.cqut.wangyu.crm.utils.Constant;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
 import com.cqut.wangyu.crm.utils.POIUtil;
@@ -35,32 +35,25 @@ public class ContactServiceImpl implements ContactService {
     private ContactDao contactDao;
 
     @Override
-    public ResponseDTO addContact(Contact contact) {
-        ResponseDTO responseDTO = new ResponseDTO();
+    public String addContact(Contact contact) throws Exception {
         List<Contact> cName = contactDao.selectContactByName(contact.getContactName());
         if (cName.isEmpty()) {
-            Integer rows = contactDao.insertContact(contact);
-            responseDTO.setMessage(rows == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE);
-            responseDTO.setData("succeed");
+            return contactDao.insertContact(contact) == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE;
         } else {
-            responseDTO.setMessage("客户名称已存在");
-            responseDTO.setData("error");
+            throw new Exception(CRMException.INPUT_CUSTOMER_NAME_ALREADY_EXISTS);
         }
-        return responseDTO;
     }
 
     @Override
-    public ResponseDTO findPageContact(PageQueryDTO pageQueryDTO) {
+    public Map<String, Object> findPageContact(PageQueryDTO pageQueryDTO) {
         PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
-        ResponseDTO responseDTO = new ResponseDTO();
         List<ContactDTO> contactList = contactDao.selectPageContact(pageQueryDTO);
         PageInfo<ContactDTO> pageInfo = new PageInfo(contactList);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", pageInfo.getTotal());
         map.put("items", contactList);
-        responseDTO.setData(map);
-        return responseDTO;
+        return map;
     }
 
     /**
@@ -70,28 +63,20 @@ public class ContactServiceImpl implements ContactService {
      * @return
      */
     @Override
-    public ResponseDTO deleteContact(Integer contactID) {
-        ResponseDTO responseDTO = new ResponseDTO();
+    public String deleteContact(Integer contactID) throws Exception {
+        // TODO: 2020/4/11 删除联系人需解决关联关系
         Integer rows = -1;
         try {
             rows = contactDao.deleteContact(contactID);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         } finally {
             switch (rows) {
                 case -1:
-                    responseDTO.setMessage(Constant.DELETE_FAILURE_FOREIGN_KEY);
-                    break;
+                    throw new Exception(Constant.DELETE_FAILURE_FOREIGN_KEY);
                 case 0:
-                    responseDTO.setMessage(Constant.DELETE_FAILURE);
-                    break;
-                case 1:
-                    responseDTO.setMessage(Constant.DELETE_SUCCEED);
-                    break;
+                    throw new Exception(Constant.DELETE_FAILURE);
             }
         }
-
-        return responseDTO;
+        return Constant.DELETE_SUCCEED;
     }
 
     /**
@@ -101,11 +86,8 @@ public class ContactServiceImpl implements ContactService {
      * @return
      */
     @Override
-    public ResponseDTO updateContact(Contact contact) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = contactDao.updateContact(contact);
-        responseDTO.setMessage(rows == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE);
-        return responseDTO;
+    public String updateContact(Contact contact) {
+        return contactDao.updateContact(contact) == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE;
     }
 
     /**
@@ -115,11 +97,8 @@ public class ContactServiceImpl implements ContactService {
      * @return
      */
     @Override
-    public ResponseDTO findContactByName(String conName) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<Contact> customerList = contactDao.selectContactByName(conName);
-        responseDTO.setData(customerList);
-        return responseDTO;
+    public List<Contact> findContactByName(String conName) {
+        return contactDao.selectContactByName(conName);
     }
 
     /**
@@ -129,11 +108,8 @@ public class ContactServiceImpl implements ContactService {
      * @return
      */
     @Override
-    public ResponseDTO findContactByConID(Integer conId) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        ContactDTO customer = contactDao.selectContactByConID(conId);
-        responseDTO.setData(customer);
-        return responseDTO;
+    public ContactDTO findContactByConID(Integer conId) {
+        return contactDao.selectContactByConID(conId);
     }
 
     /**
@@ -144,8 +120,7 @@ public class ContactServiceImpl implements ContactService {
      * @return
      */
     @Override
-    public ResponseDTO importContactFromExcel(MultipartFile file, HttpServletRequest request) {
-        ResponseDTO responseDTO = new ResponseDTO();
+    public String importContactFromExcel(MultipartFile file, HttpServletRequest request) {
         int inserted = 0, updated = 0, notChanged = 0, error = 0;
         if (Tools.isNotNull(file)) {
             String filePath = file.getOriginalFilename();
@@ -196,12 +171,13 @@ public class ContactServiceImpl implements ContactService {
                     error = contactList.size() - inserted;
                 }
             }
-            responseDTO.setMessage("新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
-        } else {
-            responseDTO.setMessage(Constant.IMPORT_FAILURE);
         }
-        POIUtil.returnImportResult(responseDTO, inserted, updated, notChanged, error);
-        return responseDTO;
+        StringBuilder sb = new StringBuilder();
+        sb.append("新增：" + inserted + "条");
+        sb.append(",更新" + updated + "条");
+        sb.append(",未改" + notChanged + "条");
+        sb.append(",失败" + error + "条");
+        return sb.toString();
     }
 
     /**
@@ -210,19 +186,12 @@ public class ContactServiceImpl implements ContactService {
      * @return
      */
     @Override
-    public ResponseDTO getAllContact() {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<ContactDTO> contactList = contactDao.selectAllContact();
-        responseDTO.setData(contactList);
-        responseDTO.setMessage("共" + contactList.size() + "条数据");
-        return responseDTO;
+    public List<ContactDTO> getAllContact() {
+        return contactDao.selectAllContact();
     }
 
     @Override
-    public ResponseDTO findContactByCusID(Integer cusID) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<ContactDTO> customer = contactDao.selectContactByCusID(cusID);
-        responseDTO.setData(customer);
-        return responseDTO;
+    public List<ContactDTO> findContactByCusID(Integer cusID) {
+        return contactDao.selectContactByCusID(cusID);
     }
 }

@@ -42,4 +42,5 @@ public class Constant {
     //    import
     public static final String IMPORT_SUCCEED = "导入成功!";
     public static final String IMPORT_FAILURE = "导入失败!";
+    public static final String LOGOUT_SUCCEED = "退出成功";
 }

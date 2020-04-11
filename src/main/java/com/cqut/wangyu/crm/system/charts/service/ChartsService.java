@@ -14,5 +14,5 @@ public interface ChartsService {
      * 获取本年的所有数据，根据月份统计
      * @return
      */
-    ResponseDTO getCustomerAllDataMonthlyStatistics();
+    Object getCustomerAllDataMonthlyStatistics();
 }

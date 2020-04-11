@@ -1,7 +1,7 @@
 package com.cqut.wangyu.crm.system.follow;
 
+import com.cqut.wangyu.crm.framework.AbstractController;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
-import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.follow.entity.Follow;
 import com.cqut.wangyu.crm.system.follow.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,66 +22,63 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/follow")
-public class FollowController {
+public class FollowController extends AbstractController {
 
     @Autowired
     private FollowService followService;
 
-    @Autowired
-    private HttpServletRequest request;
-
     @RequestMapping(value = "/addFollow", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO addFollow(Follow follow) {
-        return followService.addFollow(follow);
+    public Object addFollow(Follow follow) {
+        return succeed(followService.addFollow(follow));
     }
 
     @RequestMapping(value = "/deleteFollow", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO deleteFollow(Integer followID) {
-        return followService.deleteFollow(followID);
+    public Object deleteFollow(Integer followID) {
+        return succeed(followService.deleteFollow(followID));
     }
 
     @RequestMapping(value = "/updateFollow", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO updateFollow(Follow follow) {
-        return followService.updateFollow(follow);
+    public Object updateFollow(Follow follow) {
+        return succeed(followService.updateFollow(follow));
     }
 
     @RequestMapping(value = "/findFollowByCustomerName", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findFollowByCustomerName(String cusName) {
-        return followService.findFollowByCustomerName(cusName);
+    public Object findFollowByCustomerName(String cusName) {
+        return succeed(followService.findFollowByCustomerName(cusName));
     }
 
     @RequestMapping(value = "/findFollowById", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findFollowById(Integer cusId) {
-        return followService.findFollowById(cusId);
+    public Object findFollowById(Integer cusId) {
+        return succeed(followService.findFollowById(cusId));
     }
 
 
     @RequestMapping(value = "/findFollowByCusID", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findFollowByCusID(Integer cusID) {
-        return followService.findFollowByCusID(cusID);
+    public Object findFollowByCusID(Integer cusID) {
+        return succeed(followService.findFollowByCusID(cusID));
     }
 
     @RequestMapping(value = "/findPageFollow", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findPageFollow(PageQueryDTO pageQueryDTO) {
-        return followService.findPageFollow(pageQueryDTO);
+    public Object findPageFollow(PageQueryDTO pageQueryDTO) {
+        return succeed(followService.findPageFollow(pageQueryDTO));
     }
 
     @RequestMapping(value = "/getAllFollow", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseDTO getAllFollow() {
-        return followService.getAllFollow();
+    public Object getAllFollow() {
+        return succeed(followService.getAllFollow());
     }
 
     @RequestMapping(value = "/importFollowFromExcel", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO importFollowFromExcel(MultipartFile file) {
-        return followService.importFollowFromExcel(file, request);
+    public Object importFollowFromExcel(MultipartFile file) {
+        return succeed(followService.importFollowFromExcel(file, request));
     }
 }

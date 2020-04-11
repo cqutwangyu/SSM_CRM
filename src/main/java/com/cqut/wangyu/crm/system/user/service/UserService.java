@@ -1,10 +1,13 @@
 package com.cqut.wangyu.crm.system.user.service;
 
+import com.cqut.wangyu.crm.system.dto.GrantedUser;
 import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.user.entity.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Objects;
 
 
 /**
@@ -16,19 +19,19 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface UserService {
 
-    ResponseDTO register(User user);
+    Object register(User user) throws Exception;
 
-    ResponseDTO findUserById(Integer id);
+    Object findUserById(Integer id);
 
-    ResponseDTO findUserByName(String userName);
+    Object findUserByName(String userName);
 
-    ResponseDTO deleteUserByID(Integer id);
+    Object deleteUserByID(Integer id);
 
-    ResponseDTO updateUserByID(User user);
+    Object updateUserByID(User user);
 
-    ResponseDTO findAllUser();
+    Object findAllUser();
 
-    ResponseDTO login(User user) throws Exception;
+    Object login(User user);
 
     /**
      * 上传图片并存入avatar到数据库
@@ -36,5 +39,5 @@ public interface UserService {
      * @param request
      * @return
      */
-    ResponseDTO uploadImage(MultipartFile avatar, HttpServletRequest request);
+    Object uploadImage(MultipartFile avatar, HttpServletRequest request) throws IOException;
 }

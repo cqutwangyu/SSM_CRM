@@ -57,7 +57,8 @@ public class PageQueryDTO {
         this.sql = sql;
     }
 
-    public void assembleSql() {
+    public PageQueryDTO assembleSql() {
         this.sql = SQLUtil.assembleSql(columnsName, columnsValue);
+        return this;
     }
 }

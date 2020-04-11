@@ -1,9 +1,8 @@
 package com.cqut.wangyu.crm.system.follow.service;
 
-import com.cqut.wangyu.crm.system.follow.dao.FollowDao;
 import com.cqut.wangyu.crm.system.dto.FollowDTO;
 import com.cqut.wangyu.crm.system.dto.PageQueryDTO;
-import com.cqut.wangyu.crm.system.dto.ResponseDTO;
+import com.cqut.wangyu.crm.system.follow.dao.FollowDao;
 import com.cqut.wangyu.crm.system.follow.entity.Follow;
 import com.cqut.wangyu.crm.utils.Constant;
 import com.cqut.wangyu.crm.utils.MyFileUtil;
@@ -34,32 +33,20 @@ public class FollowServiceImpl implements FollowService {
     private FollowDao followDao;
 
     @Override
-    public ResponseDTO addFollow(Follow follow) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Follow cName = followDao.selectFollowById(follow.getFollowID());
-        if (null == cName) {
-            Integer rows = followDao.insertFollow(follow);
-            responseDTO.setMessage(rows == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE);
-            responseDTO.setData(Constant.SUCCEED);
-        } else {
-            responseDTO.setMessage(Constant.INSERT_ID_REPETITION);
-            responseDTO.setData(Constant.ERROR);
-        }
-        return responseDTO;
+    public String addFollow(Follow follow) {
+        return followDao.insertFollow(follow) == 1 ? Constant.INSERT_SUCCEED : Constant.INSERT_FAILURE;
     }
 
     @Override
-    public ResponseDTO findPageFollow(PageQueryDTO pageQueryDTO) {
+    public Map<String, Object> findPageFollow(PageQueryDTO pageQueryDTO) {
         PageHelper.startPage(pageQueryDTO.getPage(), pageQueryDTO.getLimit());
-        ResponseDTO responseDTO = new ResponseDTO();
         List<FollowDTO> followList = followDao.selectPageFollow(pageQueryDTO);
         PageInfo<FollowDTO> pageInfo = new PageInfo(followList);
 
         Map<String, Object> map = new HashMap<>();
         map.put("total", pageInfo.getTotal());
         map.put("items", followList);
-        responseDTO.setData(map);
-        return responseDTO;
+        return map;
     }
 
     /**
@@ -69,11 +56,8 @@ public class FollowServiceImpl implements FollowService {
      * @return
      */
     @Override
-    public ResponseDTO deleteFollow(Integer followID) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = followDao.deleteFollow(followID);
-        responseDTO.setMessage(rows == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE);
-        return responseDTO;
+    public String deleteFollow(Integer followID) {
+        return followDao.deleteFollow(followID) == 1 ? Constant.DELETE_SUCCEED : Constant.DELETE_FAILURE;
     }
 
     /**
@@ -83,11 +67,8 @@ public class FollowServiceImpl implements FollowService {
      * @return
      */
     @Override
-    public ResponseDTO updateFollow(Follow follow) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Integer rows = followDao.updateFollow(follow);
-        responseDTO.setMessage(rows == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE);
-        return responseDTO;
+    public String updateFollow(Follow follow) {
+        return followDao.updateFollow(follow) == 1 ? Constant.UPDATE_SUCCEED : Constant.UPDATE_FAILURE;
     }
 
     /**
@@ -97,11 +78,8 @@ public class FollowServiceImpl implements FollowService {
      * @return
      */
     @Override
-    public ResponseDTO findFollowByCustomerName(String cusName) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<Follow> customerList = followDao.findFollowByCustomerName(cusName);
-        responseDTO.setData(customerList);
-        return responseDTO;
+    public List<Follow> findFollowByCustomerName(String cusName) {
+        return followDao.findFollowByCustomerName(cusName);
     }
 
     /**
@@ -111,11 +89,8 @@ public class FollowServiceImpl implements FollowService {
      * @return
      */
     @Override
-    public ResponseDTO findFollowById(Integer conId) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        Follow customer = followDao.selectFollowById(conId);
-        responseDTO.setData(customer);
-        return responseDTO;
+    public Follow findFollowById(Integer conId) {
+        return followDao.selectFollowById(conId);
     }
 
     /**
@@ -126,8 +101,7 @@ public class FollowServiceImpl implements FollowService {
      * @return
      */
     @Override
-    public ResponseDTO importFollowFromExcel(MultipartFile file, HttpServletRequest request) {
-        ResponseDTO responseDTO = new ResponseDTO();
+    public String importFollowFromExcel(MultipartFile file, HttpServletRequest request) {
         int inserted = 0, updated = 0, notChanged = 0, error = 0;
         if (!file.isEmpty()) {
             String filePath = file.getOriginalFilename();
@@ -173,20 +147,13 @@ public class FollowServiceImpl implements FollowService {
                     error = followList.size() - inserted;
                 }
             }
-            responseDTO.setMessage("新增：" + inserted + "条," + "更新：" + updated + "条" + ",未改：" + notChanged + "条," + "失败：" + error + "条");
-        } else {
-            responseDTO.setMessage(Constant.IMPORT_FAILURE);
         }
-        if (inserted + updated + notChanged == 0) {
-            responseDTO.setData(Constant.ERROR);
-        } else if (inserted + updated + notChanged <= error) {
-            responseDTO.setData(Constant.WARN);
-        } else if (error == 0) {
-            responseDTO.setData(Constant.SUCCEED);
-        } else {
-            responseDTO.setData(Constant.INFO);
-        }
-        return responseDTO;
+        StringBuilder sb = new StringBuilder();
+        sb.append("新增：" + inserted + "条");
+        sb.append(",更新" + updated + "条");
+        sb.append(",未改" + notChanged + "条");
+        sb.append(",失败" + error + "条");
+        return sb.toString();
     }
 
     /**
@@ -195,19 +162,12 @@ public class FollowServiceImpl implements FollowService {
      * @return
      */
     @Override
-    public ResponseDTO getAllFollow() {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<FollowDTO> followList = followDao.selectAllFollow();
-        responseDTO.setData(followList);
-        responseDTO.setMessage("共" + followList.size() + "条数据");
-        return responseDTO;
+    public List<FollowDTO> getAllFollow() {
+        return followDao.selectAllFollow();
     }
 
     @Override
-    public ResponseDTO findFollowByCusID(Integer cusID) {
-        ResponseDTO responseDTO = new ResponseDTO();
-        List<FollowDTO> customer = followDao.selectFollowByCusID(cusID);
-        responseDTO.setData(customer);
-        return responseDTO;
+    public List<FollowDTO> findFollowByCusID(Integer cusID) {
+        return followDao.selectFollowByCusID(cusID);
     }
 }

@@ -1,10 +1,9 @@
 package com.cqut.wangyu.crm.system.user;
 
 import com.cqut.wangyu.crm.framework.AbstractController;
-import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.user.entity.User;
 import com.cqut.wangyu.crm.system.user.service.UserService;
-import com.cqut.wangyu.crm.utils.TokenUtil;
+import com.cqut.wangyu.crm.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,65 +31,75 @@ public class UserController extends AbstractController {
     @ResponseBody
     public Object login(User user) {
         try {
-            return userService.login(user);
-        }catch (Exception e){
-            return e.getMessage();
+            return succeed(userService.login(user));
+        } catch (Exception e) {
+            return failure(e);
         }
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO logout() {
-        ResponseDTO dto = new ResponseDTO();
-        dto.setMessage("退出成功");
-        return dto;
+    public Object logout() {
+        return succeed(Constant.LOGOUT_SUCCEED);
     }
 
     @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseDTO getUserInfo() {
-        return userService.findUserByName(getUserName());
+    public Object getUserInfo() {
+        try {
+            return succeed(userService.findUserByName(getUserName()));
+        } catch (Exception e) {
+            return failure(e);
+        }
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO register(User user) {
-        return userService.register(user);
+    public Object register(User user) {
+        try {
+            return succeed(userService.register(user));
+        } catch (Exception e) {
+            return failure(e);
+        }
     }
 
     @RequestMapping(value = "/findUserByID", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findUserById(Integer id) {
-        return userService.findUserById(id);
+    public Object findUserById(Integer id) {
+        return succeed(userService.findUserById(id));
     }
 
     @RequestMapping(value = "/findUserByName", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO findUserByName(String name) {
-        return userService.findUserByName(name);
+    public Object findUserByName(String name) {
+        return succeed(userService.findUserByName(name));
     }
 
     @RequestMapping(value = "/deleteUserByID", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO deleteUserByID(Integer id) {
-        return userService.deleteUserByID(id);
+    public Object deleteUserByID(Integer id) {
+        return succeed(userService.deleteUserByID(id));
     }
 
     @RequestMapping(value = "/updateUserByID", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO updateUserByID(User user) {
-        return userService.updateUserByID(user);
+    public Object updateUserByID(User user) {
+        return succeed(userService.updateUserByID(user));
     }
 
     @RequestMapping(value = "/findAllUser", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseDTO findAllUser() {
-        return userService.findAllUser();
+    public Object findAllUser() {
+        return succeed(userService.findAllUser());
     }
 
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseDTO uploadImage(MultipartFile avatar, HttpServletResponse response) {
-        return userService.uploadImage(avatar, request);
+    public Object uploadImage(MultipartFile avatar, HttpServletResponse response) {
+        try {
+            return succeed(userService.uploadImage(avatar, request));
+        } catch (Exception e) {
+            return failure(e);
+        }
     }
 }

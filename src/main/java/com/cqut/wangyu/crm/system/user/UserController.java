@@ -47,7 +47,8 @@ public class UserController extends AbstractController {
     @ResponseBody
     public Object getUserInfo() {
         try {
-            return succeed(userService.findUserByName(getUserName()));
+//            return succeed(userService.findUserByName(getUserName()));
+            return succeed(currentUser());
         } catch (Exception e) {
             return failure(e);
         }

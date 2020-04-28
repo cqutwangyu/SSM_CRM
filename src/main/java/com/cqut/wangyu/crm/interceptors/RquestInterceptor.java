@@ -1,17 +1,18 @@
 package com.cqut.wangyu.crm.interceptors;
 
-import com.cqut.wangyu.crm.system.dto.ResponseDTO;
-import com.cqut.wangyu.crm.utils.TokenUtil;
+import com.cqut.wangyu.crm.redis.RedisCache;
+import com.cqut.wangyu.crm.utils.Constants;
+import com.wy.sso.user.domain.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Enumeration;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName RquestInterceptor
@@ -23,6 +24,9 @@ import java.util.Enumeration;
 public class RquestInterceptor extends HandlerInterceptorAdapter {
     private final static Logger logger = LoggerFactory.getLogger(RquestInterceptor.class);
 
+    @Autowired
+    private RedisCache redisCache;
+
     private final static class MethodType {
         /*axios请求时，会先发送一个OPTIONS请求*/
         private final static String OPTIONS = "OPTIONS";
@@ -30,13 +34,6 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
 
     /*除以下请求之外都需要验证Token才能通过*/
     private final static class UrlPath {
-//        /*请求服务器图片*/
-//        private final static String getImage = "/SSM_CRM/file/getImage";
-//        /*登录请求*/
-//        private final static String login = "/SSM_CRM/user/login";
-//        /*注册请求*/
-//        private final static String register = "/SSM_CRM/user/register";
-
         private final static String getImage = "/file/getImage";
         private final static String login = "/user/login";
         private final static String register = "/user/register";
@@ -74,26 +71,30 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
         }
         //除login和register之外的请求需验证token
         if (requestURI.equals(UrlPath.getImage) || requestURI.equals(UrlPath.login)
-                || requestURI.equals(UrlPath.register) || TokenUtil.verify(token)) {
+                || requestURI.equals(UrlPath.register) || verifyToken(token)) {
             long start = System.currentTimeMillis();
             request.setAttribute("start", start);
             logger.info(request.getRequestURI() + "请求到达");
             return true;
         }
-        logger.info("请求：" + requestURI + "Token认证失败");
-//        response.setStatus(500);
-        PrintWriter out = null;
-        try {
-            out = response.getWriter();
-            ResponseDTO responseDTO = new ResponseDTO();
-            responseDTO.setCode(401);
-            responseDTO.setMessage("身份认证失败，请重新登录。");
-            out.print(responseDTO);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        logger.info("请求：" + requestURI + " Token认证失败");
         return false;
 
+    }
+
+    /**
+     * 单点登录验证Token
+     */
+    private boolean verifyToken(String token) {
+        if (token.contains(Constants.TOKEN_CODE_KEY)) {
+            UserInfo userInfo = redisCache.getCacheObject(token);
+            if (userInfo == null || userInfo.getToken() == null) {
+                return false;
+            }
+            //刷新令牌有效期
+            redisCache.setCacheObject(token, userInfo, 30, TimeUnit.MINUTES);
+        }
+        return true;
     }
     /*下面的方法可以不重写*/
 

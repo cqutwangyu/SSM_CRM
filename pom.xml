@@ -17,6 +17,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <spring.version>5.1.5.RELEASE</spring.version>
+        <fastjson.version>1.2.68</fastjson.version>
     </properties>
 
     <dependencies>
@@ -58,6 +59,17 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+        <!-- redis 缓存操作 -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>1.6.2.RELEASE</version>
         </dependency>
         <!--Spring 面向切面编程-->
         <dependency>
@@ -171,6 +183,18 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.3</version>
         </dependency>
+        <!--HTTP请求-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+        <!-- 阿里JSON解析器 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
         <!--TOKEN-->
         <dependency>
             <groupId>com.auth0</groupId>
@@ -225,6 +249,14 @@
 
     <build>
         <finalName>SSM_CRM</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
         <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
                 <plugin>

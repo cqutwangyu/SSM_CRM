@@ -1,8 +1,7 @@
 package com.cqut.wangyu.crm.framework;
 
-import com.cqut.wangyu.crm.system.user.dao.UserDao;
-import com.cqut.wangyu.crm.system.user.entity.User;
-import com.cqut.wangyu.crm.utils.TokenUtil;
+import com.cqut.wangyu.crm.redis.RedisCache;
+import com.wy.sso.user.domain.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,24 +19,21 @@ public class AbstractBase {
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private UserDao userDao;
+    private RedisCache redisCache;
 
     @Autowired
     protected HttpServletRequest request;
 
-    protected User currentUser() {
-        return getUser(getUserName());
+    protected UserInfo currentUser() {
+        return redisCache.getCacheObject(getToken());
     }
 
     protected String getToken() {
         return request.getHeader("X-Token");
     }
 
-    protected User getUser(String userName) {
-        return userDao.selectUserByName(userName);
-    }
 
     protected String getUserName() {
-        return TokenUtil.getUserName(getToken());
+        return currentUser().getUserName();
     }
 }

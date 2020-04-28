@@ -34,7 +34,7 @@
         group by month(followDate)
     </select>
     <!--根据ID修改用户-->
-    <update id="updateFollow" parameterType="Follow">
+    <update id="updateFollow" parameterType="com.cqut.wangyu.crm.system.follow.entity.Follow">
         update follow
         set
             followContent = #{followContent},

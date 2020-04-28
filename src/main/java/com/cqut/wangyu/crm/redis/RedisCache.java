@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 //@Component
 public class RedisCache
 {
-    @Resource(name = "myRedisTemplate")
+    @Resource
     public RedisTemplate redisTemplate;
 
     /**
@@ -30,7 +30,7 @@ public class RedisCache
      * @param connectionFactory
      * @return
      */
-    @Bean(name = "myRedisTemplate")
+    @Bean
     public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);

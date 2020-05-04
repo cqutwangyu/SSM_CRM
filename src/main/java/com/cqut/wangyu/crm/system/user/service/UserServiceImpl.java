@@ -1,9 +1,9 @@
 package com.cqut.wangyu.crm.system.user.service;
 
 import com.cqut.wangyu.crm.exception.CRMException;
+import com.cqut.wangyu.crm.framework.AbstractService;
 import com.cqut.wangyu.crm.system.dto.GrantedUser;
 import com.cqut.wangyu.crm.system.user.dao.UserDao;
-import com.cqut.wangyu.crm.system.dto.ResponseDTO;
 import com.cqut.wangyu.crm.system.user.entity.User;
 import com.cqut.wangyu.crm.utils.Constant;
 import com.cqut.wangyu.crm.utils.MD5Util;
@@ -26,7 +26,7 @@ import java.util.List;
  * @GitHub https://github.com/ChongqingWangYu
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends AbstractService implements UserService {
 
     @Autowired
     private UserDao userDao;

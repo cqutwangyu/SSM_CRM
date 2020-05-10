@@ -6,17 +6,21 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 
+import com.alibaba.fastjson.JSONObject;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -24,11 +28,14 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
@@ -57,7 +64,7 @@ public class ClientUtil {
         }
 
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
-                .<ConnectionSocketFactory> create()
+                .<ConnectionSocketFactory>create()
                 .register("https", sslConnectionSocketFactory)
                 .register("http", new PlainConnectionSocketFactory()).build();
         cm = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
@@ -66,11 +73,8 @@ public class ClientUtil {
     }
 
     public static CloseableHttpClient getHttpClient() {
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(cm).build();
-        /*
-         * CloseableHttpClient httpClient =
-         * HttpClients.createDefault();//如果不采用连接池就是这种方式获取连接
-         */
+//        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(cm).build();
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();//如果不采用连接池就是这种方式获取连接
         return httpClient;
     }
 
@@ -80,7 +84,7 @@ public class ClientUtil {
      * @return
      * @throws Exception
      */
-    public static String httpsdoPost(String url, Map<String, String> values) throws Exception{
+    public static String httpsdoPost(String url, Map<String, String> values) throws Exception {
         HttpClient httpClient = new SSLClient();
         url = URLDecoder.decode(url, "UTF-8");
         HttpPost post = new HttpPost(url);
@@ -96,7 +100,7 @@ public class ClientUtil {
                 list.add(new BasicNameValuePair(key, values.get(key)));
             }
             // 解决中文乱码问题
-            StringEntity entity = new UrlEncodedFormEntity(list,HTTP.UTF_8);
+            StringEntity entity = new UrlEncodedFormEntity(list, HTTP.UTF_8);
             post.setEntity(entity);
         }
         try {
@@ -152,7 +156,7 @@ public class ClientUtil {
         post.setHeader("Accept-Encoding", "gzip, deflate");
         post.setHeader("Accept-Language", "zh-CN");
         post.setHeader("Accept", "application/json, application/xml, text/html, text/*, image/*, */*");
-        post.setHeader("content-type","application/json");
+        post.setHeader("content-type", "application/json");
 
         //头部信息
         if (headvalues != null && headvalues.size() > 0) {
@@ -168,7 +172,7 @@ public class ClientUtil {
                 list.add(new BasicNameValuePair(key, values.get(key)));
             }
             // 解决中文乱码问题
-            StringEntity entity = new UrlEncodedFormEntity(list,HTTP.UTF_8);
+            StringEntity entity = new UrlEncodedFormEntity(list, HTTP.UTF_8);
             post.setEntity(entity);
         }
         try {
@@ -205,7 +209,7 @@ public class ClientUtil {
                 list.add(new BasicNameValuePair(key, values.get(key)));
             }
             // 解决中文乱码问题
-            StringEntity entity = new UrlEncodedFormEntity(list,HTTP.UTF_8);
+            StringEntity entity = new UrlEncodedFormEntity(list, HTTP.UTF_8);
             post.setEntity(entity);
         }
         try {
@@ -262,13 +266,13 @@ public class ClientUtil {
     }
 
     /**
-     * @Title: doGet
-     * @Description: 所有get 请求底层调用方法
-     * @param @param url
-     * @param @param params
+     * @param @param  url
+     * @param @param  params
      * @param @return
      * @return String
      * @throws
+     * @Title: doGet
+     * @Description: 所有get 请求底层调用方法
      * @CreateTime:2016年11月21日 下午1:52:35
      * @author zhuyuan
      * @since JDK 1.7
@@ -292,9 +296,9 @@ public class ClientUtil {
         httpGet.setHeader("Accept", "application/json, application/xml, text/html, text/*, image/*, */*");
         httpGet.setHeader("Authorization", "Basic QURNSU46S1lMSU4=");
         httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded");
-        String token=params.get("token");
-        if(Objects.nonNull(token)){
-            httpGet.setHeader("X-Token",token);
+        String token = params.get("token");
+        if (Objects.nonNull(token)) {
+            httpGet.setHeader("X-Token", token);
         }
         String resultString = "";
         try {
@@ -311,16 +315,16 @@ public class ClientUtil {
     }
 
     /**
-     * @Title: doPost
-     * @Description: 所有Post 请求底层调用方法
-     * @param @param url
-     * @param @param values
+     * @param @param  url
+     * @param @param  values
      * @param @return
      * @return String
      * @throws
+     * @throws Exception
+     * @Title: doPost
+     * @Description: 所有Post 请求底层调用方法
      * @CreateTime:2016年11月21日 下午1:52:26
      * @author zhuyuan
-     * @throws Exception
      * @since JDK 1.7
      */
     public static String doPost(String url, Map<String, String> values) throws Exception {
@@ -339,7 +343,7 @@ public class ClientUtil {
                 list.add(new BasicNameValuePair(key, values.get(key)));
             }
             // 解决中文乱码问题
-            StringEntity entity = new UrlEncodedFormEntity(list,HTTP.UTF_8);
+            StringEntity entity = new UrlEncodedFormEntity(list, HTTP.UTF_8);
             post.setEntity(entity);
         }
         try {
@@ -352,6 +356,91 @@ public class ClientUtil {
             post.releaseConnection();
         }
         return resultString;
+    }
+
+    public static String doPutParam(String url, String token, Map<String, Object> paramMap) throws Exception {
+        // 获取连接客户端工具
+        CloseableHttpClient httpClient = getHttpClient();
+        String entityStr = null;
+        CloseableHttpResponse response = null;
+        try {
+            // 创建POST请求对象
+            HttpPut httpPut = new HttpPut(url);
+            //添加请求参数
+            List<NameValuePair> list = new LinkedList<>();
+            for (String key : paramMap.keySet()) {
+                Object value = paramMap.get(key);
+                list.add(new BasicNameValuePair(key, value.toString()));
+            }
+            // 使用URL实体转换工具
+            UrlEncodedFormEntity entityParam = new UrlEncodedFormEntity(list, "UTF-8");
+            httpPut.setEntity(entityParam);
+            /*
+             * 添加请求头信息
+             */
+            httpPut.addHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6)");
+            httpPut.addHeader("Content-Type", "application/x-www-form-urlencoded");
+            httpPut.addHeader("X-Token", token);
+            // 执行请求
+            response = httpClient.execute(httpPut);
+            // 获得响应的实体对象
+            HttpEntity entity = response.getEntity();
+            // 使用Apache提供的工具类进行转换成字符串
+            entityStr = EntityUtils.toString(entity, "UTF-8");
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            // 释放连接
+            if (null != response) {
+                try {
+                    response.close();
+                    httpClient.close();
+                } catch (IOException e) {
+                    System.err.println("释放连接出错");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return entityStr;
+    }
+
+    public static String doPutObject(String url, String token, Object obj) throws Exception {
+        // 获取连接客户端工具
+        CloseableHttpClient httpClient = getHttpClient();
+        String entityStr = null;
+        CloseableHttpResponse response = null;
+        try {
+            // 创建POST请求对象
+            HttpPut httpPut = new HttpPut(url);
+            // 添加请求头信息
+            httpPut.addHeader("Content-Type", "application/json;charset=utf8");
+            httpPut.addHeader("accept","application/json");
+            httpPut.addHeader("X-Token", token);
+            // 添加请求参数
+            String jsonString = JSONObject.toJSONString(obj);
+            StringEntity entityParam = new StringEntity(jsonString, "UTF-8");
+            httpPut.setEntity(entityParam);
+            // 执行请求
+            response = httpClient.execute(httpPut);
+            // 获得响应的实体对象
+            HttpEntity entity = response.getEntity();
+            // 使用Apache提供的工具类进行转换成字符串
+            entityStr = EntityUtils.toString(entity, "UTF-8");
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            // 释放连接
+            if (null != response) {
+                try {
+                    response.close();
+                    httpClient.close();
+                } catch (IOException e) {
+                    System.err.println("释放连接出错");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return entityStr;
     }
 
     /**
@@ -404,13 +493,13 @@ public class ClientUtil {
 //	}
 
     /**
-     * @Title: doDelete
-     * @Description: Delete基础请求
-     * @param @param url
-     * @param @param values
+     * @param @param  url
+     * @param @param  values
      * @param @return
      * @return String
      * @throws
+     * @Title: doDelete
+     * @Description: Delete基础请求
      * @CreateTime:2016年11月21日 下午1:51:58
      * @author zhuyuan
      * @since JDK 1.7
@@ -440,7 +529,7 @@ public class ClientUtil {
 //		return resultString;
 //	}
 //	  type: POST GET
-    public static String jsonSend(String strURL, String params,String type) {
+    public static String jsonSend(String strURL, String params, String type) {
         try {
             URL url = new URL(strURL);// 创建连接
             HttpURLConnection connection = (HttpURLConnection) url
@@ -490,7 +579,7 @@ public class ClientUtil {
                 list.add(new BasicNameValuePair(key, values.get(key)));
             }
             // 解决中文乱码问题
-            StringEntity entity = new UrlEncodedFormEntity(list,HTTP.UTF_8);
+            StringEntity entity = new UrlEncodedFormEntity(list, HTTP.UTF_8);
             post.setEntity(entity);
         }
         HttpClient httpClient = null;
@@ -518,7 +607,7 @@ public class ClientUtil {
                 list.add(new BasicNameValuePair(key, values.get(key)));
             }
             // 解决中文乱码问题
-            StringEntity entity = new UrlEncodedFormEntity(list,HTTP.UTF_8);
+            StringEntity entity = new UrlEncodedFormEntity(list, HTTP.UTF_8);
             post.setEntity(entity);
         }
         HttpClient httpClient = null;
@@ -546,7 +635,7 @@ public class ClientUtil {
                 list.add(new BasicNameValuePair(key, values.get(key)));
             }
             // 解决中文乱码问题
-            StringEntity entity = new UrlEncodedFormEntity(list,HTTP.UTF_8);
+            StringEntity entity = new UrlEncodedFormEntity(list, HTTP.UTF_8);
             post.setEntity(entity);
         }
         try {

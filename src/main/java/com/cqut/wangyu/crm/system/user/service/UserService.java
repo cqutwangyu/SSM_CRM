@@ -39,5 +39,5 @@ public interface UserService {
      * @param request
      * @return
      */
-    Object uploadImage(MultipartFile avatar, HttpServletRequest request) throws IOException;
+    Object uploadImage(MultipartFile avatar, HttpServletRequest request) throws Exception;
 }

@@ -1,22 +1,22 @@
 package com.cqut.wangyu.crm.system.user.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cqut.wangyu.crm.exception.CRMException;
 import com.cqut.wangyu.crm.framework.AbstractService;
 import com.cqut.wangyu.crm.system.dto.GrantedUser;
 import com.cqut.wangyu.crm.system.user.dao.UserDao;
 import com.cqut.wangyu.crm.system.user.entity.User;
-import com.cqut.wangyu.crm.utils.Constant;
-import com.cqut.wangyu.crm.utils.MD5Util;
-import com.cqut.wangyu.crm.utils.MyFileUtil;
-import com.cqut.wangyu.crm.utils.TokenUtil;
+import com.cqut.wangyu.crm.utils.*;
+import com.wy.sso.user.domain.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName UserServiceImpl
@@ -90,7 +90,7 @@ public class UserServiceImpl extends AbstractService implements UserService {
      * @return
      */
     @Override
-    public String uploadImage(MultipartFile file, HttpServletRequest request) throws IOException {
+    public String uploadImage(MultipartFile file, HttpServletRequest request) throws Exception {
         boolean succeed = false;
         if (!file.isEmpty()) {
             String md5FileName = MD5Util.encodeFile(file);
@@ -103,13 +103,22 @@ public class UserServiceImpl extends AbstractService implements UserService {
                 targetFile.mkdirs();
             }
             file.transferTo(targetFile);
-            String token = request.getHeader("X-Token");
-            String userName = TokenUtil.getUserName(token);
-            User user = userDao.selectUserByName(userName);
-            if (user != null) {
-                user.setAvatar(MyFileUtil.LOCAL_HOST_SERVER_ADDRESS + MyFileUtil.IMG_REQUEST + MyFileUtil.IMG_PATH + filePath);
-                userDao.updateUserByID(user);
-                succeed = true;
+            UserInfo userInfo = currentUser();
+            if (userInfo != null) {
+                userInfo.setAvatar(MyFileUtil.LOCAL_HOST_SERVER_ADDRESS + MyFileUtil.IMG_REQUEST + MyFileUtil.IMG_PATH + filePath);
+                String url = Constants.SSO_IP_PORT + "/user/update";
+                try {
+                    Map<String, Object> param=new HashMap<>();
+                    param.put("flowId",userInfo.getFlowId());
+                    param.put("avatar",userInfo.getAvatar());
+                    String s = ClientUtil.doPutParam(url, getToken(), param);
+//                    String s = ClientUtil.doPutObject(url, getToken(), userInfo);
+                    JSONObject obj = JSONObject.parseObject(s);
+                    String message = obj.getString("message");
+                    succeed = message.equals("succeed") ? true : false;
+                } catch (Exception e) {
+                    throw new Exception(url + "请求错误" + e.getMessage());
+                }
             }
         }
         return succeed ? Constant.UPLOAD_SUCCEED : Constant.UPLOAD_FAILURE;

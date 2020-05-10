@@ -23,4 +23,14 @@ public class Constants {
      * 验证码有效期（分钟）
      */
     public static final Integer CAPTCHA_EXPIRATION = 2;
+
+    /**
+     * 用户中心地址
+     */
+    public static final String SSO_IP_PORT = "http://localhost:8085";
+
+    /**
+     * 权限中心地址
+     */
+    public static final String UPMS_IP_PORT = "http://localhost:8087";
 }

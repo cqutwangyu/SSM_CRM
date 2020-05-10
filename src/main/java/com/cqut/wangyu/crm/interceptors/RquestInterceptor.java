@@ -6,12 +6,16 @@ import com.wy.sso.user.domain.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,7 +49,7 @@ public class RquestInterceptor extends HandlerInterceptorAdapter {
      * 不会继续调用其他的拦截器或处理器，此时我们需要通过response来产生响应；
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         // 允许客户端携带跨域cookie
         // 当Access-Control-Allow-Credentials设为true的时候，Access-Control-Allow-Origin不能设为星号
         response.setHeader("Access-Control-Allow-Credentials", "true");

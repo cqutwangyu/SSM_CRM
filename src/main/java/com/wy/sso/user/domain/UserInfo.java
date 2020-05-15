@@ -3,6 +3,7 @@ package com.wy.sso.user.domain;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author wangyu
@@ -16,6 +17,13 @@ public class UserInfo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String token;
+    private String roleNames;
+    private String depName;
+    private String roleIds;
+    private List<RoleInfo> roles;
+    private Integer depId;
+    private Integer sysId;
+    private List<UserPermissionInfo> permissionInfoList;
     /*db*/
     private Integer flowId;
     private String userName;
@@ -24,6 +32,62 @@ public class UserInfo implements Serializable {
     private String avatar;
     private String activated;
     private String createTime;
+
+    public String getRoleNames() {
+        return roleNames;
+    }
+
+    public void setRoleNames(String roleNames) {
+        this.roleNames = roleNames;
+    }
+
+    public String getDepName() {
+        return depName;
+    }
+
+    public void setDepName(String depName) {
+        this.depName = depName;
+    }
+
+    public String getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(String roleIds) {
+        this.roleIds = roleIds;
+    }
+
+    public List<RoleInfo> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleInfo> roles) {
+        this.roles = roles;
+    }
+
+    public Integer getDepId() {
+        return depId;
+    }
+
+    public void setDepId(Integer depId) {
+        this.depId = depId;
+    }
+
+    public Integer getSysId() {
+        return sysId;
+    }
+
+    public void setSysId(Integer sysId) {
+        this.sysId = sysId;
+    }
+
+    public List<UserPermissionInfo> getPermissionInfoList() {
+        return permissionInfoList;
+    }
+
+    public void setPermissionInfoList(List<UserPermissionInfo> permissionInfoList) {
+        this.permissionInfoList = permissionInfoList;
+    }
 
     public String getAvatar() {
         return avatar;
